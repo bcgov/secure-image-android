@@ -1,0 +1,15 @@
+# Build system files and directories
+.gradle/
+build/
+
+# IDE Files
+*.iml
+.idea
+
+# RHMAP Files
+
+# Local Configuration Files
+local.properties
+
+# Operating System Files
+.DS_Store
