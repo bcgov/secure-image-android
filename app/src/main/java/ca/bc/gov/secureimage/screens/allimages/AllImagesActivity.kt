@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
-import ca.bc.gov.securecamera.screen.SecureCameraActivity
+import ca.bc.gov.securecamera.view.SecureCameraActivity
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
