@@ -1,20 +1,17 @@
-<!--
-
-    Copyright 2015 Red Hat, Inc., and individual contributors
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <resources>
-    <string name="app_name">Blank</string>
+    <string name="app_name">SecureImage</string>
+    <string name="email">Email</string>
+    <string name="gov_bc_ca">\@gov.bc.ca</string>
+    <string name="login">Login</string>
+    <string name="create_album">Create Album</string>
+    <string name="back">Back</string>
+    <string name="album_name">Album Name</string>
+    <string name="case_number">Case Number</string>
+    <string name="address">Address</string>
+    <string name="comments">Comments</string>
+    <string name="upload">Upload</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_images">Add Images</string>
+    <string name="view_all_images">View all Images</string>
+    <string name="all_images">All Images</string>
 </resources>
