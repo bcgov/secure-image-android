@@ -23,7 +23,7 @@ class CreateAlbumPresenter(
 
         view.setUpViewAllImagesListener()
 
-        view.setUpUploadListener()
+        view.setUpSaveListener()
     }
 
     override fun dispose() {
@@ -45,7 +45,7 @@ class CreateAlbumPresenter(
         view.finish()
     }
 
-    override fun uploadClicked() {
+    override fun saveClicked() {
 
     }
 

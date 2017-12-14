@@ -26,13 +26,10 @@ class SecureCameraPresenter(
 
         view.setUpCameraListener()
 
-        view.hideCaptureImage()
         view.setUpCaptureImageListener()
 
-        view.hideBack()
         view.setUpBackListener()
 
-        view.hideDone()
         view.setUpDoneListener()
     }
 
@@ -41,6 +38,9 @@ class SecureCameraPresenter(
     }
 
     override fun viewShown() {
+        view.hideCaptureImage()
+        view.hideBack()
+        view.hideDone()
         view.startCamera()
     }
 
@@ -65,6 +65,7 @@ class SecureCameraPresenter(
     }
 
     override fun onCameraImage(image: CameraKitImage?) {
+        if (image == null) return
         view.showMessage("Image Captured")
     }
 

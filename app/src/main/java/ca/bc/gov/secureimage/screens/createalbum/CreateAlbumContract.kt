@@ -21,7 +21,7 @@ interface CreateAlbumContract {
         fun hideViewAllImages()
         fun goToAllImages()
 
-        fun setUpUploadListener()
+        fun setUpSaveListener()
 
         fun goToSecureCamera()
     }
@@ -29,7 +29,7 @@ interface CreateAlbumContract {
     interface Presenter: BasePresenter {
         fun backClicked()
 
-        fun uploadClicked()
+        fun saveClicked()
 
         fun viewAllImagesClicked()
 

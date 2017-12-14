@@ -78,9 +78,9 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
     }
 
     // Upload
-    override fun setUpUploadListener() {
-        uploadTv.setOnClickListener {
-            presenter?.uploadClicked()
+    override fun setUpSaveListener() {
+        saveTv.setOnClickListener {
+            presenter?.saveClicked()
         }
     }
 
