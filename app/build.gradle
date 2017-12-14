@@ -48,7 +48,7 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJava2Version"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxJava2Version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxKotlinVersion"
     implementation "com.github.florent37:rxgps:$rootProject.rxGpsVersion"
 
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"

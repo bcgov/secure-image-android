@@ -1,15 +1,16 @@
 package ca.bc.gov.securecamera.view
 
-import android.graphics.SurfaceTexture
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.view.TextureView
+import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import ca.bc.gov.securecamera.R
+import com.wonderkiln.camerakit.*
 import kotlinx.android.synthetic.main.activity_secure_camera.*
 
-class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, TextureView.SurfaceTextureListener {
+class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, CameraKitEventListener {
 
     override var presenter: SecureCameraContract.Presenter? = null
 
@@ -27,8 +28,16 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Tex
 
         SecureCameraPresenter(this)
         presenter?.subscribe()
+    }
 
-        textureView.surfaceTextureListener = this
+    override fun onResume() {
+        super.onResume()
+        presenter?.viewShown()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter?.viewHidden()
     }
 
     override fun onDestroy() {
@@ -36,21 +45,108 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Tex
         presenter?.dispose()
     }
 
-    // Surface texture listener
-    override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture?, p1: Int, p2: Int) {
-
+    // Message
+    override fun showMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onSurfaceTextureUpdated(p0: SurfaceTexture?) {
-
+    // Error
+    override fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun onSurfaceTextureDestroyed(p0: SurfaceTexture?): Boolean {
-
+    // Camera method
+    override fun setCameraMethod(cameraMethod: Int) {
+        cameraView.setMethod(cameraMethod)
     }
 
-    override fun onSurfaceTextureAvailable(p0: SurfaceTexture?, p1: Int, p2: Int) {
-        
+    // Crop output
+    override fun setCameraCropOutput(cropOutput: Boolean) {
+        cameraView.setCropOutput(cropOutput)
     }
 
+    // Camera Permissions
+    override fun setCameraPermissions(permissions: Int) {
+        cameraView.setPermissions(permissions)
+    }
+
+    // Camera lifecycle
+    override fun startCamera() {
+        cameraView.start()
+    }
+
+    override fun stopCamera() {
+        cameraView.stop()
+    }
+
+    // Camera listener
+    override fun setUpCameraListener() {
+        cameraView.addCameraKitListener(this)
+    }
+
+    override fun onEvent(event: CameraKitEvent?) {
+        presenter?.onCameraEvent(event)
+    }
+
+    override fun onError(error: CameraKitError?) {
+        presenter?.onCameraError(error)
+    }
+
+    override fun onImage(image: CameraKitImage?) {
+        presenter?.onCameraImage(image)
+    }
+
+    override fun onVideo(video: CameraKitVideo?) {
+        presenter?.onCameraVideo(video)
+    }
+
+    // Capture image
+    override fun setUpCaptureImageListener() {
+        captureImageIv.setOnClickListener {
+            presenter?.takeImageClicked()
+        }
+    }
+
+    override fun showCaptureImage() {
+        captureImageIv.visibility = View.VISIBLE
+    }
+
+    override fun hideCaptureImage() {
+        captureImageIv.visibility = View.GONE
+    }
+
+    override fun captureImage() {
+        cameraView.captureImage()
+    }
+
+    // Back
+    override fun setUpBackListener() {
+        backIv.setOnClickListener {
+            presenter?.backClicked()
+        }
+    }
+
+    override fun showBack() {
+        backIv.visibility = View.VISIBLE
+    }
+
+    override fun hideBack() {
+        backIv.visibility = View.GONE
+    }
+
+    // Done
+    override fun setUpDoneListener() {
+        doneIv.setOnClickListener {
+            presenter?.doneClicked()
+        }
+    }
+
+    override fun showDone() {
+        doneIv.visibility = View.VISIBLE
+    }
+
+    override fun hideDone() {
+        doneIv.visibility = View.GONE
+    }
 }
+

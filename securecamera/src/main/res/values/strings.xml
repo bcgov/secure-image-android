@@ -1,4 +1,8 @@
 <resources>
+
     <string name="app_name">SecureCamera</string>
     <string name="back">Back</string>
+    <string name="take_image">Take image</string>
+    <string name="done">Done</string>
+
 </resources>
