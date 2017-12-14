@@ -1,15 +1,21 @@
 package ca.bc.gov.securecamera.view
 
-import ca.bc.gov.securecamera.data.ImagesHolder
+import ca.bc.gov.securecamera.data.CameraImage
+import ca.bc.gov.securecamera.data.CameraImagesRepo
 import com.wonderkiln.camerakit.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Aidan Laing on 2017-12-13.
  *
  */
 class SecureCameraPresenter(
-        private val view: SecureCameraContract.View
+        private val view: SecureCameraContract.View,
+        private val cameraImagesRepo: CameraImagesRepo
 ) : SecureCameraContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -74,12 +80,28 @@ class SecureCameraPresenter(
 
     override fun onCameraImage(image: CameraKitImage?) {
         if (image == null) return
-        ImagesHolder.addImage(image.jpeg)
 
-        val imagesSize = ImagesHolder.getAllImages().size
-        val imageCounterText = "${imagesSize} ${if (imagesSize == 1) "Image" else "Images"}"
-        view.setImageCounterText(imageCounterText)
-        view.showImageCounter()
+        val cameraImage = CameraImage()
+        cameraImage.position = cameraImagesRepo.imageCount
+        cameraImage.byteArray = image.jpeg
+        saveCameraImage(cameraImage)
+    }
+
+    private fun saveCameraImage(cameraImage: CameraImage) {
+        cameraImagesRepo.saveImage(cameraImage)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving image")
+                },
+                onSuccess = {
+                    cameraImagesRepo.imageCount++
+                    val imageCounterText = "${cameraImagesRepo.imageCount} ${if (cameraImagesRepo.imageCount == 1) "Image" else "Images"}"
+                    view.setImageCounterText(imageCounterText)
+                    view.showImageCounter()
+                }
+        ).addTo(disposables)
     }
 
     override fun onCameraVideo(video: CameraKitVideo?) {

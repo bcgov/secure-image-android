@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
+import android.widget.Toast
+import ca.bc.gov.securecamera.di.Injection
 import ca.bc.gov.securecamera.view.SecureCameraActivity
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
@@ -22,13 +24,20 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_images)
 
-        AllImagesPresenter(this)
+        AllImagesPresenter(this,
+                Injection.provideCameraImagesRepo())
+
         presenter?.subscribe()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
+    }
+
+    // Error
+    override fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     // Back

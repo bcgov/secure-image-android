@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
+import ca.bc.gov.securecamera.di.Injection
 import ca.bc.gov.securecamera.view.SecureCameraActivity
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
@@ -24,13 +26,24 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_album)
 
-        CreateAlbumPresenter(this)
+        CreateAlbumPresenter(this,
+                Injection.provideCameraImagesRepo())
+
         presenter?.subscribe()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
+    }
+
+    // Error
+    override fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     // Back

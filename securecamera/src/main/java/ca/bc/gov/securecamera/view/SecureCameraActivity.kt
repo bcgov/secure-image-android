@@ -7,6 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import ca.bc.gov.securecamera.R
+import ca.bc.gov.securecamera.di.Injection
 import com.wonderkiln.camerakit.*
 import kotlinx.android.synthetic.main.activity_secure_camera.*
 
@@ -26,7 +27,9 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
         setTheme(R.style.Theme_AppCompat_Light_NoActionBar)
         setContentView(R.layout.activity_secure_camera)
 
-        SecureCameraPresenter(this)
+        SecureCameraPresenter(this,
+                Injection.provideCameraImagesRepo())
+
         presenter?.subscribe()
     }
 

@@ -12,6 +12,8 @@ interface AllImagesContract {
     interface View: BaseView<Presenter> {
         fun finish()
 
+        fun showError(message: String)
+
         fun setUpBackListener()
 
         fun setUpImagesList()

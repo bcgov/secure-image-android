@@ -11,6 +11,10 @@ interface CreateAlbumContract {
 
     interface View: BaseView<Presenter> {
         fun finish()
+
+        fun showError(message: String)
+        fun showMessage(message: String)
+
         fun setUpBackListener()
 
         fun setUpImagesList()
