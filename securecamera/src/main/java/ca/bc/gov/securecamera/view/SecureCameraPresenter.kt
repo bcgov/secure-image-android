@@ -1,5 +1,6 @@
 package ca.bc.gov.securecamera.view
 
+import ca.bc.gov.securecamera.data.ImagesHolder
 import com.wonderkiln.camerakit.*
 import io.reactivex.disposables.CompositeDisposable
 
@@ -46,6 +47,8 @@ class SecureCameraPresenter(
         view.hideBack()
         view.hideDone()
         view.hideFlashControl()
+        view.hideImageCounter()
+
         view.startCamera()
     }
 
@@ -66,17 +69,20 @@ class SecureCameraPresenter(
     }
 
     override fun onCameraError(error: CameraKitError?) {
-        val message = "Error: ${error?.exception.toString()}"
-        println(message)
+
     }
 
     override fun onCameraImage(image: CameraKitImage?) {
         if (image == null) return
-        view.showMessage("Image Captured")
+        ImagesHolder.addImage(image.jpeg)
+
+        val imagesSize = ImagesHolder.getAllImages().size
+        val imageCounterText = "${imagesSize} ${if (imagesSize == 1) "Image" else "Images"}"
+        view.setImageCounterText(imageCounterText)
+        view.showImageCounter()
     }
 
     override fun onCameraVideo(video: CameraKitVideo?) {
-
     }
 
     // Take image

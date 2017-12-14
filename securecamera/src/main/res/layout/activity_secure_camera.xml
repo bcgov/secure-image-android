@@ -74,4 +74,18 @@
         app:layout_constraintTop_toTopOf="@+id/cameraView"
         app:layout_constraintRight_toRightOf="@+id/cameraView"/>
 
+    <TextView
+        android:id="@+id/imageCounterTv"
+        android:textColor="@color/darkGray"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/shape_rect_white_rounded"
+        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/captureImageIv"
+        app:layout_constraintLeft_toLeftOf="@+id/captureImageIv"
+        app:layout_constraintRight_toRightOf="@+id/captureImageIv"/>
+
 </android.support.constraint.ConstraintLayout>

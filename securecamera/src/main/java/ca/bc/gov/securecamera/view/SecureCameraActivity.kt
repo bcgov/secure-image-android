@@ -196,5 +196,18 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
         flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.ic_flash_auto_black_24dp, 0, 0, 0)
     }
+
+    // Image counter
+    override fun setImageCounterText(text: String) {
+        imageCounterTv.text = text
+    }
+
+    override fun showImageCounter() {
+        imageCounterTv.visibility = View.VISIBLE
+    }
+
+    override fun hideImageCounter() {
+        imageCounterTv.visibility = View.GONE
+    }
 }
 

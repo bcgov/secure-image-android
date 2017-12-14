@@ -47,6 +47,10 @@ interface SecureCameraContract {
         fun showFlashOff()
         fun showFlashOn()
         fun showFlashAuto()
+
+        fun setImageCounterText(text: String)
+        fun showImageCounter()
+        fun hideImageCounter()
     }
 
     interface Presenter : BasePresenter {
