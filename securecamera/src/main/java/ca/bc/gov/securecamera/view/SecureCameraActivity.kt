@@ -70,9 +70,9 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
         cameraView.setPermissions(permissions)
     }
 
-    // Flash
-    override fun setCameraFlash(flashMode: Int) {
-        cameraView.flash = flashMode
+    // Focus
+    override fun setCameraFocus(focus: Int) {
+        cameraView.setFocus(focus)
     }
 
     // Camera lifecycle
@@ -155,6 +155,10 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     }
 
     // Flash control
+    override fun setCameraFlash(flash: Int) {
+        cameraView.flash = flash
+    }
+
     override fun setUpFlashControlListener() {
         flashControlTv.setOnClickListener {
             cameraView.toggleFlash()

@@ -19,7 +19,7 @@ interface SecureCameraContract {
         fun setCameraMethod(cameraMethod: Int)
         fun setCameraCropOutput(cropOutput: Boolean)
         fun setCameraPermissions(permissions: Int)
-        fun setCameraFlash(flashMode: Int)
+        fun setCameraFocus(focus: Int)
 
         fun startCamera()
         fun stopCamera()
@@ -39,6 +39,7 @@ interface SecureCameraContract {
         fun showDone()
         fun hideDone()
 
+        fun setCameraFlash(flash: Int)
         fun setUpFlashControlListener()
         fun showFlashControl()
         fun hideFlashControl()

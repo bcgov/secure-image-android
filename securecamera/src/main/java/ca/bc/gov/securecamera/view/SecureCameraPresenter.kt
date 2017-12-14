@@ -20,8 +20,8 @@ class SecureCameraPresenter(
     override fun subscribe() {
         view.setCameraMethod(CameraKit.Constants.METHOD_STANDARD)
         view.setCameraCropOutput(false)
-
         view.setCameraPermissions(CameraKit.Constants.PERMISSIONS_PICTURE)
+        view.setCameraFocus(CameraKit.Constants.FOCUS_TAP_WITH_MARKER)
 
         view.setUpCameraListener()
 
