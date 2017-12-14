@@ -20,6 +20,7 @@ interface SecureCameraContract {
         fun setCameraCropOutput(cropOutput: Boolean)
         fun setCameraPermissions(permissions: Int)
         fun setCameraFocus(focus: Int)
+        fun setPinchToZoom(pinchToZooom: Boolean)
 
         fun startCamera()
         fun stopCamera()

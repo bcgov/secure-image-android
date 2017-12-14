@@ -60,6 +60,7 @@
 
     <TextView
         android:id="@+id/flashControlTv"
+        android:textColor="@color/darkGray"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"

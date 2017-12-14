@@ -75,6 +75,11 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
         cameraView.setFocus(focus)
     }
 
+    // Pinch to zoom
+    override fun setPinchToZoom(pinchToZooom: Boolean) {
+        cameraView.setPinchToZoom(pinchToZooom)
+    }
+
     // Camera lifecycle
     override fun startCamera() {
         cameraView.start()

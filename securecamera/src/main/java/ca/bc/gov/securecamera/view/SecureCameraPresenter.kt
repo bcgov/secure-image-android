@@ -22,6 +22,7 @@ class SecureCameraPresenter(
         view.setCameraCropOutput(false)
         view.setCameraPermissions(CameraKit.Constants.PERMISSIONS_PICTURE)
         view.setCameraFocus(CameraKit.Constants.FOCUS_TAP_WITH_MARKER)
+        view.setPinchToZoom(true)
 
         view.setUpCameraListener()
 
