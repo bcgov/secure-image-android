@@ -24,6 +24,8 @@ android {
 
 }
 
+// Camerakit Docs -> http://docs.camerakit.website/#/
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     

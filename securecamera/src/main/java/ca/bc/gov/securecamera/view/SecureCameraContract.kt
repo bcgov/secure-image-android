@@ -19,6 +19,7 @@ interface SecureCameraContract {
         fun setCameraMethod(cameraMethod: Int)
         fun setCameraCropOutput(cropOutput: Boolean)
         fun setCameraPermissions(permissions: Int)
+        fun setCameraFlash(flashMode: Int)
 
         fun startCamera()
         fun stopCamera()
@@ -37,6 +38,13 @@ interface SecureCameraContract {
         fun setUpDoneListener()
         fun showDone()
         fun hideDone()
+
+        fun setUpFlashControlListener()
+        fun showFlashControl()
+        fun hideFlashControl()
+        fun showFlashOff()
+        fun showFlashOn()
+        fun showFlashAuto()
     }
 
     interface Presenter : BasePresenter {
@@ -53,6 +61,8 @@ interface SecureCameraContract {
         fun backClicked()
 
         fun doneClicked()
+
+        fun flashControlClicked(flashMode: Int)
     }
 
 }

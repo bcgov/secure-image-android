@@ -70,6 +70,11 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
         cameraView.setPermissions(permissions)
     }
 
+    // Flash
+    override fun setCameraFlash(flashMode: Int) {
+        cameraView.flash = flashMode
+    }
+
     // Camera lifecycle
     override fun startCamera() {
         cameraView.start()
@@ -147,6 +152,40 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
 
     override fun hideDone() {
         doneIv.visibility = View.GONE
+    }
+
+    // Flash control
+    override fun setUpFlashControlListener() {
+        flashControlTv.setOnClickListener {
+            cameraView.toggleFlash()
+            presenter?.flashControlClicked(cameraView.flash)
+        }
+    }
+
+    override fun showFlashControl() {
+        flashControlTv.visibility = View.VISIBLE
+    }
+
+    override fun hideFlashControl() {
+        flashControlTv.visibility = View.GONE
+    }
+
+    override fun showFlashOff() {
+        flashControlTv.setText(R.string.flash_off)
+        flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_flash_off_black_24dp, 0, 0, 0)
+    }
+
+    override fun showFlashOn() {
+        flashControlTv.setText(R.string.flash_on)
+        flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_flash_on_black_24dp, 0, 0, 0)
+    }
+
+    override fun showFlashAuto() {
+        flashControlTv.setText(R.string.flash_auto)
+        flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_flash_auto_black_24dp, 0, 0, 0)
     }
 }
 

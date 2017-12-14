@@ -21,8 +21,7 @@ class SecureCameraPresenter(
         view.setCameraMethod(CameraKit.Constants.METHOD_STANDARD)
         view.setCameraCropOutput(false)
 
-        // Set to 2 so only camera permission is called and audio permission is not called
-        view.setCameraPermissions(2)
+        view.setCameraPermissions(CameraKit.Constants.PERMISSIONS_PICTURE)
 
         view.setUpCameraListener()
 
@@ -31,6 +30,10 @@ class SecureCameraPresenter(
         view.setUpBackListener()
 
         view.setUpDoneListener()
+
+        view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
+        view.showFlashOff()
+        view.setUpFlashControlListener()
     }
 
     override fun dispose() {
@@ -41,6 +44,7 @@ class SecureCameraPresenter(
         view.hideCaptureImage()
         view.hideBack()
         view.hideDone()
+        view.hideFlashControl()
         view.startCamera()
     }
 
@@ -55,6 +59,7 @@ class SecureCameraPresenter(
                 view.showCaptureImage()
                 view.showBack()
                 view.showDone()
+                view.showFlashControl()
             }
         }
     }
@@ -86,5 +91,14 @@ class SecureCameraPresenter(
     // Done
     override fun doneClicked() {
         view.finish()
+    }
+
+    // Flash control
+    override fun flashControlClicked(flashMode: Int) {
+        when (flashMode) {
+            CameraKit.Constants.FLASH_OFF -> view.showFlashOff()
+            CameraKit.Constants.FLASH_ON -> view.showFlashOn()
+            CameraKit.Constants.FLASH_AUTO -> view.showFlashAuto()
+        }
     }
 }
