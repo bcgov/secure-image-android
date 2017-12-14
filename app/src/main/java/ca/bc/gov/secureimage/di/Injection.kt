@@ -1,7 +1,7 @@
-package ca.bc.gov.securecamera.di
+package ca.bc.gov.secureimage.di
 
-import ca.bc.gov.securecamera.data.CameraImagesLocalDataSource
-import ca.bc.gov.securecamera.data.CameraImagesRepo
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesLocalDataSource
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 
 /**
  * Created by Aidan Laing on 2017-12-14.

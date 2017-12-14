@@ -1,8 +1,12 @@
-package ca.bc.gov.securecamera.view
+package ca.bc.gov.secureimage.screens.securecamera
 
-import ca.bc.gov.securecamera.common.base.BasePresenter
-import ca.bc.gov.securecamera.common.base.BaseView
-import com.wonderkiln.camerakit.*
+import ca.bc.gov.secureimage.common.base.BasePresenter
+import ca.bc.gov.secureimage.common.base.BaseView
+import com.wonderkiln.camerakit.CameraKitError
+import com.wonderkiln.camerakit.CameraKitEvent
+import com.wonderkiln.camerakit.CameraKitImage
+import com.wonderkiln.camerakit.CameraKitVideo
+
 
 /**
  * Created by Aidan Laing on 2017-12-13.

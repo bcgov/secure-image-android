@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
-import ca.bc.gov.securecamera.di.Injection
-import ca.bc.gov.securecamera.view.SecureCameraActivity
+import ca.bc.gov.secureimage.di.Injection
+import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter

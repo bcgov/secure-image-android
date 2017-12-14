@@ -1,8 +1,7 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
-import ca.bc.gov.securecamera.data.CameraImagesRepo
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.models.AddImages
-import ca.bc.gov.secureimage.data.models.Image
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -39,18 +38,13 @@ class CreateAlbumPresenter(
         disposables.dispose()
     }
 
-    /**
-     * Gets firs 5 camera images from camera repo and turns them into images
-     * For each of the images creates a scaled bitmap version
-     * On success shows the list of image items
-     */
     fun getImages() {
         cameraImagesRepo.getAllImages()
                 .flatMapIterable { it }
                 .take(5)
-                .map { Image(it.byteArray) }
+                .observeOn(Schedulers.computation())
                 .map {
-                    it.createScaledBitmap(500)
+                    it.createScaledBitmap()
                     it
                 }
                 .toList()

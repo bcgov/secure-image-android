@@ -1,5 +1,6 @@
-package ca.bc.gov.securecamera.data
+package ca.bc.gov.secureimage.data.repos.cameraimages
 
+import ca.bc.gov.secureimage.data.models.CameraImage
 import io.reactivex.Observable
 import io.realm.Realm
 

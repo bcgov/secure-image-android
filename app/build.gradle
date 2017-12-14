@@ -36,6 +36,8 @@ android {
     }
 }
 
+// Camerakit Docs -> http://docs.camerakit.website/#/
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -71,5 +73,7 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$rootProject.ext.testRunnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
 
-    implementation project(":securecamera")
+    implementation ("com.wonderkiln:camerakit:0.13.1") {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
 }

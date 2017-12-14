@@ -11,5 +11,6 @@
     <color name="lightGray">#EDEDED</color>
     <color name="mediumGray">#7F7F7F</color>
     <color name="darkGray">#333333</color>
+    <color name="black">#000000</color>
 
 </resources>

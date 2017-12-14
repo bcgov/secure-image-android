@@ -1,7 +1,7 @@
-package ca.bc.gov.securecamera.view
+package ca.bc.gov.secureimage.screens.securecamera
 
-import ca.bc.gov.securecamera.data.CameraImage
-import ca.bc.gov.securecamera.data.CameraImagesRepo
+import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import com.wonderkiln.camerakit.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -82,7 +82,6 @@ class SecureCameraPresenter(
         if (image == null) return
 
         val cameraImage = CameraImage()
-        cameraImage.position = cameraImagesRepo.imageCount
         cameraImage.byteArray = image.jpeg
         saveCameraImage(cameraImage)
     }

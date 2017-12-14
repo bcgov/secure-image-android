@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/black"
-    tools:context="ca.bc.gov.securecamera.view.SecureCameraActivity">
+    tools:context="ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity">
 
     <com.wonderkiln.camerakit.CameraView
         android:id="@+id/cameraView"

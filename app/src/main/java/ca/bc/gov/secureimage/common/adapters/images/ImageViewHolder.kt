@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ca.bc.gov.secureimage.R
-import ca.bc.gov.secureimage.data.models.Image
+import ca.bc.gov.secureimage.data.models.CameraImage
 import kotlinx.android.synthetic.main.item_image.view.*
 
 /**
@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.item_image.view.*
  */
 class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(image: Image) = with(itemView) {
-        imageIv.setImageBitmap(image.getScaledBitmap())
+    fun bind(cameraImage: CameraImage) = with(itemView) {
+        imageIv.setImageBitmap(cameraImage.getScaledBitmap())
     }
 
     companion object {

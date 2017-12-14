@@ -1,4 +1,4 @@
-package ca.bc.gov.securecamera.view
+package ca.bc.gov.secureimage.screens.securecamera
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -6,8 +6,8 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
-import ca.bc.gov.securecamera.R
-import ca.bc.gov.securecamera.di.Injection
+import ca.bc.gov.secureimage.di.Injection
+import ca.bc.gov.secureimage.R
 import com.wonderkiln.camerakit.*
 import kotlinx.android.synthetic.main.activity_secure_camera.*
 
