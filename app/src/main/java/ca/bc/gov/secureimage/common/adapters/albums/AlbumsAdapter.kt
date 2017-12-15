@@ -11,6 +11,7 @@ import ca.bc.gov.secureimage.data.models.Album
  */
 class AlbumsAdapter(
         private val inflater: LayoutInflater,
+        private val albumClickListener: AlbumViewHolder.ClickListener,
         private var items: ArrayList<Any> = ArrayList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -28,7 +29,7 @@ class AlbumsAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         when (holder) {
-            is AlbumViewHolder -> holder.bind(items[position] as Album)
+            is AlbumViewHolder -> holder.bind(items[position] as Album, albumClickListener)
         }
     }
 

@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.screens.albums
 
+import ca.bc.gov.secureimage.data.models.Album
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -84,4 +85,8 @@ class AlbumsPresenter(
                 .addTo(disposables)
     }
 
+    // Album clicks
+    override fun albumClicked(album: Album) {
+        view.goToCreateAlbum(album.key)
+    }
 }

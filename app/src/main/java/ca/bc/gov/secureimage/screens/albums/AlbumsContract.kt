@@ -2,6 +2,7 @@ package ca.bc.gov.secureimage.screens.albums
 
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
+import ca.bc.gov.secureimage.data.models.Album
 
 /**
  * Created by Aidan Laing on 2017-12-12.
@@ -24,6 +25,8 @@ interface AlbumsContract {
         fun viewHidden()
 
         fun createAlbumClicked()
+
+        fun albumClicked(album: Album)
     }
 
 }

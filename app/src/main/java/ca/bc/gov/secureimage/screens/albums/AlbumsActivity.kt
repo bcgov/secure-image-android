@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
+import ca.bc.gov.secureimage.common.adapters.albums.AlbumViewHolder
 import ca.bc.gov.secureimage.common.adapters.albums.AlbumsAdapter
+import ca.bc.gov.secureimage.data.models.Album
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.createalbum.CreateAlbumActivity
 import kotlinx.android.synthetic.main.activity_albums.*
 
-class AlbumsActivity : AppCompatActivity(), AlbumsContract.View {
+class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder.ClickListener {
 
     override var presenter: AlbumsContract.Presenter? = null
 
@@ -32,6 +34,16 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View {
         presenter?.subscribe()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter?.viewShown()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter?.viewHidden()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
@@ -44,7 +56,7 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View {
 
     // Album list
     override fun setUpAlbumsList() {
-        albumsAdapter = AlbumsAdapter(LayoutInflater.from(this))
+        albumsAdapter = AlbumsAdapter(LayoutInflater.from(this), this)
         albumsRv.apply {
             layoutManager = LinearLayoutManager(this@AlbumsActivity)
             adapter = albumsAdapter
@@ -53,6 +65,10 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View {
 
     override fun showAlbumItems(items: ArrayList<Any>) {
         albumsAdapter?.replaceItems(items)
+    }
+
+    override fun albumClicked(album: Album) {
+        presenter?.albumClicked(album)
     }
 
     // Create album

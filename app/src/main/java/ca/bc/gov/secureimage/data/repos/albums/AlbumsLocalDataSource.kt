@@ -40,7 +40,7 @@ object AlbumsLocalDataSource : AlbumsDataSource {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
-                realm.copyToRealm(album)
+                realm.copyToRealmOrUpdate(album)
                 emitter.onNext(album)
             }
             realm.close()

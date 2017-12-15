@@ -16,12 +16,17 @@ import java.util.*
  */
 class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(album: Album) = with(itemView) {
+    fun bind(album: Album, clickListener: ClickListener) = with(itemView) {
         val imageUrl = "https://picsum.photos/200/${100 + Random().nextInt(200)}"
         Picasso.with(context)
                 .load(imageUrl)
                 .placeholder(R.color.lightGray)
                 .into(imageIv)
+
+        // Clicks
+        layout.setOnClickListener {
+            clickListener.albumClicked(album)
+        }
     }
 
     companion object {
@@ -31,6 +36,10 @@ class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
                 attachToRoot: Boolean = false
         ): AlbumViewHolder =
                 AlbumViewHolder(inflater.inflate(R.layout.item_album, root, attachToRoot))
+    }
+
+    interface ClickListener {
+        fun albumClicked(album: Album)
     }
 
 }
