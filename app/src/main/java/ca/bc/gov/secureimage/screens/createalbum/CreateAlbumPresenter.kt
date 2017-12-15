@@ -81,9 +81,8 @@ class CreateAlbumPresenter(
      * On success show images with add images model so recycler view can display an add image tile
      */
     fun getImages() {
-        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
+        cameraImagesRepo.getFirstFiveImagesInAlbum(albumKey)
                 .flatMapIterable { it }
-                .take(5)
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

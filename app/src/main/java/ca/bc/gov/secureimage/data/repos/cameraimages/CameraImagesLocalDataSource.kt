@@ -37,6 +37,36 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
+    override fun getImageCountInAlbum(albumKey: String): Observable<Int> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val cameraImages = realm.where(CameraImage::class.java)
+                        .equalTo("albumKey", albumKey).findAll()
+                if(cameraImages != null) emitter.onNext(cameraImages.size)
+                else emitter.onNext(0)
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
+    override fun getFirstFiveImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val cameraImages = realm.where(CameraImage::class.java)
+                        .equalTo("albumKey", albumKey).findAll()
+                val firstFive = cameraImages.take(5)
+                emitter.onNext(ArrayList(realm.copyFromRealm(firstFive)))
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
     override fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()

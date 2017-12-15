@@ -95,8 +95,7 @@ class SecureCameraPresenter(
      * onSuccess current counter is shown
      */
     private fun getAlbumImageCount() {
-        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
-                .map { it.size }
+        cameraImagesRepo.getImageCountInAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -118,8 +117,7 @@ class SecureCameraPresenter(
     private fun saveCameraImage(cameraImage: CameraImage) {
         cameraImagesRepo.saveCameraImage(cameraImage)
                 .observeOn(Schedulers.io())
-                .flatMap { cameraImagesRepo.getAllCameraImagesInAlbum(albumKey) }
-                .map { it.size }
+                .flatMap { cameraImagesRepo.getImageCountInAlbum(albumKey) }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

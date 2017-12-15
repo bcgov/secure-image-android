@@ -30,6 +30,12 @@ private constructor(val localDataSource: CameraImagesDataSource) : CameraImagesD
     override fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
             localDataSource.saveCameraImage(cameraImage)
 
+    override fun getImageCountInAlbum(albumKey: String): Observable<Int> =
+            localDataSource.getImageCountInAlbum(albumKey)
+
+    override fun getFirstFiveImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> =
+            localDataSource.getFirstFiveImagesInAlbum(albumKey)
+
     override fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> =
             localDataSource.getAllCameraImagesInAlbum(albumKey)
 
