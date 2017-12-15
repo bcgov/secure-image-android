@@ -27,7 +27,6 @@ class CreateAlbumPresenter(
         view.setUpBackListener()
 
         view.setUpImagesList()
-        getImages()
 
         view.setUpViewAllImagesListener()
 
@@ -38,6 +37,16 @@ class CreateAlbumPresenter(
         disposables.dispose()
     }
 
+    override fun viewShown() {
+        view.showImages(ArrayList())
+        getImages()
+    }
+
+    override fun viewHidden() {
+        disposables.clear()
+    }
+
+    // Images
     fun getImages() {
         cameraImagesRepo.getAllImages()
                 .flatMapIterable { it }
@@ -62,18 +71,22 @@ class CreateAlbumPresenter(
         ).addTo(disposables)
     }
 
+    // back
     override fun backClicked() {
         view.finish()
     }
 
+    // Save
     override fun saveClicked() {
 
     }
 
+    // View all
     override fun viewAllImagesClicked() {
         view.goToAllImages()
     }
 
+    // Add images
     override fun addImagesClicked() {
         view.goToSecureCamera()
     }

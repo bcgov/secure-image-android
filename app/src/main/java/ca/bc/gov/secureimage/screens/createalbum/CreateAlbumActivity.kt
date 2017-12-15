@@ -32,6 +32,16 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         presenter?.subscribe()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter?.viewShown()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter?.viewHidden()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()

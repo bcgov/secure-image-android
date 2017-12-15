@@ -31,6 +31,9 @@ interface CreateAlbumContract {
     }
 
     interface Presenter: BasePresenter {
+        fun viewShown()
+        fun viewHidden()
+
         fun backClicked()
 
         fun saveClicked()
