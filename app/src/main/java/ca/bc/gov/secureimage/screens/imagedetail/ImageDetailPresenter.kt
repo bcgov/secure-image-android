@@ -35,6 +35,7 @@ class ImageDetailPresenter(
 
     /**
      * Grabs the image associated with the passed image key
+     * onSuccess shows image
      */
     fun getImage() {
         cameraImagesRepo.getCameraImage(imageKey)

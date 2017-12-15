@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="@string/delete_album_forever"
+            android:text="@string/delete_device_album"
             android:textColor="@color/red"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -49,7 +49,7 @@
 
         <TextView
             android:id="@+id/deleteForeverTv"
-            android:text="@string/delete_forever"
+            android:text="@string/delete_album"
             android:textColor="@color/red"
             android:textAllCaps="true"
             android:textStyle="bold"
