@@ -31,6 +31,9 @@ class ImageDetailPresenter(
         disposables.dispose()
     }
 
+    /**
+     * Grabs the image associated with the passed image key
+     */
     fun getImage() {
         cameraImagesRepo.getCameraImage(imageKey)
                 .firstOrError()

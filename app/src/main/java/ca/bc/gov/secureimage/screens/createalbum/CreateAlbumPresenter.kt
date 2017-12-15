@@ -3,6 +3,7 @@ package ca.bc.gov.secureimage.screens.createalbum
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -16,7 +17,8 @@ import io.reactivex.schedulers.Schedulers
 class CreateAlbumPresenter(
         private val view: CreateAlbumContract.View,
         private val albumKey: String,
-        private val albumsRepo: AlbumsRepo
+        private val albumsRepo: AlbumsRepo,
+        private val cameraImagesRepo: CameraImagesRepo
 ) : CreateAlbumContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -71,15 +73,14 @@ class CreateAlbumPresenter(
 
     /**
      * Gets the first 5 album images and sorts by first created
-     * On success show images
+     * On success show images with add images model so recycler view can display an add image tile
      */
     fun getImages() {
-        albumsRepo.getAlbum(albumKey)
-                .map { it.cameraImages }
+        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .take(5)
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error processing images")
@@ -129,8 +130,13 @@ class CreateAlbumPresenter(
         view.showDeleteAlbumDialog()
     }
 
+    /**
+     * Deletes album model then deletes all the images associated with that album
+     */
     override fun deleteForeverClicked() {
         albumsRepo.deleteAlbum(albumKey)
+                .observeOn(Schedulers.io())
+                .flatMap { cameraImagesRepo.deleteAllCameraImagesInAlbum(albumKey) }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

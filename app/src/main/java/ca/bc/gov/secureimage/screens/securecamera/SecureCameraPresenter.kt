@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.screens.securecamera
 
 import ca.bc.gov.secureimage.data.models.CameraImage
-import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import com.wonderkiln.camerakit.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 class SecureCameraPresenter(
         private val view: SecureCameraContract.View,
         private val albumKey: String,
-        private val albumsRepo: AlbumsRepo
+        private val cameraImagesRepo: CameraImagesRepo
 ) : SecureCameraContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -43,6 +43,8 @@ class SecureCameraPresenter(
         view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
         view.showFlashOff()
         view.setUpFlashControlListener()
+
+        getAlbumImageCount()
     }
 
     override fun dispose() {
@@ -84,28 +86,40 @@ class SecureCameraPresenter(
 
         val cameraImage = CameraImage()
         cameraImage.byteArray = image.jpeg
+        cameraImage.albumKey = albumKey
         saveCameraImage(cameraImage)
     }
 
     /**
-     * Gets current album, adds the new image to the album's images and saves
-     * Updates album's updated time
-     * On success shows the new image count
+     * Gets the current count of images in album
+     * onSuccess current counter is shown
+     */
+    private fun getAlbumImageCount() {
+        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
+                .map { it.size }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving image")
+                },
+                onSuccess = {
+                    val imageCounterText = "$it ${if (it == 1) "Image" else "Images"}"
+                    view.setImageCounterText(imageCounterText)
+                    view.showImageCounter()
+                }
+        ).addTo(disposables)
+    }
+
+    /**
+     * Saves camera image locally then grabs the current amount of images for the album
+     * On success gets called with the integer size of images and the image counter is displayed
      */
     private fun saveCameraImage(cameraImage: CameraImage) {
-        albumsRepo.getAlbum(albumKey)
-                .take(1)
+        cameraImagesRepo.saveCameraImage(cameraImage)
                 .observeOn(Schedulers.io())
-                .flatMap {
-                    val images = it.cameraImages
-                    images.add(cameraImage)
-
-                    it.cameraImages = images
-                    it.updatedTime = System.currentTimeMillis()
-
-                    albumsRepo.saveAlbum(it)
-                }
-                .map { it.cameraImages.size }
+                .flatMap { cameraImagesRepo.getAllCameraImagesInAlbum(albumKey) }
+                .map { it.size }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

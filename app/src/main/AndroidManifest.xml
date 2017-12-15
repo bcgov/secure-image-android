@@ -6,6 +6,7 @@
 
     <application
         android:name=".common.base.BaseApplication"
+        android:largeHeap="true"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,18 +14,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".screens.enteremail.EnterEmailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity android:name=".screens.albums.AlbumsActivity" />
         <activity android:name=".screens.createalbum.CreateAlbumActivity" />
         <activity android:name=".screens.allimages.AllImagesActivity" />
         <activity android:name=".screens.securecamera.SecureCameraActivity" />
-        <activity android:name=".screens.imagedetail.ImageDetailActivity"></activity>
+        <activity android:name=".screens.imagedetail.ImageDetailActivity" />
+
     </application>
 
 </manifest>

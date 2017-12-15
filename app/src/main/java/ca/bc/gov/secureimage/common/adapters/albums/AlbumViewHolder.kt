@@ -19,16 +19,10 @@ class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     fun bind(album: Album, clickListener: ClickListener) = with(itemView) {
 
         // Image
-        val cameraImages = album.cameraImages
-        if(cameraImages.size > 0) {
-            val cameraImage = cameraImages[0]
-            Glide.with(context)
-                    .load(cameraImage?.byteArray)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(imageIv)
-        } else {
-            imageIv.setImageBitmap(null)
-        }
+        Glide.with(context)
+                .load(album.previewByteArray)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageIv)
 
         // Name
         nameTv.text = album.albumName

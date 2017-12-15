@@ -24,5 +24,15 @@ private constructor(val localDataSource: CameraImagesDataSource) : CameraImagesD
         }
     }
 
-    override fun getCameraImage(key: String): Observable<CameraImage> = localDataSource.getCameraImage(key)
+    override fun getCameraImage(key: String): Observable<CameraImage> =
+            localDataSource.getCameraImage(key)
+
+    override fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
+            localDataSource.saveCameraImage(cameraImage)
+
+    override fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> =
+            localDataSource.getAllCameraImagesInAlbum(albumKey)
+
+    override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> =
+            localDataSource.deleteAllCameraImagesInAlbum(albumKey)
 }

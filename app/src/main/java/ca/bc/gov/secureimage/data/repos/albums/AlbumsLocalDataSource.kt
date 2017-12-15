@@ -1,6 +1,7 @@
 package ca.bc.gov.secureimage.data.repos.albums
 
 import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.CameraImage
 import io.reactivex.Observable
 import io.realm.Realm
 
@@ -42,6 +43,12 @@ object AlbumsLocalDataSource : AlbumsDataSource {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 val albums = realm.copyFromRealm(realm.where(Album::class.java).findAll())
+                for(album in albums) {
+                    val previewImage = realm.where(CameraImage::class.java)
+                            .equalTo("albumKey", album.key)
+                            .findFirst()
+                    if(previewImage != null) album.previewByteArray = realm.copyFromRealm(previewImage).byteArray
+                }
                 emitter.onNext(ArrayList(albums))
             }
             realm.close()
@@ -68,7 +75,6 @@ object AlbumsLocalDataSource : AlbumsDataSource {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 val album = realm.where(Album::class.java).equalTo("key", key).findFirst()
-                album?.cameraImages?.deleteAllFromRealm()
                 album?.deleteFromRealm()
 
                 if (album != null) emitter.onNext(album)

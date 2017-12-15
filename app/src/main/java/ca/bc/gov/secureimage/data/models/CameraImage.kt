@@ -13,8 +13,11 @@ open class CameraImage : RealmObject() {
     @PrimaryKey
     var key: String = UUID.randomUUID().toString()
 
+    var albumKey: String = ""
+
     var createdTime: Long = System.currentTimeMillis()
     var updatedTime: Long = System.currentTimeMillis()
+
     var byteArray: ByteArray = ByteArray(64)
 
     fun compareTo(cameraImage: CameraImage): Int  = when {

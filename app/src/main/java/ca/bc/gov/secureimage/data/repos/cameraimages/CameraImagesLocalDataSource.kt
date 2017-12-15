@@ -23,4 +23,49 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
             emitter.onComplete()
         }
     }
+
+    override fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                realm.copyToRealmOrUpdate(cameraImage)
+                emitter.onNext(cameraImage)
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
+    override fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val cameraImages = realm.where(CameraImage::class.java)
+                        .equalTo("albumKey", albumKey).findAll()
+                if(cameraImages != null) emitter.onNext(ArrayList(realm.copyFromRealm(cameraImages)))
+                else emitter.onNext(ArrayList())
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
+    override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val cameraImages = realm.where(CameraImage::class.java)
+                        .equalTo("albumKey", albumKey).findAll()
+                cameraImages.deleteAllFromRealm()
+
+                if(cameraImages != null) emitter.onNext(ArrayList(cameraImages))
+                else emitter.onNext(ArrayList())
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
 }

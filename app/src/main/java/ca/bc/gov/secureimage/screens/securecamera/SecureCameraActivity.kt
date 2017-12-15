@@ -29,7 +29,7 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
 
         SecureCameraPresenter(this,
                 albumKey,
-                Injection.provideAlbumsRepo())
+                Injection.provideCameraImagesRepo())
 
         presenter?.subscribe()
     }

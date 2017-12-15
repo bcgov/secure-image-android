@@ -43,7 +43,7 @@ class AlbumsPresenter(
     }
 
     /**
-     * Grabs all the albums from the albums repo
+     * Grabs all the albums with preview image from the albums repo
      * Orders albums by updated time and displays in view
      */
     fun getAlbums() {

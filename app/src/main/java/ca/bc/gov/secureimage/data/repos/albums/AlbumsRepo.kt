@@ -34,5 +34,4 @@ class AlbumsRepo(
     override fun saveAlbum(album: Album): Observable<Album> = localDataSource.saveAlbum(album)
 
     override fun deleteAlbum(key: String): Observable<Album> = localDataSource.deleteAlbum(key)
-
 }

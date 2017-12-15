@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.data.models
 
-import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
@@ -16,9 +16,11 @@ open class Album : RealmObject() {
 
     var createdTime: Long = System.currentTimeMillis()
     var updatedTime: Long = System.currentTimeMillis()
-    var cameraImages: RealmList<CameraImage> = RealmList()
 
     var albumName: String = "Unnamed Album"
+
+    @Ignore
+    var previewByteArray: ByteArray? = null
 
     fun compareTo(album: Album): Int = when {
         updatedTime < album.updatedTime -> 1

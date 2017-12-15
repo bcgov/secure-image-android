@@ -30,6 +30,11 @@ class EnterEmailPresenter(
         disposables.dispose()
     }
 
+    /**
+     * Checks for existing user.
+     * If the email is not blank then on success is called and user is sent to albums page
+     * If the email is blank then on complete is called and the enter email ui is displayed.
+     */
     fun checkForExistingUser() {
         userRepo.getUser()
                 .filter { it.email.isNotBlank() }
@@ -60,6 +65,10 @@ class EnterEmailPresenter(
         saveUser(govEmail)
     }
 
+    /**
+     * Grabs the current user, updates the fields and saves locally
+     * On success goes to main albums page
+     */
     fun saveUser(govEmail: String) {
         userRepo.getUser()
                 .observeOn(Schedulers.io())

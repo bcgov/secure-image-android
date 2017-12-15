@@ -38,7 +38,7 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
         AllImagesPresenter(this,
                 albumKey,
-                Injection.provideAlbumsRepo())
+                Injection.provideCameraImagesRepo())
 
         presenter?.subscribe()
     }

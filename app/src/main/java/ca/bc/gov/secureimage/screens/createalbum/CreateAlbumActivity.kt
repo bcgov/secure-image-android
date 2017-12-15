@@ -43,7 +43,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         CreateAlbumPresenter(
                 this,
                 albumKey,
-                Injection.provideAlbumsRepo()
+                Injection.provideAlbumsRepo(),
+                Injection.provideCameraImagesRepo()
         )
 
         presenter?.subscribe()
