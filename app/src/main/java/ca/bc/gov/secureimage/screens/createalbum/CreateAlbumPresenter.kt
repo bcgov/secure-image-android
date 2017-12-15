@@ -50,7 +50,9 @@ class CreateAlbumPresenter(
         disposables.clear()
     }
 
-    // Album
+    /**
+     * Gets album and populates album fields
+     */
     fun getAlbum() {
         albumsRepo.getAlbum(albumKey)
                 .firstOrError()
@@ -65,7 +67,10 @@ class CreateAlbumPresenter(
         ).addTo(disposables)
     }
 
-    // Images
+    /**
+     * Gets the first 5 album images and sorts by first created
+     * On success show images
+     */
     fun getImages() {
         albumsRepo.getAlbum(albumKey)
                 .map { it.cameraImages }
@@ -91,9 +96,30 @@ class CreateAlbumPresenter(
         view.finish()
     }
 
-    // Save
-    override fun saveClicked() {
-
+    /**
+     * Add all current album fields to existing album and saves
+     * Update time is set to current time in millis
+     * On success finishes
+     */
+    override fun saveClicked(albumName: String) {
+        albumsRepo.getAlbum(albumKey)
+                .observeOn(Schedulers.io())
+                .flatMap {
+                    it.albumName = albumName
+                    it.updatedTime = System.currentTimeMillis()
+                    albumsRepo.saveAlbum(it)
+                }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving album")
+                },
+                onSuccess = {
+                    view.showMessage("Album saved")
+                    view.finish()
+                })
+                .addTo(disposables)
     }
 
     // View all

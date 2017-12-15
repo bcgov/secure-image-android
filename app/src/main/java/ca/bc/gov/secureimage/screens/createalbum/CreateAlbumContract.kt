@@ -36,7 +36,7 @@ interface CreateAlbumContract {
 
         fun backClicked()
 
-        fun saveClicked()
+        fun saveClicked(albumName: String)
 
         fun viewAllImagesClicked()
 
