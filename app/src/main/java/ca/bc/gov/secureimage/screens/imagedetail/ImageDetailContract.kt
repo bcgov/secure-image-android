@@ -10,13 +10,17 @@ import ca.bc.gov.secureimage.common.base.BaseView
 interface ImageDetailContract {
 
     interface View : BaseView<Presenter> {
+        fun finish()
+
         fun showError(message: String)
+
+        fun addBackListener()
 
         fun showImage(byteArray: ByteArray)
     }
 
     interface Presenter : BasePresenter {
-
+        fun backClicked()
     }
 
 }

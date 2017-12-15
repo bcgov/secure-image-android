@@ -40,6 +40,12 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailContract.View {
         presenter?.dispose()
     }
 
+    override fun addBackListener() {
+        backIv.setOnClickListener {
+            presenter?.backClicked()
+        }
+    }
+
     // Error
     override fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()

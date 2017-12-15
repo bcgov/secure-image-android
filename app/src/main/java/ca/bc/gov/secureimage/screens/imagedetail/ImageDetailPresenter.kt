@@ -24,6 +24,8 @@ class ImageDetailPresenter(
     }
 
     override fun subscribe() {
+        view.addBackListener()
+
         getImage()
     }
 
@@ -46,5 +48,9 @@ class ImageDetailPresenter(
                     view.showImage(it.byteArray)
                 })
                 .addTo(disposables)
+    }
+
+    override fun backClicked() {
+        view.finish()
     }
 }

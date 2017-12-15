@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/colorPrimary"
+    android:background="@color/black"
     tools:context="ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity">
 
     <RelativeLayout
