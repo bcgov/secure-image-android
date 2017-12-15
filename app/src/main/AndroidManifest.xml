@@ -5,8 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-
-        android:name="ca.bc.gov.secureimage.common.base.BaseApplication"
+        android:name=".common.base.BaseApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,7 +24,7 @@
         <activity android:name=".screens.createalbum.CreateAlbumActivity" />
         <activity android:name=".screens.allimages.AllImagesActivity" />
         <activity android:name=".screens.securecamera.SecureCameraActivity" />
-
+        <activity android:name=".screens.imagedetail.ImageDetailActivity"></activity>
     </application>
 
 </manifest>

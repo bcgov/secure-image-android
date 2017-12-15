@@ -13,6 +13,7 @@ import ca.bc.gov.secureimage.data.models.CameraImage
 class ImagesAdapter(
         private val inflater: LayoutInflater,
         private val addImagesListener: AddImagesViewHolder.Listener,
+        private val imageClickListener : ImageViewHolder.ImageClickListener,
         private var items: ArrayList<Any> = ArrayList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -32,7 +33,7 @@ class ImagesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         when (holder) {
-            is ImageViewHolder -> holder.bind(items[position] as CameraImage)
+            is ImageViewHolder -> holder.bind(items[position] as CameraImage, imageClickListener)
             is AddImagesViewHolder -> holder.bind(addImagesListener)
         }
     }

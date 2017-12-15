@@ -11,10 +11,13 @@ import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
+import ca.bc.gov.secureimage.common.adapters.images.ImageViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
+import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_all_images.*
 
-class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImagesViewHolder.Listener {
+class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener {
 
     override var presenter: AllImagesContract.Presenter? = null
 
@@ -69,7 +72,7 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     // Images list
     override fun setUpImagesList() {
-        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this)
+        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this, this)
         imagesRv.apply {
             layoutManager = GridLayoutManager(this@AllImagesActivity, 3)
             adapter = imagesAdapter
@@ -80,6 +83,10 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         presenter?.addImagesClicked()
     }
 
+    override fun imageClicked(cameraImage: CameraImage) {
+        presenter?.imageClicked(cameraImage)
+    }
+
     override fun showImages(items: ArrayList<Any>) {
         imagesAdapter?.replaceItems(items)
     }
@@ -88,6 +95,13 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
     override fun goToSecureCamera(albumKey: String) {
         Intent(this, SecureCameraActivity::class.java)
                 .putExtra(Constants.ALBUM_KEY, albumKey)
+                .run { startActivity(this) }
+    }
+
+    // Image detail
+    override fun goToImageDetail(imageKey: String) {
+        Intent(this, ImageDetailActivity::class.java)
+                .putExtra(Constants.IMAGE_KEY, imageKey)
                 .run { startActivity(this) }
     }
 }

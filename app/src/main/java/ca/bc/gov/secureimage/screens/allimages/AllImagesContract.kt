@@ -2,6 +2,7 @@ package ca.bc.gov.secureimage.screens.allimages
 
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
+import ca.bc.gov.secureimage.data.models.CameraImage
 
 /**
  * Created by Aidan Laing on 2017-12-13.
@@ -20,6 +21,7 @@ interface AllImagesContract {
         fun showImages(items: ArrayList<Any>)
 
         fun goToSecureCamera(albumKey: String)
+        fun goToImageDetail(imageKey: String)
     }
 
     interface Presenter: BasePresenter {
@@ -29,6 +31,7 @@ interface AllImagesContract {
         fun backClicked()
 
         fun addImagesClicked()
+        fun imageClicked(cameraImage: CameraImage)
     }
 
 }

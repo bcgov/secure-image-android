@@ -1,6 +1,7 @@
 package ca.bc.gov.secureimage.screens.allimages
 
 import ca.bc.gov.secureimage.data.models.AddImages
+import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -69,5 +70,10 @@ class AllImagesPresenter(
     // Add images
     override fun addImagesClicked() {
         view.goToSecureCamera(albumKey)
+    }
+
+    // Image clicks
+    override fun imageClicked(cameraImage: CameraImage) {
+        view.goToImageDetail(cameraImage.key)
     }
 }

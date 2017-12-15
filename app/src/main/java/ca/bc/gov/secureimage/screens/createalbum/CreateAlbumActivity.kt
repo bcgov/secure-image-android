@@ -11,12 +11,15 @@ import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
+import ca.bc.gov.secureimage.common.adapters.images.ImageViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
 import ca.bc.gov.secureimage.common.ui.NoScrollGridLayoutManager
+import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.screens.allimages.AllImagesActivity
+import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_create_album.*
 
-class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddImagesViewHolder.Listener {
+class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener {
 
     override var presenter: CreateAlbumContract.Presenter? = null
 
@@ -77,7 +80,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
 
     // Image list
     override fun setUpImagesList() {
-        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this)
+        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this, this)
         imagesRv.apply {
             layoutManager = NoScrollGridLayoutManager(this@CreateAlbumActivity, 3)
             adapter = imagesAdapter
@@ -86,6 +89,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
 
     override fun addImagesClicked() {
         presenter?.addImagesClicked()
+    }
+
+    override fun imageClicked(cameraImage: CameraImage) {
+        presenter?.imageClicked(cameraImage)
     }
 
     override fun showImages(items: ArrayList<Any>) {
@@ -120,10 +127,22 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         }
     }
 
+    // Album name
+    override fun setAlbumName(albumName: String) {
+        albumNameEt.setText(albumName)
+    }
+
     // Camera
     override fun goToSecureCamera(albumKey: String) {
         Intent(this, SecureCameraActivity::class.java)
                 .putExtra(Constants.ALBUM_KEY, albumKey)
+                .run { startActivity(this) }
+    }
+
+    // Image detail
+    override fun goToImageDetail(imageKey: String) {
+        Intent(this, ImageDetailActivity::class.java)
+                .putExtra(Constants.IMAGE_KEY, imageKey)
                 .run { startActivity(this) }
     }
 }

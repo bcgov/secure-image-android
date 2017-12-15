@@ -3,7 +3,6 @@ package ca.bc.gov.secureimage.screens.createalbum
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -42,7 +41,7 @@ class CreateAlbumPresenter(
 
     override fun viewShown() {
         view.showImages(ArrayList())
-        getAlbum()
+        getAlbumFields()
         getImages()
     }
 
@@ -53,7 +52,7 @@ class CreateAlbumPresenter(
     /**
      * Gets album and populates album fields
      */
-    fun getAlbum() {
+    fun getAlbumFields() {
         albumsRepo.getAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -62,7 +61,7 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error retrieving album")
                 },
                 onSuccess = {
-
+                    view.setAlbumName(it.albumName)
                 }
         ).addTo(disposables)
     }
@@ -130,5 +129,9 @@ class CreateAlbumPresenter(
     // Add images
     override fun addImagesClicked() {
         view.goToSecureCamera(albumKey)
+    }
+
+    override fun imageClicked(cameraImage: CameraImage) {
+        view.goToImageDetail(cameraImage.key)
     }
 }

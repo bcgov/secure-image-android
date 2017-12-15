@@ -16,11 +16,19 @@ import kotlinx.android.synthetic.main.item_image.view.*
  */
 class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(cameraImage: CameraImage) = with(itemView) {
+    fun bind(cameraImage: CameraImage, imageClickListener: ImageClickListener) = with(itemView) {
+
+        // Image
         Glide.with(context)
                 .load(cameraImage.byteArray)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageIv)
+
+        // Clicks
+        layout.setOnClickListener {
+            imageClickListener.imageClicked(cameraImage)
+        }
+
     }
 
     companion object {
@@ -30,6 +38,10 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
                 attachToRoot: Boolean = false
         ): ImageViewHolder =
                 ImageViewHolder(inflater.inflate(R.layout.item_image, root, attachToRoot))
+    }
+
+    interface ImageClickListener {
+        fun imageClicked(cameraImage: CameraImage)
     }
 
 }
