@@ -53,7 +53,8 @@
             <RelativeLayout
                 android:id="@+id/imagesLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="3:2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
@@ -64,6 +65,14 @@
                     android:layout_height="wrap_content"/>
 
             </RelativeLayout>
+
+            <View
+                android:background="@color/lightGray"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/viewAllImagesTv"/>
 
             <TextView
                 android:id="@+id/viewAllImagesTv"
