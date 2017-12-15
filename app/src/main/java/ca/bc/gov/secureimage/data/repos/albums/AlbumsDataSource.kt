@@ -9,7 +9,12 @@ import io.reactivex.Observable
  */
 interface AlbumsDataSource {
 
-    fun saveAlbum(album: Album): Observable<Album>
+    fun createAlbum(): Observable<Album>
+
     fun getAllAlbums(): Observable<ArrayList<Album>>
+
+    fun saveAlbum(album: Album): Observable<Album>
+
+    fun deleteAlbum(key: String): Observable<Album>
 
 }

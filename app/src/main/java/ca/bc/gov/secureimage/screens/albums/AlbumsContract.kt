@@ -10,14 +10,19 @@ import ca.bc.gov.secureimage.common.base.BaseView
 interface AlbumsContract {
 
     interface View: BaseView<Presenter> {
+        fun showError(message: String)
+
         fun setUpAlbumsList()
         fun showAlbumItems(items: ArrayList<Any>)
 
         fun setUpCreateAlbumListener()
-        fun goToCreateAlbum()
+        fun goToCreateAlbum(albumKey: String)
     }
 
     interface Presenter: BasePresenter {
+        fun viewShown()
+        fun viewHidden()
+
         fun createAlbumClicked()
     }
 

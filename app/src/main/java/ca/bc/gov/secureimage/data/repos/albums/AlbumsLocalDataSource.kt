@@ -10,11 +10,11 @@ import io.realm.Realm
  */
 object AlbumsLocalDataSource : AlbumsDataSource {
 
-    override fun saveAlbum(album: Album): Observable<Album> {
+    override fun createAlbum(): Observable<Album> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
-                realm.copyToRealm(album)
+                val album = realm.copyFromRealm(realm.copyToRealm(Album()))
                 emitter.onNext(album)
             }
             realm.close()
@@ -29,6 +29,35 @@ object AlbumsLocalDataSource : AlbumsDataSource {
             realm.executeTransaction {
                 val albums = realm.copyFromRealm(realm.where(Album::class.java).findAll())
                 emitter.onNext(ArrayList(albums))
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
+    override fun saveAlbum(album: Album): Observable<Album> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                realm.copyToRealm(album)
+                emitter.onNext(album)
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
+    override fun deleteAlbum(key: String): Observable<Album> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val album = realm.where(Album::class.java).equalTo("key", key).findFirst()
+                album?.deleteFromRealm()
+
+                if (album != null) emitter.onNext(realm.copyFromRealm(album))
+                else emitter.onError(Throwable("Album not found"))
             }
             realm.close()
 

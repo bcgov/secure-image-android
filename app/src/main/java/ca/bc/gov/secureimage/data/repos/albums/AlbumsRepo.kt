@@ -25,11 +25,12 @@ class AlbumsRepo(
         }
     }
 
-    override fun saveAlbum(album: Album): Observable<Album> {
-        return localDataSource.saveAlbum(album)
-    }
+    override fun createAlbum(): Observable<Album> = localDataSource.createAlbum()
 
-    override fun getAllAlbums(): Observable<ArrayList<Album>> {
-        return localDataSource.getAllAlbums()
-    }
+    override fun getAllAlbums(): Observable<ArrayList<Album>> = localDataSource.getAllAlbums()
+
+    override fun saveAlbum(album: Album): Observable<Album> = localDataSource.saveAlbum(album)
+
+    override fun deleteAlbum(key: String): Observable<Album> = localDataSource.deleteAlbum(key)
+
 }
