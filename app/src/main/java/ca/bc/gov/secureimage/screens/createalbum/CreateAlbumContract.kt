@@ -13,6 +13,8 @@ interface CreateAlbumContract {
     interface View: BaseView<Presenter> {
         fun finish()
 
+        fun setRefresh(refresh: Boolean)
+
         fun showError(message: String)
         fun showMessage(message: String)
 
@@ -39,7 +41,7 @@ interface CreateAlbumContract {
     }
 
     interface Presenter: BasePresenter {
-        fun viewShown()
+        fun viewShown(refresh: Boolean)
         fun viewHidden()
 
         fun backClicked()

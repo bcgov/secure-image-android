@@ -23,6 +23,8 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     private var imagesAdapter: ImagesAdapter? = null
 
+    private var refresh = true
+
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +52,17 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     override fun onResume() {
         super.onResume()
-        presenter?.viewShown()
+        presenter?.viewShown(refresh)
     }
 
     override fun onPause() {
         super.onPause()
         presenter?.viewHidden()
+    }
+
+    // Refresh
+    override fun setRefresh(refresh: Boolean) {
+        this.refresh = refresh
     }
 
     // Error

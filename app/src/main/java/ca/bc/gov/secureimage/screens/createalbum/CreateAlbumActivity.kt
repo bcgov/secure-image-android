@@ -27,6 +27,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
 
     private var deleteAlbumDialog: DeleteAlbumDialog? = null
 
+    private var refresh = true
+
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
 
     override fun onResume() {
         super.onResume()
-        presenter?.viewShown()
+        presenter?.viewShown(refresh)
     }
 
     override fun onPause() {
@@ -63,6 +65,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
+    }
+
+    override fun setRefresh(refresh: Boolean) {
+        this.refresh = refresh
     }
 
     // Error

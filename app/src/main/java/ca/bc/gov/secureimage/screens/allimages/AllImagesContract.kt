@@ -13,6 +13,8 @@ interface AllImagesContract {
     interface View: BaseView<Presenter> {
         fun finish()
 
+        fun setRefresh(refresh: Boolean)
+
         fun showError(message: String)
 
         fun setUpBackListener()
@@ -25,7 +27,7 @@ interface AllImagesContract {
     }
 
     interface Presenter: BasePresenter {
-        fun viewShown()
+        fun viewShown(refresh: Boolean)
         fun viewHidden()
 
         fun backClicked()

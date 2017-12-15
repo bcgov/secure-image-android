@@ -37,6 +37,8 @@ class CreateAlbumPresenter(
         view.setUpSaveListener()
 
         view.setUpDeleteListener()
+
+        view.setRefresh(true)
     }
 
     override fun dispose() {
@@ -44,10 +46,13 @@ class CreateAlbumPresenter(
         disposables.dispose()
     }
 
-    override fun viewShown() {
-        view.showImages(ArrayList())
-        getAlbumFields()
-        getImages()
+    override fun viewShown(refresh: Boolean) {
+        if(refresh) {
+            view.showImages(ArrayList())
+            getImages()
+            getAlbumFields()
+            view.setRefresh(false)
+        }
     }
 
     override fun viewHidden() {
@@ -152,11 +157,13 @@ class CreateAlbumPresenter(
 
     // View all
     override fun viewAllImagesClicked() {
+        view.setRefresh(true)
         view.goToAllImages(albumKey)
     }
 
     // Add images
     override fun addImagesClicked() {
+        view.setRefresh(true)
         view.goToSecureCamera(albumKey)
     }
 

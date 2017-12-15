@@ -29,15 +29,21 @@ class AllImagesPresenter(
         view.setUpBackListener()
 
         view.setUpImagesList()
+
+        view.setRefresh(true)
     }
 
     override fun dispose() {
         disposables.dispose()
     }
 
-    override fun viewShown() {
-        view.showImages(ArrayList())
-        getImages()
+    override fun viewShown(refresh: Boolean) {
+        if(refresh) {
+            view.showImages(ArrayList())
+            getImages()
+
+            view.setRefresh(false)
+        }
     }
 
     override fun viewHidden() {
@@ -72,6 +78,7 @@ class AllImagesPresenter(
 
     // Add images
     override fun addImagesClicked() {
+        view.setRefresh(true)
         view.goToSecureCamera(albumKey)
     }
 
