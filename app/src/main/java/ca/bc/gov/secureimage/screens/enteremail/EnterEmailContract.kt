@@ -10,12 +10,16 @@ import ca.bc.gov.secureimage.common.base.BaseView
 interface EnterEmailContract {
 
     interface View: BaseView<Presenter> {
+        fun setContentView()
+
+        fun showError(message: String)
+
         fun setUpLoginListener()
         fun goToAlbums()
     }
 
     interface Presenter: BasePresenter {
-        fun loginClicked()
+        fun loginClicked(email: String)
     }
 
 }

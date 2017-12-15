@@ -16,6 +16,7 @@ object UserLocalDataSource : UserDataSource {
             realm.executeTransaction {
                 val user = realm.where(User::class.java).findFirst()
                 if(user != null) emitter.onNext(realm.copyFromRealm(user))
+                else emitter.onNext(User())
             }
             realm.close()
 
