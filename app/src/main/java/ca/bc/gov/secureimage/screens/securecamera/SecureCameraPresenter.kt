@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.screens.securecamera
 
 import ca.bc.gov.secureimage.data.models.CameraImage
-import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
+import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import com.wonderkiln.camerakit.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,7 +15,8 @@ import io.reactivex.schedulers.Schedulers
  */
 class SecureCameraPresenter(
         private val view: SecureCameraContract.View,
-        private val cameraImagesRepo: CameraImagesRepo
+        private val albumKey: String,
+        private val albumsRepo: AlbumsRepo
 ) : SecureCameraContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -86,8 +87,25 @@ class SecureCameraPresenter(
         saveCameraImage(cameraImage)
     }
 
+    /**
+     * Gets current album, adds the new image to the album's images and saves
+     * Updates album's updated time
+     * On success shows the new image count
+     */
     private fun saveCameraImage(cameraImage: CameraImage) {
-        cameraImagesRepo.saveImage(cameraImage)
+        albumsRepo.getAlbum(albumKey)
+                .take(1)
+                .observeOn(Schedulers.io())
+                .flatMap {
+                    val images = it.cameraImages
+                    images.add(cameraImage)
+
+                    it.cameraImages = images
+                    it.updatedTime = System.currentTimeMillis()
+
+                    albumsRepo.saveAlbum(it)
+                }
+                .map { it.cameraImages.size }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -95,8 +113,7 @@ class SecureCameraPresenter(
                     view.showError(it.message ?: "Error saving image")
                 },
                 onSuccess = {
-                    cameraImagesRepo.imageCount++
-                    val imageCounterText = "${cameraImagesRepo.imageCount} ${if (cameraImagesRepo.imageCount == 1) "Image" else "Images"}"
+                    val imageCounterText = "$it ${if (it == 1) "Image" else "Images"}"
                     view.setImageCounterText(imageCounterText)
                     view.showImageCounter()
                 }
@@ -104,6 +121,7 @@ class SecureCameraPresenter(
     }
 
     override fun onCameraVideo(video: CameraKitVideo?) {
+
     }
 
     // Take image

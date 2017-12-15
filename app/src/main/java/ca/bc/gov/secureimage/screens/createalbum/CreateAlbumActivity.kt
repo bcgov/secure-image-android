@@ -9,6 +9,7 @@ import android.widget.Toast
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
 import ca.bc.gov.secureimage.R
+import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
 import ca.bc.gov.secureimage.common.ui.NoScrollGridLayoutManager
@@ -26,8 +27,19 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_album)
 
-        CreateAlbumPresenter(this,
-                Injection.provideCameraImagesRepo())
+        // Extras
+        val albumKey = intent.getStringExtra(Constants.ALBUM_KEY)
+        if(albumKey == null) {
+            showError("No Album key passed")
+            finish()
+            return
+        }
+
+        CreateAlbumPresenter(
+                this,
+                albumKey,
+                Injection.provideAlbumsRepo()
+        )
 
         presenter?.subscribe()
     }
@@ -95,8 +107,9 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         viewAllImagesTv.visibility = View.GONE
     }
 
-    override fun goToAllImages() {
+    override fun goToAllImages(albumKey: String) {
         Intent(this, AllImagesActivity::class.java)
+                .putExtra(Constants.ALBUM_KEY, albumKey)
                 .run { startActivity(this) }
     }
 
@@ -108,8 +121,9 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
     }
 
     // Camera
-    override fun goToSecureCamera() {
+    override fun goToSecureCamera(albumKey: String) {
         Intent(this, SecureCameraActivity::class.java)
+                .putExtra(Constants.ALBUM_KEY, albumKey)
                 .run { startActivity(this) }
     }
 }

@@ -2,12 +2,11 @@ package ca.bc.gov.secureimage.screens.securecamera
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.R
+import ca.bc.gov.secureimage.common.Constants
 import com.wonderkiln.camerakit.*
 import kotlinx.android.synthetic.main.activity_secure_camera.*
 
@@ -18,17 +17,19 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Status Bar Color
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
-
-        setTheme(R.style.Theme_AppCompat_Light_NoActionBar)
         setContentView(R.layout.activity_secure_camera)
 
+        // Extras
+        val albumKey = intent.getStringExtra(Constants.ALBUM_KEY)
+        if(albumKey == null) {
+            showError("No Album key passed")
+            finish()
+            return
+        }
+
         SecureCameraPresenter(this,
-                Injection.provideCameraImagesRepo())
+                albumKey,
+                Injection.provideAlbumsRepo())
 
         presenter?.subscribe()
     }

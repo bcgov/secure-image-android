@@ -11,6 +11,8 @@ interface AlbumsDataSource {
 
     fun createAlbum(): Observable<Album>
 
+    fun getAlbum(key: String): Observable<Album>
+
     fun getAllAlbums(): Observable<ArrayList<Album>>
 
     fun saveAlbum(album: Album): Observable<Album>

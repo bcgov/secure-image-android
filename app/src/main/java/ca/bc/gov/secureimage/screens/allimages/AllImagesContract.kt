@@ -19,10 +19,13 @@ interface AllImagesContract {
         fun setUpImagesList()
         fun showImages(items: ArrayList<Any>)
 
-        fun goToSecureCamera()
+        fun goToSecureCamera(albumKey: String)
     }
 
     interface Presenter: BasePresenter {
+        fun viewShown()
+        fun viewHidden()
+
         fun backClicked()
 
         fun addImagesClicked()

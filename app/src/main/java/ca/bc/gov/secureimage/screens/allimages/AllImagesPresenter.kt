@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.screens.allimages
 
-import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.models.AddImages
+import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -14,7 +14,8 @@ import io.reactivex.schedulers.Schedulers
  */
 class AllImagesPresenter(
         private val view: AllImagesContract.View,
-        private val cameraImagesRepo: CameraImagesRepo
+        private val albumKey: String,
+        private val albumsRepo: AlbumsRepo
 ) : AllImagesContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -27,15 +28,25 @@ class AllImagesPresenter(
         view.setUpBackListener()
 
         view.setUpImagesList()
-        getImages()
     }
 
     override fun dispose() {
         disposables.dispose()
     }
 
+    override fun viewShown() {
+        view.showImages(ArrayList())
+        getImages()
+    }
+
+    override fun viewHidden() {
+        disposables.clear()
+    }
+
     fun getImages() {
-        cameraImagesRepo.getAllImages()
+        albumsRepo.getAlbum(albumKey)
+                .take(1)
+                .map { ArrayList(it.cameraImages) }
                 .flatMapIterable { it }
                 .observeOn(Schedulers.computation())
                 .map {
@@ -64,6 +75,6 @@ class AllImagesPresenter(
 
     // Add images
     override fun addImagesClicked() {
-        view.goToSecureCamera()
+        view.goToSecureCamera(albumKey)
     }
 }

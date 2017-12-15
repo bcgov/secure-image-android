@@ -54,4 +54,10 @@ open class CameraImage : RealmObject() {
 
         return scaledBitmap
     }
+
+    fun compareTo(cameraImage: CameraImage): Int  = when {
+        createdTime < cameraImage.createdTime -> 1
+        createdTime > cameraImage.createdTime -> -1
+        else -> 0
+    }
 }

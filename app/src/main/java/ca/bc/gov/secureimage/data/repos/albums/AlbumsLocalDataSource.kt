@@ -23,6 +23,20 @@ object AlbumsLocalDataSource : AlbumsDataSource {
         }
     }
 
+    override fun getAlbum(key: String): Observable<Album> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val album = realm.where(Album::class.java).equalTo("key", key).findFirst()
+                if(album != null) emitter.onNext(realm.copyFromRealm(album))
+                else emitter.onError(Throwable("Album not found"))
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
     override fun getAllAlbums(): Observable<ArrayList<Album>> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()

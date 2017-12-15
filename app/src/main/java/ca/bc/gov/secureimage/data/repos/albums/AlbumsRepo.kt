@@ -27,6 +27,8 @@ class AlbumsRepo(
 
     override fun createAlbum(): Observable<Album> = localDataSource.createAlbum()
 
+    override fun getAlbum(key: String): Observable<Album> = localDataSource.getAlbum(key)
+
     override fun getAllAlbums(): Observable<ArrayList<Album>> = localDataSource.getAllAlbums()
 
     override fun saveAlbum(album: Album): Observable<Album> = localDataSource.saveAlbum(album)

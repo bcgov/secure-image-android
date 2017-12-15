@@ -44,7 +44,7 @@ class AlbumsPresenter(
 
     /**
      * Grabs all the albums from the albums repo
-     * Orders albums by created time and displays in view
+     * Orders albums by updated time and displays in view
      */
     fun getAlbums() {
         albumsRepo.getAllAlbums()

@@ -19,8 +19,8 @@ open class Album : RealmObject() {
     var cameraImages: RealmList<CameraImage> = RealmList()
 
     fun compareTo(album: Album): Int = when {
-        createdTime < album.createdTime -> 1
-        createdTime > album.createdTime -> -1
+        updatedTime < album.updatedTime -> 1
+        updatedTime > album.updatedTime -> -1
         else -> 0
     }
 

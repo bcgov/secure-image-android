@@ -23,11 +23,11 @@ interface CreateAlbumContract {
         fun setUpViewAllImagesListener()
         fun showViewAllImages()
         fun hideViewAllImages()
-        fun goToAllImages()
+        fun goToAllImages(albumKey: String)
 
         fun setUpSaveListener()
 
-        fun goToSecureCamera()
+        fun goToSecureCamera(albumKey: String)
     }
 
     interface Presenter: BasePresenter {
