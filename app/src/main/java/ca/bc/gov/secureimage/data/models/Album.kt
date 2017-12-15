@@ -18,6 +18,8 @@ open class Album : RealmObject() {
     var updatedTime: Long = System.currentTimeMillis()
     var cameraImages: RealmList<CameraImage> = RealmList()
 
+    var albumName: String = "Unnamed Album"
+
     fun compareTo(album: Album): Int = when {
         updatedTime < album.updatedTime -> 1
         updatedTime > album.updatedTime -> -1

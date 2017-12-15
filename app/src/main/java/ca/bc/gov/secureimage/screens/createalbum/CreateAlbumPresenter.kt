@@ -43,6 +43,7 @@ class CreateAlbumPresenter(
     override fun viewShown() {
         view.showImages(ArrayList())
         getAlbum()
+        getImages()
     }
 
     override fun viewHidden() {
@@ -59,19 +60,17 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error retrieving album")
                 },
                 onSuccess = {
-                    processImages(ArrayList(it.cameraImages))
+
                 }
         ).addTo(disposables)
     }
 
     // Images
-    fun processImages(images: ArrayList<CameraImage>) {
-        Observable.just(images)
+    fun getImages() {
+        albumsRepo.getAlbum(albumKey)
+                .map { it.cameraImages }
                 .flatMapIterable { it }
-                .map {
-                    it.createScaledBitmap()
-                    it
-                }
+                .take(5)
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

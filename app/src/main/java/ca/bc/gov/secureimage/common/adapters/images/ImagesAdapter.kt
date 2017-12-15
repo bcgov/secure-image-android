@@ -44,11 +44,6 @@ class ImagesAdapter(
         notifyDataSetChanged()
     }
 
-    fun insertItem(index: Int, item: Any) {
-        items.add(index, items)
-        notifyItemInserted(index)
-    }
-
     companion object {
         val CAMERA_IMAGE = 0
         val ADD_IMAGES = 1

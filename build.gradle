@@ -45,8 +45,9 @@ ext {
     rxGpsVersion = '1.0.0'
     retrofitVersion = '2.3.0'
     retrofitRxAdapterVersion = '1.0.0'
-    picassoVersion = '2.5.2'
     leakCanaryVersion = '1.5.4'
+    glideVersion = '4.4.0'
+    camerakitVersion = '0.13.1'
 
     // Testing
     junitVersion = '4.12'

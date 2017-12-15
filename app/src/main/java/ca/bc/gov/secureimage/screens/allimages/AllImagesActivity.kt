@@ -45,6 +45,16 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         presenter?.dispose()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter?.viewShown()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter?.viewHidden()
+    }
+
     // Error
     override fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

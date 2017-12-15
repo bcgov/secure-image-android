@@ -45,15 +45,8 @@ class AllImagesPresenter(
 
     fun getImages() {
         albumsRepo.getAlbum(albumKey)
-                .take(1)
-                .map { ArrayList(it.cameraImages) }
-                .flatMapIterable { it }
-                .observeOn(Schedulers.computation())
-                .map {
-                    it.createScaledBitmap()
-                    it
-                }
-                .toList()
+                .map { it.cameraImages }
+                .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
