@@ -28,6 +28,10 @@ interface CreateAlbumContract {
 
         fun setUpSaveListener()
 
+        fun setUpDeleteListener()
+        fun showDeleteAlbumDialog()
+        fun hideDeleteAlbumDialog()
+
         fun setAlbumName(albumName: String)
 
         fun goToSecureCamera(albumKey: String)
@@ -41,6 +45,9 @@ interface CreateAlbumContract {
         fun backClicked()
 
         fun saveClicked(albumName: String)
+
+        fun deleteClicked()
+        fun deleteForeverClicked()
 
         fun viewAllImagesClicked()
 

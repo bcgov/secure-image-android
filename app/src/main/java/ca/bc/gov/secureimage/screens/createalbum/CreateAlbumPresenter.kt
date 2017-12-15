@@ -33,9 +33,12 @@ class CreateAlbumPresenter(
         view.setUpViewAllImagesListener()
 
         view.setUpSaveListener()
+
+        view.setUpDeleteListener()
     }
 
     override fun dispose() {
+        view.hideDeleteAlbumDialog()
         disposables.dispose()
     }
 
@@ -119,6 +122,26 @@ class CreateAlbumPresenter(
                     view.finish()
                 })
                 .addTo(disposables)
+    }
+
+    // Delete
+    override fun deleteClicked() {
+        view.showDeleteAlbumDialog()
+    }
+
+    override fun deleteForeverClicked() {
+        albumsRepo.deleteAlbum(albumKey)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error deleting")
+                },
+                onSuccess = {
+                    view.showMessage("Album deleted")
+                    view.finish()
+                }
+        ).addTo(disposables)
     }
 
     // View all

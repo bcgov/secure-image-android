@@ -68,9 +68,10 @@ object AlbumsLocalDataSource : AlbumsDataSource {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 val album = realm.where(Album::class.java).equalTo("key", key).findFirst()
+                album?.cameraImages?.deleteAllFromRealm()
                 album?.deleteFromRealm()
 
-                if (album != null) emitter.onNext(realm.copyFromRealm(album))
+                if (album != null) emitter.onNext(album)
                 else emitter.onError(Throwable("Album not found"))
             }
             realm.close()

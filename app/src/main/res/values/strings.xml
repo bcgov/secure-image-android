@@ -21,5 +21,10 @@
     <string name="flash_off">Flash off</string>
     <string name="flash_on">Flash on</string>
     <string name="flash_auto">Flash auto</string>
+    <string name="delete_album">Delete Album</string>
+    <string name="delete_album_info">This album and all it\'s content will be deleted off this device forever. Are you sure you want to delete?</string>
+    <string name="delete_forever">Delete Forever</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_album_forever">Delete Album Forever</string>
 
 </resources>

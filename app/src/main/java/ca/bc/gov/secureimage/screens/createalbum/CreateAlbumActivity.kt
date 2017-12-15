@@ -19,11 +19,13 @@ import ca.bc.gov.secureimage.screens.allimages.AllImagesActivity
 import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_create_album.*
 
-class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener {
+class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener, DeleteAlbumDialog.DeleteListener {
 
     override var presenter: CreateAlbumContract.Presenter? = null
 
     private var imagesAdapter: ImagesAdapter? = null
+
+    private var deleteAlbumDialog: DeleteAlbumDialog? = null
 
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,11 +122,31 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
                 .run { startActivity(this) }
     }
 
-    // Upload
+    // Save
     override fun setUpSaveListener() {
         saveTv.setOnClickListener {
             presenter?.saveClicked(albumNameEt.text.toString())
         }
+    }
+
+    // Delete
+    override fun setUpDeleteListener() {
+        deleteIv.setOnClickListener {
+            presenter?.deleteClicked()
+        }
+    }
+
+    override fun showDeleteAlbumDialog() {
+        if (deleteAlbumDialog == null) deleteAlbumDialog = DeleteAlbumDialog(this, this)
+        deleteAlbumDialog?.show()
+    }
+
+    override fun hideDeleteAlbumDialog() {
+        deleteAlbumDialog?.hide()
+    }
+
+    override fun deleteForeverClicked() {
+        presenter?.deleteForeverClicked()
     }
 
     // Album name

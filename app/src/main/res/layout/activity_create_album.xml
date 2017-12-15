@@ -23,7 +23,10 @@
         android:tint="@color/white"
         android:padding="16dp"
         android:layout_width="56dp"
-        android:layout_height="56dp" />
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
 
     <TextView
         android:text="@string/create_album"
@@ -34,6 +37,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
         app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"
+        app:layout_constraintRight_toRightOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
+
+    <ImageView
+        android:id="@+id/deleteIv"
+        android:contentDescription="@string/delete_album"
+        android:src="@drawable/ic_delete_forever_black_24dp"
+        android:tint="@color/white"
+        android:padding="16dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
         app:layout_constraintRight_toRightOf="@+id/toolbarBackgroundView"
         app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
     
