@@ -36,4 +36,21 @@ object UserLocalDataSource : UserDataSource {
             emitter.onComplete()
         }
     }
+
+    override fun deleteUser(): Observable<User> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val user = realm.where(User::class.java).findFirst()
+                user?.deleteFromRealm()
+
+                if (user != null) emitter.onNext(user)
+                else emitter.onError(Throwable("User not found"))
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
 }

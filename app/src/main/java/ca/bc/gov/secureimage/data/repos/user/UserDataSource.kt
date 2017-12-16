@@ -13,4 +13,6 @@ interface UserDataSource {
 
     fun saveUser(user: User): Observable<User>
 
+    fun deleteUser(): Observable<User>
+
 }

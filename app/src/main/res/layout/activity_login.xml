@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:background="@color/colorPrimary"
-    tools:context="ca.bc.gov.secureimage.screens.enteremail.EnterEmailActivity">
+    tools:context="ca.bc.gov.secureimage.screens.login.LoginActivity">
 
     <EditText
         android:id="@+id/emailEt"

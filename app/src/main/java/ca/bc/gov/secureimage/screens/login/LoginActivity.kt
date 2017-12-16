@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.screens.enteremail
+package ca.bc.gov.secureimage.screens.login
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -7,17 +7,17 @@ import android.widget.Toast
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.albums.AlbumsActivity
-import kotlinx.android.synthetic.main.activity_enter_email.*
+import kotlinx.android.synthetic.main.activity_login.*
 
-class EnterEmailActivity : AppCompatActivity(), EnterEmailContract.View {
+class LoginActivity : AppCompatActivity(), LoginContract.View {
 
-    override var presenter: EnterEmailContract.Presenter? = null
+    override var presenter: LoginContract.Presenter? = null
 
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        EnterEmailPresenter(
+        LoginPresenter(
                 this,
                 Injection.provideUserRepo()
         )
@@ -32,7 +32,7 @@ class EnterEmailActivity : AppCompatActivity(), EnterEmailContract.View {
 
     // Content view
     override fun setContentView() {
-        setContentView(R.layout.activity_enter_email)
+        setContentView(R.layout.activity_login)
     }
 
     // Error

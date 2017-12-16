@@ -27,4 +27,7 @@ private constructor(val localDataSource: UserDataSource) : UserDataSource {
     override fun getUser(): Observable<User> = localDataSource.getUser()
 
     override fun saveUser(user: User): Observable<User> = localDataSource.saveUser(user)
+
+    override fun deleteUser(): Observable<User> = localDataSource.deleteUser()
+
 }

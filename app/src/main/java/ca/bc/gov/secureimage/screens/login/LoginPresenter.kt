@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.screens.enteremail
+package ca.bc.gov.secureimage.screens.login
 
 import ca.bc.gov.secureimage.data.repos.user.UserRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,10 +11,10 @@ import io.reactivex.schedulers.Schedulers
  * Created by Aidan Laing on 2017-12-12.
  *
  */
-class EnterEmailPresenter(
-        private val view: EnterEmailContract.View,
+class LoginPresenter(
+        private val view: LoginContract.View,
         private val userRepo: UserRepo
-): EnterEmailContract.Presenter {
+): LoginContract.Presenter {
 
     private val disposables = CompositeDisposable()
 

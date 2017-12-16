@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.screens.enteremail
+package ca.bc.gov.secureimage.screens.login
 
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
@@ -7,7 +7,7 @@ import ca.bc.gov.secureimage.common.base.BaseView
  * Created by Aidan Laing on 2017-12-12.
  *
  */
-interface EnterEmailContract {
+interface LoginContract {
 
     interface View: BaseView<Presenter> {
         fun setContentView()
