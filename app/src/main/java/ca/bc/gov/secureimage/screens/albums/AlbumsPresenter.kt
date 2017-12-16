@@ -24,6 +24,8 @@ class AlbumsPresenter(
     }
 
     override fun subscribe() {
+        view.setUpSettingsListener()
+
         view.setUpAlbumsList()
 
         view.setUpCreateAlbumListener()
@@ -40,6 +42,10 @@ class AlbumsPresenter(
 
     override fun viewHidden() {
         disposables.clear()
+    }
+
+    override fun settingsClicked() {
+        view.goToSettings()
     }
 
     /**

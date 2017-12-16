@@ -13,6 +13,7 @@ import ca.bc.gov.secureimage.common.adapters.albums.AlbumsAdapter
 import ca.bc.gov.secureimage.data.models.Album
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.createalbum.CreateAlbumActivity
+import ca.bc.gov.secureimage.screens.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_albums.*
 
 class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder.ClickListener {
@@ -52,6 +53,18 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
     // Error
     override fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    // Settings
+    override fun setUpSettingsListener() {
+        settingsIv.setOnClickListener {
+            presenter?.settingsClicked()
+        }
+    }
+
+    override fun goToSettings() {
+        Intent(this, SettingsActivity::class.java)
+                .run { startActivity(this) }
     }
 
     // Album list

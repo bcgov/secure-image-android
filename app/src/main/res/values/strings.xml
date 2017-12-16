@@ -25,5 +25,6 @@
     <string name="delete_album_info">This album and all it\'s content will be deleted off this device forever. Are you sure you want to delete?</string>
     <string name="cancel">Cancel</string>
     <string name="delete_device_album">Delete Device Album</string>
+    <string name="settings">Settings</string>
 
 </resources>
