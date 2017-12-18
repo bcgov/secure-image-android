@@ -7,6 +7,7 @@ import android.widget.Toast
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
+import com.github.florent37.rxgps.RxGps
 import com.wonderkiln.camerakit.*
 import kotlinx.android.synthetic.main.activity_secure_camera.*
 
@@ -29,7 +30,9 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
 
         SecureCameraPresenter(this,
                 albumKey,
-                Injection.provideCameraImagesRepo())
+                Injection.provideCameraImagesRepo(),
+                Injection.provideLocationRepo(),
+                RxGps(this))
 
         presenter?.subscribe()
     }

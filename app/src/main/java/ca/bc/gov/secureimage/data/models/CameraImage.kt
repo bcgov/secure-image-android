@@ -19,6 +19,8 @@ open class CameraImage : RealmObject() {
     var updatedTime: Long = System.currentTimeMillis()
 
     var byteArray: ByteArray = ByteArray(64)
+    var lat: Double = 0.0
+    var lon: Double = 0.0
 
     fun compareTo(cameraImage: CameraImage): Int  = when {
         createdTime > cameraImage.createdTime -> 1

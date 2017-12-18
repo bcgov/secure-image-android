@@ -2,6 +2,8 @@ package ca.bc.gov.secureimage.screens.albums
 
 import ca.bc.gov.secureimage.data.models.Album
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
+import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
+import com.github.florent37.rxgps.RxGps
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -14,7 +16,9 @@ import io.reactivex.schedulers.Schedulers
  */
 class AlbumsPresenter(
         private val view: AlbumsContract.View,
-        private val albumsRepo: AlbumsRepo
+        private val albumsRepo: AlbumsRepo,
+        private val locationRepo: LocationRepo,
+        private val rxGps: RxGps
 ) : AlbumsContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -36,6 +40,8 @@ class AlbumsPresenter(
     }
 
     override fun viewShown() {
+        getLocation()
+
         view.showAlbumItems(ArrayList())
         getAlbums()
     }
@@ -46,6 +52,19 @@ class AlbumsPresenter(
 
     override fun settingsClicked() {
         view.goToSettings()
+    }
+
+    /**
+     * Grabs user location and caches it
+     */
+    fun getLocation() {
+        locationRepo.getLocation(rxGps, false)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = { view.showError(it.message ?: "Error retrieving location") },
+                onSuccess = { })
+                .addTo(disposables)
     }
 
     /**

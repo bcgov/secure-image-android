@@ -14,6 +14,7 @@ import ca.bc.gov.secureimage.data.models.Album
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.createalbum.CreateAlbumActivity
 import ca.bc.gov.secureimage.screens.settings.SettingsActivity
+import com.github.florent37.rxgps.RxGps
 import kotlinx.android.synthetic.main.activity_albums.*
 
 class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder.ClickListener {
@@ -29,7 +30,9 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
 
         AlbumsPresenter(
                 this,
-                Injection.provideAlbumsRepo()
+                Injection.provideAlbumsRepo(),
+                Injection.provideLocationRepo(),
+                RxGps(this)
         )
 
         presenter?.subscribe()

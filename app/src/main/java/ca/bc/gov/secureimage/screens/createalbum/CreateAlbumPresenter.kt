@@ -28,6 +28,8 @@ class CreateAlbumPresenter(
     }
 
     override fun subscribe() {
+        getAlbumFields()
+
         view.setUpBackListener()
 
         view.setUpImagesList()
@@ -50,7 +52,6 @@ class CreateAlbumPresenter(
         if(refresh) {
             view.showImages(ArrayList())
             getImages()
-            getAlbumFields()
             view.setRefresh(false)
         }
     }

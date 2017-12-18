@@ -2,6 +2,8 @@ package ca.bc.gov.secureimage.screens.securecamera
 
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
+import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
+import com.github.florent37.rxgps.RxGps
 import com.wonderkiln.camerakit.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +18,9 @@ import io.reactivex.schedulers.Schedulers
 class SecureCameraPresenter(
         private val view: SecureCameraContract.View,
         private val albumKey: String,
-        private val cameraImagesRepo: CameraImagesRepo
+        private val cameraImagesRepo: CameraImagesRepo,
+        private val locationRepo: LocationRepo,
+        private val rxGps: RxGps
 ) : SecureCameraContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -52,6 +56,8 @@ class SecureCameraPresenter(
     }
 
     override fun viewShown() {
+        getLocation()
+
         view.hideCaptureImage()
         view.hideBack()
         view.hideDone()
@@ -63,6 +69,19 @@ class SecureCameraPresenter(
 
     override fun viewHidden() {
         view.stopCamera()
+    }
+
+    /**
+     * Grabs user location and caches it
+     */
+    fun getLocation() {
+        locationRepo.getLocation(rxGps, false)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = { view.showError(it.message ?: "Error retrieving location") },
+                onSuccess = { })
+                .addTo(disposables)
     }
 
     // Camera listener events
@@ -81,15 +100,6 @@ class SecureCameraPresenter(
 
     }
 
-    override fun onCameraImage(image: CameraKitImage?) {
-        if (image == null) return
-
-        val cameraImage = CameraImage()
-        cameraImage.byteArray = image.jpeg
-        cameraImage.albumKey = albumKey
-        saveCameraImage(cameraImage)
-    }
-
     /**
      * Gets the current count of images in album
      * onSuccess current counter is shown
@@ -106,6 +116,37 @@ class SecureCameraPresenter(
                     val imageCounterText = "$it ${if (it == 1) "Image" else "Images"}"
                     view.setImageCounterText(imageCounterText)
                     view.showImageCounter()
+                }
+        ).addTo(disposables)
+    }
+
+    override fun onCameraImage(image: CameraKitImage?) {
+        if (image == null) return
+
+        val cameraImage = CameraImage()
+        cameraImage.byteArray = image.jpeg
+        cameraImage.albumKey = albumKey
+
+        getLocationForCameraImage(cameraImage)
+    }
+
+    /**
+     * Grabs the location of device
+     * On error saves camera image without lat lon
+     * On success saves camera image with lat lon
+     */
+    private fun getLocationForCameraImage(cameraImage: CameraImage) {
+        locationRepo.getLocation(rxGps, true)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    saveCameraImage(cameraImage)
+                },
+                onSuccess = {
+                    cameraImage.lat = it.lat
+                    cameraImage.lon = it.lon
+                    saveCameraImage(cameraImage)
                 }
         ).addTo(disposables)
     }
