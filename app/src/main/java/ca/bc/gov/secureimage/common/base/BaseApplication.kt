@@ -36,7 +36,7 @@ class BaseApplication: Application() {
 
         val config = RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
-                .encryptionKey(loadKey("realmalias"))
+                .encryptionKey(loadKey("realm"))
                 .build()
 
         Realm.setDefaultConfiguration(config)
@@ -45,15 +45,19 @@ class BaseApplication: Application() {
 
     private fun loadKey(
             alias: String,
+            realmKeySize: Int = 64,
+            keyStoreKeySize: Int = 256,
             keyStoreType: String = "AndroidKeyStore",
-            transformation: String = "AES/GCM/NoPadding"
+            transformation: String = "AES/GCM/NoPadding",
+            tLen: Int = 128,
+            ivKey: String = "ivKey"
     ): ByteArray {
 
         // Key store setup
         val keystore = KeyStore.getInstance(keyStoreType)
         keystore.load(null)
 
-        // Generating key if alias is not found
+        // Generating AES key if alias is not found
         if (!keystore.containsAlias(alias)) {
             val gen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, keyStoreType)
 
@@ -61,12 +65,13 @@ class BaseApplication: Application() {
                     alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setKeySize(256)
+                    .setKeySize(keyStoreKeySize)
                     .build())
 
             gen.generateKey()
         }
 
+        // Grabbing secret key from keystore
         val secretKey = keystore.getKey(alias, null) as SecretKey
 
         // Shared Prefs setup
@@ -74,37 +79,42 @@ class BaseApplication: Application() {
 
         // If shared prefs doesn't have saved key generate random, encrypt, and save to shared prefs
         if(!sharedPrefs.contains(alias)) {
+
+            // Encryption setup
             val encryptionCipher = Cipher.getInstance(transformation)
             encryptionCipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
             // Random key
-            val randomKey = ByteArray(64)
+            val randomKey = ByteArray(realmKeySize)
             SecureRandom().nextBytes(randomKey)
 
-            // Encrypt
+            // Encrypt random key
             val encryptedBytes = encryptionCipher.doFinal(randomKey)
 
-            // Writing to shared prefs
+            // Saving base 64 encoded encrypted bytes
             val base64EncryptedBytesString = Base64.encodeToString(encryptedBytes, Base64.DEFAULT)
             sharedPrefs.edit().putString(alias, base64EncryptedBytesString).apply()
 
+            // Saving base 64 encoded initialization vector
             val base64IvString = Base64.encodeToString(encryptionCipher.iv, Base64.DEFAULT)
-            sharedPrefs.edit().putString("iv", base64IvString).apply()
+            sharedPrefs.edit().putString(ivKey, base64IvString).apply()
         }
 
+        // Decoding saved encrypted bytes
         val base64EncryptedBytesString = sharedPrefs.getString(alias, "")
         val encryptedBytes = Base64.decode(base64EncryptedBytesString, Base64.DEFAULT)
 
-        val base64IvString = sharedPrefs.getString("iv", "")
-        val iv = Base64.decode(base64IvString, Base64.DEFAULT)
+        // Decoding saved initialization vector
+        val base64IvString = sharedPrefs.getString(ivKey, "")
+        val savedIv = Base64.decode(base64IvString, Base64.DEFAULT)
 
-        // Decrypt
+        // Decrypting setup
         val decryptionCipher = Cipher.getInstance(transformation)
-        val gcmParameterSpec = GCMParameterSpec(128, iv)
+        val gcmParameterSpec = GCMParameterSpec(tLen, savedIv)
         decryptionCipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec)
-        val decryptedBytes = decryptionCipher.doFinal(encryptedBytes)
 
-        return decryptedBytes
+        // Decrypting encryped bytes
+        return decryptionCipher.doFinal(encryptedBytes)
     }
 
     // Strict mode
