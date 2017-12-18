@@ -52,14 +52,13 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
-    override fun getFirstFiveImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
+    override fun getFixedAmountImagesInAlbum(albumKey: String, amount: Int): Observable<ArrayList<CameraImage>> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 val cameraImages = realm.where(CameraImage::class.java)
-                        .equalTo("albumKey", albumKey).findAll()
-                val firstFive = cameraImages.take(5)
-                emitter.onNext(ArrayList(realm.copyFromRealm(firstFive)))
+                        .equalTo("albumKey", albumKey).findAll().take(amount)
+                emitter.onNext(ArrayList(realm.copyFromRealm(cameraImages)))
             }
             realm.close()
 

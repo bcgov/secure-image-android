@@ -19,5 +19,4 @@ interface AlbumsDataSource {
 
     fun deleteAlbum(key: String): Observable<Album>
 
-
 }
