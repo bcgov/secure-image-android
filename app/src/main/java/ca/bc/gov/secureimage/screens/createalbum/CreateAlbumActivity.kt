@@ -103,6 +103,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         presenter?.imageClicked(cameraImage)
     }
 
+    override fun imageSelected(cameraImage: CameraImage, position: Int) {
+
+    }
+
     override fun showImages(items: ArrayList<Any>) {
         imagesAdapter?.replaceItems(items)
     }

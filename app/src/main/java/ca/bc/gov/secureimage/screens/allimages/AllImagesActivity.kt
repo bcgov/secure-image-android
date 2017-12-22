@@ -3,8 +3,10 @@ package ca.bc.gov.secureimage.screens.allimages
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
@@ -24,6 +26,8 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
     private var imagesAdapter: ImagesAdapter? = null
 
     private var refresh = true
+
+    private var imagesSelected = 0
 
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,15 +69,117 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         this.refresh = refresh
     }
 
+    // Loading
+    override fun showLoading() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        progressBar.visibility = View.GONE
+    }
+
+    // Message
+    override fun showMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     // Error
     override fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    // Toolbar color
+    override fun setToolbarColorPrimary() {
+        toolbarBackgroundView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+    }
+
+    override fun setToolbarColorPrimaryLight() {
+        toolbarBackgroundView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryLight))
+    }
+
     // Back
+    override fun showBack() {
+        backIv.visibility = View.VISIBLE
+    }
+
+    override fun hideBack() {
+        backIv.visibility = View.GONE
+    }
+
     override fun setUpBackListener() {
         backIv.setOnClickListener {
             presenter?.backClicked()
+        }
+    }
+
+    // Toolbar title
+    override fun showToolbarTitle() {
+        toolbarTitleTv.visibility = View.VISIBLE
+    }
+
+    override fun hideToolbarTitle() {
+        toolbarTitleTv.visibility = View.GONE
+    }
+
+    // Select
+    override fun showSelect() {
+        selectTv.visibility = View.VISIBLE
+    }
+
+    override fun hideSelect() {
+        selectTv.visibility = View.GONE
+    }
+
+    override fun setUpSelectListener() {
+        selectTv.setOnClickListener {
+            presenter?.selectClicked()
+        }
+    }
+
+    // Close select
+    override fun showSelectClose() {
+        toolbarSelectCloseIv.visibility = View.VISIBLE
+    }
+
+    override fun hideSelectClose() {
+        toolbarSelectCloseIv.visibility = View.GONE
+    }
+
+    override fun setUpSelectCloseListener() {
+        toolbarSelectCloseIv.setOnClickListener {
+            presenter?.closeSelectClicked()
+        }
+    }
+
+    // Select title
+    override fun showSelectTitle() {
+        toolbarSelectTitleTv.visibility = View.VISIBLE
+    }
+
+    override fun hideSelectTitle() {
+        toolbarSelectTitleTv.visibility = View.GONE
+    }
+
+    override fun setSelectTitle(title: String) {
+        toolbarSelectTitleTv.text = title
+    }
+
+    override fun setSelectTitleSelectItems() {
+        toolbarSelectTitleTv.setText(R.string.select_items)
+    }
+
+    // Select delete
+    override fun showSelectDelete() {
+        toolbarSelectDeleteTv.visibility = View.VISIBLE
+    }
+
+    override fun hideSelectDelete() {
+        toolbarSelectDeleteTv.visibility = View.GONE
+    }
+
+    override fun setUpSelectDeleteListener() {
+        toolbarSelectDeleteTv.setOnClickListener {
+            presenter?.selectDeleteClicked(imagesAdapter?.getSelectedImages() ?: ArrayList())
         }
     }
 
@@ -94,8 +200,20 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         presenter?.imageClicked(cameraImage)
     }
 
+    override fun imageSelected(cameraImage: CameraImage, position: Int) {
+        presenter?.imageSelected(cameraImage, position, imagesAdapter?.getSelectedCount() ?: 0)
+    }
+
     override fun showImages(items: ArrayList<Any>) {
         imagesAdapter?.replaceItems(items)
+    }
+
+    override fun setSelectMode(selectMode: Boolean) {
+        imagesAdapter?.setSelectMode(selectMode)
+    }
+
+    override fun itemChanged(position: Int) {
+        imagesAdapter?.notifyItemChanged(position)
     }
 
     // Secure camera

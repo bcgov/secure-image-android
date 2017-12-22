@@ -3,6 +3,7 @@ package ca.bc.gov.secureimage.screens.allimages
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -26,7 +27,15 @@ class AllImagesPresenter(
     }
 
     override fun subscribe() {
+        view.hideLoading()
+
         view.setUpBackListener()
+        view.setUpSelectListener()
+
+        view.setUpSelectCloseListener()
+        view.setUpSelectDeleteListener()
+
+        showToolbarMode()
 
         view.setUpImagesList()
 
@@ -39,7 +48,8 @@ class AllImagesPresenter(
 
     override fun viewShown(refresh: Boolean) {
         if(refresh) {
-            view.showImages(ArrayList())
+            showToolbarMode()
+
             getImages()
 
             view.setRefresh(false)
@@ -51,14 +61,19 @@ class AllImagesPresenter(
     }
 
     /**
+     * Wipes current images list clean
      * Gets all images in album by key
      * Adds a Add images model so recycler view can display an add image tile
      */
     fun getImages() {
+        view.showImages(ArrayList())
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { view.showLoading() }
+                .doOnError { view.hideLoading() }
+                .doOnSuccess { view.hideLoading() }.subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error retrieving images")
                 },
@@ -76,6 +91,78 @@ class AllImagesPresenter(
         view.finish()
     }
 
+    // Select
+    override fun selectClicked() {
+        showSelectMode()
+    }
+
+    // Close select
+    override fun closeSelectClicked() {
+        showToolbarMode()
+    }
+
+    fun showSelectMode() {
+        view.setToolbarColorPrimaryLight()
+
+        view.hideBack()
+        view.hideToolbarTitle()
+        view.hideSelect()
+
+        view.showSelectClose()
+        view.showSelectTitle()
+        view.hideSelectDelete()
+
+        view.setSelectTitleSelectItems()
+
+        view.setSelectMode(true)
+    }
+
+    fun showToolbarMode() {
+        view.setToolbarColorPrimary()
+
+        view.showBack()
+        view.showToolbarTitle()
+        view.showSelect()
+
+        view.hideSelectClose()
+        view.hideSelectTitle()
+        view.hideSelectDelete()
+
+        view.setSelectMode(false)
+    }
+
+    // Delete
+    override fun selectDeleteClicked(cameraImages: ArrayList<CameraImage>) {
+        showToolbarMode()
+        deleteImages(cameraImages)
+    }
+
+    /**
+     * Deletes all images passed through.
+     * On complete gets new images.
+     */
+    fun deleteImages(cameraImages: ArrayList<CameraImage>) {
+        view.showImages(ArrayList())
+        Observable.fromIterable(cameraImages)
+                .flatMap { cameraImagesRepo.deleteCameraImage(it) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { view.showLoading() }
+                .doOnError { view.hideLoading() }
+                .doOnComplete { view.hideLoading() }.subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error deleting images")
+                },
+                onNext = {
+
+                },
+                onComplete = {
+                    view.showMessage("Deleted successfully")
+                    getImages()
+                }
+        ).addTo(disposables)
+    }
+
     // Add images
     override fun addImagesClicked() {
         view.setRefresh(true)
@@ -85,5 +172,22 @@ class AllImagesPresenter(
     // Image clicks
     override fun imageClicked(cameraImage: CameraImage) {
         view.goToImageDetail(cameraImage.key)
+    }
+
+    // Image selected
+    override fun imageSelected(cameraImage: CameraImage, position: Int, selectedCount: Int) {
+        cameraImage.selected = !cameraImage.selected
+
+        val newSelectedCount = if(cameraImage.selected) selectedCount + 1 else selectedCount - 1
+
+        if(newSelectedCount <= 0) {
+            view.setSelectTitleSelectItems()
+            view.hideSelectDelete()
+        } else {
+            view.setSelectTitle("$newSelectedCount Selected")
+            view.showSelectDelete()
+        }
+
+        view.itemChanged(position)
     }
 }

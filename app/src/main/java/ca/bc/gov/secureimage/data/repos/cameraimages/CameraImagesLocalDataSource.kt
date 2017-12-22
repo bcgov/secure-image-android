@@ -37,6 +37,22 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
+    override fun deleteCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
+        return Observable.create { emitter ->
+            val realm = Realm.getDefaultInstance()
+            realm.executeTransaction {
+                val cameraImages = realm.where(CameraImage::class.java)
+                        .equalTo("key", cameraImage.key).findAll()
+                cameraImages.deleteAllFromRealm()
+
+                emitter.onNext(cameraImage)
+            }
+            realm.close()
+
+            emitter.onComplete()
+        }
+    }
+
     override fun getImageCountInAlbum(albumKey: String): Observable<Int> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()

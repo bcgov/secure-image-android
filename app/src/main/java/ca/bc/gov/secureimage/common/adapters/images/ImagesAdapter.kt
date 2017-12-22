@@ -14,7 +14,8 @@ class ImagesAdapter(
         private val inflater: LayoutInflater,
         private val addImagesListener: AddImagesViewHolder.Listener,
         private val imageClickListener : ImageViewHolder.ImageClickListener,
-        private var items: ArrayList<Any> = ArrayList()
+        private var items: ArrayList<Any> = ArrayList(),
+        private var selectMode: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int = when (items[position]) {
@@ -33,7 +34,7 @@ class ImagesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         when (holder) {
-            is ImageViewHolder -> holder.bind(items[position] as CameraImage, imageClickListener)
+            is ImageViewHolder -> holder.bind(items[position] as CameraImage, selectMode, imageClickListener)
             is AddImagesViewHolder -> holder.bind(addImagesListener)
         }
     }
@@ -43,6 +44,23 @@ class ImagesAdapter(
     fun replaceItems(items: ArrayList<Any>) {
         this.items = items
         notifyDataSetChanged()
+    }
+
+    fun setSelectMode(selectMode: Boolean) {
+        this.selectMode = selectMode
+        notifyDataSetChanged()
+    }
+
+    fun getSelectedCount(): Int {
+        var count = 0
+        items.forEach { if(it is CameraImage && it.selected) count++ }
+        return count
+    }
+
+    fun getSelectedImages(): ArrayList<CameraImage> {
+        val images = ArrayList<CameraImage>()
+        items.forEach { if(it is CameraImage && it.selected) images.add(it) }
+        return images
     }
 
     companion object {

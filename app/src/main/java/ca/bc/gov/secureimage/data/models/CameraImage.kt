@@ -1,6 +1,7 @@
 package ca.bc.gov.secureimage.data.models
 
 import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
@@ -21,6 +22,9 @@ open class CameraImage : RealmObject() {
     var byteArray: ByteArray = ByteArray(64)
     var lat: Double = 0.0
     var lon: Double = 0.0
+
+    @Ignore
+    var selected: Boolean = false
 
     fun compareTo(cameraImage: CameraImage): Int  = when {
         createdTime > cameraImage.createdTime -> 1
