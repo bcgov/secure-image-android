@@ -129,6 +129,7 @@ class AllImagesPresenter(
         view.hideSelectDelete()
 
         view.setSelectMode(false)
+        view.clearSelectedImages()
     }
 
     // Delete

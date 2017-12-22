@@ -63,6 +63,10 @@ class ImagesAdapter(
         return images
     }
 
+    fun clearSelectedImages() {
+        items.forEach { if(it is CameraImage) it.selected = false }
+    }
+
     companion object {
         val CAMERA_IMAGE = 0
         val ADD_IMAGES = 1

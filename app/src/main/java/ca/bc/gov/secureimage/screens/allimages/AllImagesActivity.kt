@@ -27,8 +27,6 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     private var refresh = true
 
-    private var imagesSelected = 0
-
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -214,6 +212,10 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     override fun itemChanged(position: Int) {
         imagesAdapter?.notifyItemChanged(position)
+    }
+
+    override fun clearSelectedImages() {
+        imagesAdapter?.clearSelectedImages()
     }
 
     // Secure camera

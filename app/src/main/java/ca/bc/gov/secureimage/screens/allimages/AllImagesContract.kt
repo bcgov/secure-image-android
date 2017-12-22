@@ -52,6 +52,7 @@ interface AllImagesContract {
         fun showImages(items: ArrayList<Any>)
         fun setSelectMode(selectMode: Boolean)
         fun itemChanged(position: Int)
+        fun clearSelectedImages()
 
         fun goToSecureCamera(albumKey: String)
         fun goToImageDetail(imageKey: String)
