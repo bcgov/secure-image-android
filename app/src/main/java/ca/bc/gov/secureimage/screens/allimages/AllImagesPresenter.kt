@@ -68,7 +68,8 @@ class AllImagesPresenter(
     fun getImages() {
         view.showImages(ArrayList())
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
-                .firstOrError()
+                .flatMapIterable { it }
+                .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view.showLoading() }
@@ -129,6 +130,7 @@ class AllImagesPresenter(
         view.hideSelectDelete()
 
         view.setSelectMode(false)
+
         view.clearSelectedImages()
     }
 
