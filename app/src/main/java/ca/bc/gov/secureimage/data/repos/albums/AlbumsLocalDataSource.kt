@@ -4,6 +4,7 @@ import ca.bc.gov.secureimage.data.models.Album
 import ca.bc.gov.secureimage.data.models.CameraImage
 import io.reactivex.Observable
 import io.realm.Realm
+import io.realm.Sort
 
 /**
  * Created by Aidan Laing on 2017-12-14.
@@ -44,10 +45,11 @@ object AlbumsLocalDataSource : AlbumsDataSource {
             realm.executeTransaction {
                 val albums = realm.copyFromRealm(realm.where(Album::class.java).findAll())
                 for(album in albums) {
-                    val previewImage = realm.where(CameraImage::class.java)
+                    val images = realm.where(CameraImage::class.java)
                             .equalTo("albumKey", album.key)
-                            .findFirst()
-                    if(previewImage != null) album.previewByteArray = realm.copyFromRealm(previewImage).byteArray
+                            .sort("createdTime", Sort.DESCENDING)
+                            .findAll()
+                    if(images.size > 0) album.previewByteArray = images[0]?.byteArray
                 }
                 emitter.onNext(ArrayList(albums))
             }
