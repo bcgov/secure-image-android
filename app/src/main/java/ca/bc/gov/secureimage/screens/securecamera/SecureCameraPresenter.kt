@@ -134,10 +134,11 @@ class SecureCameraPresenter(
      * Grabs the location of device
      * On error saves camera image without lat lon
      * On success saves camera image with lat lon
+     * On complete saves camera image without lat lon
      */
     private fun getLocationForCameraImage(cameraImage: CameraImage) {
-        locationRepo.getLocation(rxGps, true)
-                .firstOrError()
+        locationRepo.getCachedLocation()
+                .firstElement()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
@@ -146,6 +147,9 @@ class SecureCameraPresenter(
                 onSuccess = {
                     cameraImage.lat = it.lat
                     cameraImage.lon = it.lon
+                    saveCameraImage(cameraImage)
+                },
+                onComplete = {
                     saveCameraImage(cameraImage)
                 }
         ).addTo(disposables)

@@ -43,4 +43,8 @@ private constructor(
                 .doAfterNext { cacheLatLon(it) }
     }
 
+    fun getCachedLocation(): Observable<Location> {
+        return Observable.just(cachedLocation)
+    }
+
 }
