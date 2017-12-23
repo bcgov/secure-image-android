@@ -44,7 +44,11 @@ private constructor(
     }
 
     fun getCachedLocation(): Observable<Location> {
-        return Observable.just(cachedLocation)
+        if(cachedLocation != null) {
+            return Observable.just(cachedLocation)
+        } else {
+            return Observable.empty()
+        }
     }
 
 }
