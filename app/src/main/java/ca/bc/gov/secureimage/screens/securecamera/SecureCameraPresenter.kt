@@ -47,8 +47,6 @@ class SecureCameraPresenter(
         view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
         view.showFlashOff()
         view.setUpFlashControlListener()
-
-        getAlbumImageCount()
     }
 
     override fun dispose() {
@@ -57,6 +55,7 @@ class SecureCameraPresenter(
 
     override fun viewShown() {
         getLocation()
+        getAlbumImageCount()
 
         view.hideCaptureImage()
         view.hideBack()

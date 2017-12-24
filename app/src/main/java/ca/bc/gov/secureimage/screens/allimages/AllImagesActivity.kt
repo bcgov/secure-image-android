@@ -168,15 +168,15 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     // Select delete
     override fun showSelectDelete() {
-        toolbarSelectDeleteTv.visibility = View.VISIBLE
+        deleteTv.visibility = View.VISIBLE
     }
 
     override fun hideSelectDelete() {
-        toolbarSelectDeleteTv.visibility = View.GONE
+        deleteTv.visibility = View.GONE
     }
 
     override fun setUpSelectDeleteListener() {
-        toolbarSelectDeleteTv.setOnClickListener {
+        deleteTv.setOnClickListener {
             presenter?.selectDeleteClicked(imagesAdapter?.getSelectedImages() ?: ArrayList())
         }
     }

@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
         app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"/>
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/imageIv"
         android:scaleType="fitCenter"
         android:contentDescription="@null"

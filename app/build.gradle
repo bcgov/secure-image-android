@@ -78,4 +78,6 @@ dependencies {
     implementation("com.wonderkiln:camerakit:$rootProject.ext.camerakitVersion") {
         exclude group: 'com.android.support', module: 'support-compat'
     }
+
+    implementation "com.github.chrisbanes:PhotoView:$rootProject.ext.photoViewVersion"
 }

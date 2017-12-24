@@ -22,6 +22,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -48,6 +49,7 @@ ext {
     leakCanaryVersion = '1.5.4'
     glideVersion = '4.4.0'
     camerakitVersion = '0.13.1'
+    photoViewVersion = '2.0.0'
 
     // Testing
     junitVersion = '4.12'

@@ -15,6 +15,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
+    <TextView
+        android:id="@+id/toolbarTitleTv"
+        android:text="@string/albums"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"
+        app:layout_constraintRight_toRightOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
+
     <ImageView
         android:id="@+id/settingsIv"
         android:src="@drawable/ic_settings_black_24dp"
@@ -47,9 +60,8 @@
         android:gravity="center"
         android:background="@drawable/shape_rect_color_primary_light_solid_rounded"
         android:layout_margin="16dp"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="56dp"
-        app:layout_constraintWidth_max="200dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
