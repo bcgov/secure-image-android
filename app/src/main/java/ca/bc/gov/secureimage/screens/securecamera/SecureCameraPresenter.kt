@@ -11,9 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import java.io.ByteArrayOutputStream
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import ca.bc.gov.secureimage.common.utils.CompressionUtils
 
 /**
  * Created by Aidan Laing on 2017-12-13.
@@ -106,31 +104,33 @@ class SecureCameraPresenter(
     override fun onCameraImage(image: CameraKitImage?) {
         if (image == null) return
 
-        createCameraImage(image.jpeg, 50)
+        createCameraImage(image.jpeg, 50, 1080, 1920)
     }
 
     /**
      * Creates camera image with album key
+     * Calls to compress image
      */
-    fun createCameraImage(imageBytes: ByteArray, quality: Int) {
+    fun createCameraImage(imageBytes: ByteArray, quality: Int, reqWidth: Int, reqHeight: Int) {
         val cameraImage = CameraImage()
         cameraImage.albumKey = albumKey
 
-        compressImageBytesForCameraImage(cameraImage, imageBytes, quality)
+        compressImageBytesForCameraImage(cameraImage, imageBytes, quality, reqWidth, reqHeight)
     }
 
     /**
      * Compresses image byte array
      * On success creates camera image object and calls to get a location for it
      */
-    fun compressImageBytesForCameraImage(cameraImage: CameraImage, imageBytes: ByteArray, quality: Int) {
+    fun compressImageBytesForCameraImage(
+            cameraImage: CameraImage,
+            imageBytes: ByteArray,
+            quality: Int,
+            reqWidth: Int,
+            reqHeight: Int) {
+
         val compressImageObservable = Observable.create<ByteArray> { emitter ->
-            val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
-            val outputStream = ByteArrayOutputStream()
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
-
-            emitter.onNext(outputStream.toByteArray())
+            emitter.onNext(CompressionUtils.compressToJpeg(imageBytes, quality, reqWidth, reqHeight))
             emitter.onComplete()
         }
 
