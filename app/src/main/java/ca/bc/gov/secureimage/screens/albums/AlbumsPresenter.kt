@@ -58,7 +58,7 @@ class AlbumsPresenter(
      * Grabs user location and caches it
      */
     fun getLocation() {
-        locationRepo.getLocation(rxGps, false)
+        locationRepo.getLocation(rxGps, true)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

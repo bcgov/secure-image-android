@@ -25,7 +25,8 @@ class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
                 .into(imageIv)
 
         // Name
-        nameTv.text = album.albumName
+        val name = if (album.albumName.isNotBlank()) album.albumName else "Unnamed Album"
+        nameTv.text = name
 
         // Clicks
         layout.setOnClickListener {

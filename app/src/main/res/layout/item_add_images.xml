@@ -61,6 +61,7 @@
         android:text="@string/add_images"
         android:textColor="@color/darkGray"
         android:textStyle="bold"
+        android:fontFamily="@font/open_sans_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/cameraIv"

@@ -10,6 +10,6 @@ import io.reactivex.Observable
  */
 interface LocationDataSource {
 
-    fun getLocation(rxGps: RxGps, returnCacheIfExists: Boolean = true): Observable<Location>
+    fun getLocation(rxGps: RxGps, cache: Boolean): Observable<Location>
 
 }

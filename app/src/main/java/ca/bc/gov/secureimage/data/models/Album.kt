@@ -17,7 +17,7 @@ open class Album : RealmObject() {
     var createdTime: Long = System.currentTimeMillis()
     var updatedTime: Long = System.currentTimeMillis()
 
-    var albumName: String = "Unnamed Album"
+    var albumName: String = ""
 
     @Ignore
     var previewByteArray: ByteArray? = null

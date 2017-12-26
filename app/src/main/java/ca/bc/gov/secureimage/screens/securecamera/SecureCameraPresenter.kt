@@ -5,11 +5,15 @@ import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
 import com.github.florent37.rxgps.RxGps
 import com.wonderkiln.camerakit.*
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import java.io.ByteArrayOutputStream
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 
 /**
  * Created by Aidan Laing on 2017-12-13.
@@ -54,7 +58,7 @@ class SecureCameraPresenter(
     }
 
     override fun viewShown() {
-        getLocation()
+        getLocationAndCache()
         getAlbumImageCount()
 
         view.hideCaptureImage()
@@ -71,10 +75,10 @@ class SecureCameraPresenter(
     }
 
     /**
-     * Grabs user location and caches it
+     * Grabs user location and caches it in location repo
      */
-    fun getLocation() {
-        locationRepo.getLocation(rxGps, false)
+    fun getLocationAndCache() {
+        locationRepo.getLocation(rxGps, true)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -99,34 +103,49 @@ class SecureCameraPresenter(
 
     }
 
+    override fun onCameraImage(image: CameraKitImage?) {
+        if (image == null) return
+
+        createCameraImage(image.jpeg, 50)
+    }
+
     /**
-     * Gets the current count of images in album
-     * onSuccess current counter is shown
+     * Creates camera image with album key
      */
-    private fun getAlbumImageCount() {
-        cameraImagesRepo.getImageCountInAlbum(albumKey)
+    fun createCameraImage(imageBytes: ByteArray, quality: Int) {
+        val cameraImage = CameraImage()
+        cameraImage.albumKey = albumKey
+
+        compressImageBytesForCameraImage(cameraImage, imageBytes, quality)
+    }
+
+    /**
+     * Compresses image byte array
+     * On success creates camera image object and calls to get a location for it
+     */
+    fun compressImageBytesForCameraImage(cameraImage: CameraImage, imageBytes: ByteArray, quality: Int) {
+        val compressImageObservable = Observable.create<ByteArray> { emitter ->
+            val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+            val outputStream = ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+
+            emitter.onNext(outputStream.toByteArray())
+            emitter.onComplete()
+        }
+
+        compressImageObservable
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
-                    view.showError(it.message ?: "Error saving image")
+                    view.showError(it.message ?: "Error compressing image")
                 },
                 onSuccess = {
-                    val imageCounterText = "$it ${if (it == 1) "Image" else "Images"}"
-                    view.setImageCounterText(imageCounterText)
-                    view.showImageCounter()
+                    cameraImage.byteArray = it
+                    getLocationForCameraImage(cameraImage)
                 }
         ).addTo(disposables)
-    }
-
-    override fun onCameraImage(image: CameraKitImage?) {
-        if (image == null) return
-
-        val cameraImage = CameraImage()
-        cameraImage.byteArray = image.jpeg
-        cameraImage.albumKey = albumKey
-
-        getLocationForCameraImage(cameraImage)
     }
 
     /**
@@ -135,7 +154,7 @@ class SecureCameraPresenter(
      * On success saves camera image with lat lon
      * On complete saves camera image without lat lon
      */
-    private fun getLocationForCameraImage(cameraImage: CameraImage) {
+    fun getLocationForCameraImage(cameraImage: CameraImage) {
         locationRepo.getCachedLocation()
                 .firstElement()
                 .subscribeOn(Schedulers.io())
@@ -155,13 +174,29 @@ class SecureCameraPresenter(
     }
 
     /**
-     * Saves camera image locally then grabs the current amount of images for the album
-     * On success gets called with the integer size of images and the image counter is displayed
+     * Saves camera image locally
+     * On success gets album image count
      */
-    private fun saveCameraImage(cameraImage: CameraImage) {
+    fun saveCameraImage(cameraImage: CameraImage) {
         cameraImagesRepo.saveCameraImage(cameraImage)
-                .observeOn(Schedulers.io())
-                .flatMap { cameraImagesRepo.getImageCountInAlbum(albumKey) }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving image")
+                },
+                onSuccess = {
+                    getAlbumImageCount()
+                }
+        ).addTo(disposables)
+    }
+
+    /**
+     * Gets the current count of images in album
+     * onSuccess current counter is shown
+     */
+    fun getAlbumImageCount() {
+        cameraImagesRepo.getImageCountInAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

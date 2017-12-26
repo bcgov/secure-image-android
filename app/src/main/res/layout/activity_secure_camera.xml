@@ -68,6 +68,7 @@
     <TextView
         android:id="@+id/flashControlTv"
         android:textColor="@color/darkGray"
+        android:fontFamily="@font/open_sans_regular"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -84,6 +85,7 @@
     <TextView
         android:id="@+id/imageCounterTv"
         android:textColor="@color/darkGray"
+        android:fontFamily="@font/open_sans_regular"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"

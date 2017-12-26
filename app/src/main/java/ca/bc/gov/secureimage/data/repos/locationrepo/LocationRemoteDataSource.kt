@@ -10,7 +10,7 @@ import io.reactivex.Observable
  */
 object LocationRemoteDataSource : LocationDataSource {
 
-    override fun getLocation(rxGps: RxGps, returnCacheIfExists: Boolean): Observable<Location> {
+    override fun getLocation(rxGps: RxGps, cache: Boolean): Observable<Location> {
         return rxGps.locationLowPower()
                 .map { Location(it.latitude, it.longitude) }
     }

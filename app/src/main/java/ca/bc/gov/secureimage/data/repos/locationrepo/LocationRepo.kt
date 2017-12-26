@@ -33,22 +33,14 @@ private constructor(
         cachedLocation = location
     }
 
-    override fun getLocation(rxGps: RxGps, returnCacheIfExists: Boolean): Observable<Location> {
-
-        if (returnCacheIfExists && cachedLocation != null) {
-            return Observable.just(cachedLocation)
-        }
-
-        return remoteDataSource.getLocation(rxGps)
-                .doAfterNext { cacheLatLon(it) }
+    override fun getLocation(rxGps: RxGps, cache: Boolean): Observable<Location> {
+        return remoteDataSource.getLocation(rxGps, cache)
+                .doAfterNext { if (cache) cacheLatLon(it) }
     }
 
     fun getCachedLocation(): Observable<Location> {
-        if(cachedLocation != null) {
-            return Observable.just(cachedLocation)
-        } else {
-            return Observable.empty()
-        }
+        return if(cachedLocation != null) Observable.just(cachedLocation)
+        else Observable.empty()
     }
 
 }

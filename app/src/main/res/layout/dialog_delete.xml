@@ -18,12 +18,14 @@
             android:textColor="@color/red"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:fontFamily="@font/open_sans_bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/deleteAlbumInfoTv"
             android:text="@string/delete_album_info"
+            android:fontFamily="@font/open_sans_regular"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:layout_width="0dp"
@@ -38,6 +40,7 @@
             android:textColor="@color/darkGray"
             android:textAllCaps="true"
             android:textStyle="bold"
+            android:fontFamily="@font/open_sans_bold"
             android:background="?attr/selectableItemBackground"
             android:padding="16dp"
             android:layout_marginEnd="16dp"
@@ -53,6 +56,7 @@
             android:textColor="@color/red"
             android:textAllCaps="true"
             android:textStyle="bold"
+            android:fontFamily="@font/open_sans_bold"
             android:background="?attr/selectableItemBackground"
             android:padding="16dp"
             android:layout_width="wrap_content"
