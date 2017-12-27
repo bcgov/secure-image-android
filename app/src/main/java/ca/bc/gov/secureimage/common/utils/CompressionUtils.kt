@@ -2,6 +2,7 @@ package ca.bc.gov.secureimage.common.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import io.reactivex.Observable
 import java.io.ByteArrayOutputStream
 
 
@@ -11,11 +12,23 @@ import java.io.ByteArrayOutputStream
  */
 object CompressionUtils {
 
-    fun compressToJpeg(
+    fun compressByteArrayAsObservable(
             imageBytes: ByteArray,
             quality: Int,
             reqWidth: Int,
-            reqHeight: Int): ByteArray {
+            reqHeight: Int
+    ): Observable<ByteArray> = Observable.create<ByteArray> { emitter ->
+        val compressedImageBytes = compressByteArray(imageBytes, quality, reqWidth, reqHeight)
+        emitter.onNext(compressedImageBytes)
+        emitter.onComplete()
+    }
+
+    fun compressByteArray(
+            imageBytes: ByteArray,
+            quality: Int,
+            reqWidth: Int,
+            reqHeight: Int
+    ): ByteArray {
 
         val options = BitmapFactory.Options()
 

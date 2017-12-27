@@ -40,7 +40,7 @@ class AlbumsPresenter(
     }
 
     override fun viewShown() {
-        getLocation()
+        getLocationAndCache()
 
         view.showAlbumItems(ArrayList())
         getAlbums()
@@ -55,15 +55,14 @@ class AlbumsPresenter(
     }
 
     /**
-     * Grabs user location and caches it
+     * Grabs user location and caches it in location repo
      */
-    fun getLocation() {
+    fun getLocationAndCache() {
         locationRepo.getLocation(rxGps, true)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-                onError = { view.showError(it.message ?: "Error retrieving location") },
-                onSuccess = { })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy()
                 .addTo(disposables)
     }
 

@@ -5,7 +5,6 @@ import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
 import com.github.florent37.rxgps.RxGps
 import com.wonderkiln.camerakit.*
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -79,9 +78,8 @@ class SecureCameraPresenter(
         locationRepo.getLocation(rxGps, true)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-                onError = { view.showError(it.message ?: "Error retrieving location") },
-                onSuccess = { })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy()
                 .addTo(disposables)
     }
 
@@ -129,12 +127,7 @@ class SecureCameraPresenter(
             reqWidth: Int,
             reqHeight: Int) {
 
-        val compressImageObservable = Observable.create<ByteArray> { emitter ->
-            emitter.onNext(CompressionUtils.compressToJpeg(imageBytes, quality, reqWidth, reqHeight))
-            emitter.onComplete()
-        }
-
-        compressImageObservable
+        CompressionUtils.compressByteArrayAsObservable(imageBytes, quality, reqWidth, reqHeight)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
