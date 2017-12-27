@@ -156,9 +156,6 @@ class AllImagesPresenter(
                 onError = {
                     view.showError(it.message ?: "Error deleting images")
                 },
-                onNext = {
-
-                },
                 onComplete = {
                     view.showMessage("Deleted successfully")
                     getImages()
