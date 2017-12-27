@@ -32,7 +32,7 @@
 
     <EditText
         android:id="@+id/emailEt"
-        android:hint="email"
+        android:hint="@string/email"
         android:textColorHint="@color/lightGray"
         android:textColor="@color/white"
         android:textSize="14sp"

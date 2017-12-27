@@ -7,5 +7,6 @@ package ca.bc.gov.secureimage.common
 object Constants {
 
     val ALBUM_KEY = "ALBUM_KEY"
+
     val IMAGE_KEY = "IMAGE_KEY"
 }

@@ -113,7 +113,7 @@ class BaseApplication: Application() {
         val gcmParameterSpec = GCMParameterSpec(tLen, savedIv)
         decryptionCipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec)
 
-        // Decrypting encryped bytes
+        // Decrypting encrypted bytes
         return decryptionCipher.doFinal(encryptedBytes)
     }
 
@@ -132,8 +132,8 @@ class BaseApplication: Application() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
-            return;
+            return
         }
-        LeakCanary.install(this);
+        LeakCanary.install(this)
     }
 }
