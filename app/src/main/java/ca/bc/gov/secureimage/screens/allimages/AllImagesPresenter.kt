@@ -190,4 +190,10 @@ class AllImagesPresenter(
 
         view.itemChanged(position)
     }
+
+    // Image long click
+    override fun imageLongClicked(cameraImage: CameraImage, position: Int, selectedCount: Int) {
+        showSelectMode()
+        imageSelected(cameraImage, position, selectedCount)
+    }
 }

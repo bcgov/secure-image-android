@@ -75,6 +75,8 @@ interface AllImagesContract {
         fun imageClicked(cameraImage: CameraImage)
 
         fun imageSelected(cameraImage: CameraImage, position: Int, selectedCount: Int)
+
+        fun imageLongClicked(cameraImage: CameraImage, position: Int, selectedCount: Int)
     }
 
 }

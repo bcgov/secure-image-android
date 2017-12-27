@@ -49,6 +49,13 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
+        layout.setOnLongClickListener {
+            if(!selectMode) {
+                imageClickListener.imageLongClicked(cameraImage, adapterPosition)
+            }
+            true
+        }
+
     }
 
     companion object {
@@ -63,6 +70,7 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     interface ImageClickListener {
         fun imageClicked(cameraImage: CameraImage)
         fun imageSelected(cameraImage: CameraImage, position: Int)
+        fun imageLongClicked(cameraImage: CameraImage, position: Int)
     }
 
 }

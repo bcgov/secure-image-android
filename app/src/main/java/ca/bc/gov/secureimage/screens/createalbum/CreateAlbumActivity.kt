@@ -107,6 +107,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
 
     }
 
+    override fun imageLongClicked(cameraImage: CameraImage, position: Int) {
+
+    }
+
     override fun showImages(items: ArrayList<Any>) {
         imagesAdapter?.replaceItems(items)
     }

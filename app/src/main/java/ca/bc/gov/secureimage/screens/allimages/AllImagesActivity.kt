@@ -202,6 +202,10 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         presenter?.imageSelected(cameraImage, position, imagesAdapter?.getSelectedCount() ?: 0)
     }
 
+    override fun imageLongClicked(cameraImage: CameraImage, position: Int) {
+        presenter?.imageLongClicked(cameraImage, position, imagesAdapter?.getSelectedCount() ?: 0)
+    }
+
     override fun showImages(items: ArrayList<Any>) {
         imagesAdapter?.replaceItems(items)
     }
