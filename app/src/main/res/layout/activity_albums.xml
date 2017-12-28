@@ -60,7 +60,7 @@
         android:fontFamily="@font/open_sans_bold"
         android:elevation="8dp"
         android:gravity="center"
-        android:background="@drawable/shape_rect_color_primary_light_solid_rounded"
+        android:background="@drawable/shape_rect_color_primary_light_rounded_28dp"
         android:layout_margin="16dp"
         android:layout_width="200dp"
         android:layout_height="56dp"

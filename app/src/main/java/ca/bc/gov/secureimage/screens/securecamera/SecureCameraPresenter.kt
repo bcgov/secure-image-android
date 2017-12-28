@@ -91,6 +91,7 @@ class SecureCameraPresenter(
                 view.showBack()
                 view.showDone()
                 view.showFlashControl()
+                view.showImageCounter()
             }
         }
     }
@@ -199,7 +200,6 @@ class SecureCameraPresenter(
                 onSuccess = {
                     val imageCounterText = "$it ${if (it == 1) "Image" else "Images"}"
                     view.setImageCounterText(imageCounterText)
-                    view.showImageCounter()
                 }
         ).addTo(disposables)
     }

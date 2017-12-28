@@ -65,7 +65,7 @@
         android:fontFamily="@font/open_sans_bold"
         android:elevation="8dp"
         android:gravity="center"
-        android:background="@drawable/shape_rect_red_solid_rounded"
+        android:background="@drawable/shape_rect_color_accent_rounded_28dp"
         android:layout_margin="16dp"
         android:layout_width="0dp"
         android:layout_height="56dp"

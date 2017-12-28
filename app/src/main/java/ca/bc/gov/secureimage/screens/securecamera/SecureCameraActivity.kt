@@ -189,19 +189,19 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     override fun showFlashOff() {
         flashControlTv.setText(R.string.flash_off)
         flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_flash_off_black_24dp, 0, 0, 0)
+                R.drawable.ic_flash_off_white_24dp, 0, 0, 0)
     }
 
     override fun showFlashOn() {
         flashControlTv.setText(R.string.flash_on)
         flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_flash_on_black_24dp, 0, 0, 0)
+                R.drawable.ic_flash_on_white_24dp, 0, 0, 0)
     }
 
     override fun showFlashAuto() {
         flashControlTv.setText(R.string.flash_auto)
         flashControlTv.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_flash_auto_black_24dp, 0, 0, 0)
+                R.drawable.ic_flash_auto_white_24dp, 0, 0, 0)
     }
 
     // Image counter
