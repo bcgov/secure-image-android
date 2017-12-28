@@ -72,7 +72,7 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error retrieving album")
                 },
                 onSuccess = {
-                    view.setAlbumName(it.albumName)
+                    view.setAlbumName(it.name)
                 }
         ).addTo(disposables)
     }
@@ -113,7 +113,7 @@ class CreateAlbumPresenter(
         albumsRepo.getAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap {
-                    it.albumName = albumName
+                    it.name = albumName
                     it.updatedTime = System.currentTimeMillis()
                     albumsRepo.saveAlbum(it)
                 }
