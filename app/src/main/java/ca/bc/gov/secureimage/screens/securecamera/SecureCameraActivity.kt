@@ -3,6 +3,8 @@ package ca.bc.gov.secureimage.screens.securecamera
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.R
@@ -18,6 +20,12 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Fullscreen
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         setContentView(R.layout.activity_secure_camera)
 
         // Extras

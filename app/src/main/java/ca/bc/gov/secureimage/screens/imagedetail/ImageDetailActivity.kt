@@ -2,6 +2,8 @@ package ca.bc.gov.secureimage.screens.imagedetail
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
@@ -17,6 +19,12 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailContract.View {
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Fullscreen
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         setContentView(R.layout.activity_image_detail)
 
         // Extras
