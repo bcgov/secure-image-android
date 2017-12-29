@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.common.utils
+package ca.bc.gov.secureimage.common.services
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream
  * Created by Aidan Laing on 2017-12-26.
  *
  */
-object CompressionUtils {
+class CompressionService {
 
     fun compressByteArrayAsObservable(
             imageBytes: ByteArray,

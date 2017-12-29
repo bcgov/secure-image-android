@@ -1,6 +1,7 @@
 package ca.bc.gov.secureimage.di
 
 import android.net.ConnectivityManager
+import ca.bc.gov.secureimage.common.services.CompressionService
 import ca.bc.gov.secureimage.common.services.NetworkService
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsLocalDataSource
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
@@ -31,5 +32,8 @@ object Injection {
 
     fun provideNetworkService(connectivityManager: ConnectivityManager): NetworkService =
             NetworkService(connectivityManager)
+
+    fun provideCompressionService(): CompressionService =
+            CompressionService()
 
 }

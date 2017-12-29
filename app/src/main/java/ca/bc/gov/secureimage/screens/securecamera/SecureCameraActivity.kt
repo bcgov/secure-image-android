@@ -40,7 +40,9 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
                 albumKey,
                 Injection.provideCameraImagesRepo(),
                 Injection.provideLocationRepo(),
-                RxGps(this))
+                RxGps(this),
+                Injection.provideCompressionService()
+        )
 
         presenter?.subscribe()
     }

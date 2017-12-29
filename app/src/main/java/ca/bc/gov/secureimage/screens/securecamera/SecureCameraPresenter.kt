@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import ca.bc.gov.secureimage.common.utils.CompressionUtils
+import ca.bc.gov.secureimage.common.services.CompressionService
 
 /**
  * Created by Aidan Laing on 2017-12-13.
@@ -21,7 +21,8 @@ class SecureCameraPresenter(
         private val albumKey: String,
         private val cameraImagesRepo: CameraImagesRepo,
         private val locationRepo: LocationRepo,
-        private val rxGps: RxGps
+        private val rxGps: RxGps,
+        private val compressionService: CompressionService
 ) : SecureCameraContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -128,7 +129,7 @@ class SecureCameraPresenter(
             reqWidth: Int,
             reqHeight: Int) {
 
-        CompressionUtils.compressByteArrayAsObservable(imageBytes, quality, reqWidth, reqHeight)
+        compressionService.compressByteArrayAsObservable(imageBytes, quality, reqWidth, reqHeight)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
