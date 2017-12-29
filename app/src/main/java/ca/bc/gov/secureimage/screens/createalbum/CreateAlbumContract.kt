@@ -20,6 +20,10 @@ interface CreateAlbumContract {
 
         fun setUpBackListener()
 
+        fun showNetworkType()
+        fun hideNetworkType()
+        fun setNetworkTypeText(text: String)
+
         fun setUpImagesList()
         fun showImages(items: ArrayList<Any>)
 

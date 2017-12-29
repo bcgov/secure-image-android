@@ -1,6 +1,8 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -41,11 +43,15 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
             return
         }
 
+        val networkService = Injection.provideNetworkService(
+                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+
         CreateAlbumPresenter(
                 this,
                 albumKey,
                 Injection.provideAlbumsRepo(),
-                Injection.provideCameraImagesRepo()
+                Injection.provideCameraImagesRepo(),
+                networkService
         )
 
         presenter?.subscribe()
@@ -84,6 +90,19 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         backIv.setOnClickListener {
             presenter?.backClicked()
         }
+    }
+
+    // Network type
+    override fun showNetworkType() {
+        networkTypeTv.visibility = View.VISIBLE
+    }
+
+    override fun hideNetworkType() {
+        networkTypeTv.visibility = View.GONE
+    }
+
+    override fun setNetworkTypeText(text: String) {
+        networkTypeTv.text = text
     }
 
     // Image list

@@ -1,5 +1,7 @@
 package ca.bc.gov.secureimage.di
 
+import android.net.ConnectivityManager
+import ca.bc.gov.secureimage.common.services.NetworkService
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsLocalDataSource
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesLocalDataSource
@@ -26,5 +28,8 @@ object Injection {
 
     fun provideLocationRepo(): LocationRepo =
             LocationRepo.getInstance(LocationRemoteDataSource)
+
+    fun provideNetworkService(connectivityManager: ConnectivityManager): NetworkService =
+            NetworkService(connectivityManager)
 
 }

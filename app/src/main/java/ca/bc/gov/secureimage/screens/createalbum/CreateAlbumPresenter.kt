@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import ca.bc.gov.secureimage.common.services.NetworkService
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
@@ -9,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Aidan Laing on 2017-12-12.
@@ -18,7 +20,8 @@ class CreateAlbumPresenter(
         private val view: CreateAlbumContract.View,
         private val albumKey: String,
         private val albumsRepo: AlbumsRepo,
-        private val cameraImagesRepo: CameraImagesRepo
+        private val cameraImagesRepo: CameraImagesRepo,
+        private val networkService: NetworkService
 ) : CreateAlbumContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -28,7 +31,7 @@ class CreateAlbumPresenter(
     }
 
     override fun subscribe() {
-        getAlbumFields()
+        view.hideNetworkType()
 
         view.setUpBackListener()
 
@@ -41,6 +44,8 @@ class CreateAlbumPresenter(
         view.setUpDeleteListener()
 
         view.setRefresh(true)
+
+        getAlbumFields()
     }
 
     override fun dispose() {
@@ -52,12 +57,44 @@ class CreateAlbumPresenter(
         if(refresh) {
             view.showImages(ArrayList())
             getImages()
+
             view.setRefresh(false)
         }
+
+        addNetworkTypeListener()
     }
 
     override fun viewHidden() {
         disposables.clear()
+    }
+
+    /**
+     * Pings the network every 5 seconds to check if connected/disconnected or on wifi/mobile
+     */
+    fun addNetworkTypeListener() {
+        networkService.getNetworkTypeListener(0, 5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error listening to network status")
+                },
+                onNext = {
+                    when (it) {
+                        is NetworkService.NetworkType.WifiConnection -> {
+                            view.hideNetworkType()
+                            view.setNetworkTypeText("")
+                        }
+                        is NetworkService.NetworkType.MobileConnection -> {
+                            view.showNetworkType()
+                            view.setNetworkTypeText("Mobile connection")
+                        }
+                        is NetworkService.NetworkType.NoConnection -> {
+                            view.showNetworkType()
+                            view.setNetworkTypeText("No internet connection")
+                        }
+                    }
+                }
+        ).addTo(disposables)
     }
 
     /**
