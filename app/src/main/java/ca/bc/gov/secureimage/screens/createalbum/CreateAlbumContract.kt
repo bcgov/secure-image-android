@@ -41,7 +41,7 @@ interface CreateAlbumContract {
         fun setAlbumName(albumName: String)
 
         fun goToSecureCamera(albumKey: String)
-        fun goToImageDetail(imageKey: String)
+        fun goToImageDetail(albumKey: String, imageIndex: Int)
     }
 
     interface Presenter: BasePresenter {
@@ -58,7 +58,7 @@ interface CreateAlbumContract {
         fun viewAllImagesClicked()
 
         fun addImagesClicked()
-        fun imageClicked(cameraImage: CameraImage)
+        fun imageClicked(cameraImage: CameraImage, position: Int)
     }
 
 }

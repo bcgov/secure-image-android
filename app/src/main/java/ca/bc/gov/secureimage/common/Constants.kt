@@ -8,5 +8,6 @@ object Constants {
 
     val ALBUM_KEY = "ALBUM_KEY"
 
-    val IMAGE_KEY = "IMAGE_KEY"
+    val IMAGE_INDEX = "IMAGE_INDEX"
+
 }

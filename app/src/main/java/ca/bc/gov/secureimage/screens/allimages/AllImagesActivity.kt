@@ -69,11 +69,11 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     // Loading
     override fun showLoading() {
-        progressBar.visibility = View.VISIBLE
+        viewedProgressBar.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        progressBar.visibility = View.GONE
+        viewedProgressBar.visibility = View.GONE
     }
 
     // Message
@@ -194,8 +194,8 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         presenter?.addImagesClicked()
     }
 
-    override fun imageClicked(cameraImage: CameraImage) {
-        presenter?.imageClicked(cameraImage)
+    override fun imageClicked(cameraImage: CameraImage, position: Int) {
+        presenter?.imageClicked(cameraImage, position)
     }
 
     override fun imageSelected(cameraImage: CameraImage, position: Int) {
@@ -230,9 +230,10 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
     }
 
     // Image detail
-    override fun goToImageDetail(imageKey: String) {
+    override fun goToImageDetail(albumKey: String, imageIndex: Int) {
         Intent(this, ImageDetailActivity::class.java)
-                .putExtra(Constants.IMAGE_KEY, imageKey)
+                .putExtra(Constants.ALBUM_KEY, albumKey)
+                .putExtra(Constants.IMAGE_INDEX, imageIndex)
                 .run { startActivity(this) }
     }
 }

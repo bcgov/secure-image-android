@@ -55,7 +55,7 @@ interface AllImagesContract {
         fun clearSelectedImages()
 
         fun goToSecureCamera(albumKey: String)
-        fun goToImageDetail(imageKey: String)
+        fun goToImageDetail(albumKey: String, imageIndex: Int)
     }
 
     interface Presenter: BasePresenter {
@@ -72,7 +72,7 @@ interface AllImagesContract {
 
         fun addImagesClicked()
 
-        fun imageClicked(cameraImage: CameraImage)
+        fun imageClicked(cameraImage: CameraImage, position: Int)
 
         fun imageSelected(cameraImage: CameraImage, position: Int, selectedCount: Int)
 

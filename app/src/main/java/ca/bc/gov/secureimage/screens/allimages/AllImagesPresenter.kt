@@ -170,8 +170,8 @@ class AllImagesPresenter(
     }
 
     // Image clicks
-    override fun imageClicked(cameraImage: CameraImage) {
-        view.goToImageDetail(cameraImage.key)
+    override fun imageClicked(cameraImage: CameraImage, position: Int) {
+        view.goToImageDetail(cameraImage.albumKey, position - 1)
     }
 
     // Image selected

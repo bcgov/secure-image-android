@@ -14,13 +14,22 @@ interface ImageDetailContract {
 
         fun showError(message: String)
 
-        fun addBackListener()
+        fun addCloseListener()
 
-        fun showImage(byteArray: ByteArray)
+        fun setToolbarTitle(title: String)
+
+        fun setUpImagesList()
+        fun addImagesListScrollChangeListener()
+        fun showImages(items: ArrayList<Any>)
+        fun scrollImagesListTo(position: Int)
+
+        fun setViewedProgress(progress: Int)
     }
 
     interface Presenter : BasePresenter {
-        fun backClicked()
+        fun closeClicked()
+
+        fun imagesListScrollChanged(currentIndex: Int, imagesSize: Int, currentProgress: Int)
     }
 
 }

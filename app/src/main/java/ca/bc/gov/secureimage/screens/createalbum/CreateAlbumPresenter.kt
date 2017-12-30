@@ -204,7 +204,7 @@ class CreateAlbumPresenter(
         view.goToSecureCamera(albumKey)
     }
 
-    override fun imageClicked(cameraImage: CameraImage) {
-        view.goToImageDetail(cameraImage.key)
+    override fun imageClicked(cameraImage: CameraImage, position: Int) {
+        view.goToImageDetail(cameraImage.albumKey, position - 1)
     }
 }

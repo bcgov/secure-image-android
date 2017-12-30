@@ -118,8 +118,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         presenter?.addImagesClicked()
     }
 
-    override fun imageClicked(cameraImage: CameraImage) {
-        presenter?.imageClicked(cameraImage)
+    override fun imageClicked(cameraImage: CameraImage, position: Int) {
+        presenter?.imageClicked(cameraImage, position)
     }
 
     override fun imageSelected(cameraImage: CameraImage, position: Int) {
@@ -195,9 +195,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
     }
 
     // Image detail
-    override fun goToImageDetail(imageKey: String) {
+    override fun goToImageDetail(albumKey: String, imageIndex: Int) {
         Intent(this, ImageDetailActivity::class.java)
-                .putExtra(Constants.IMAGE_KEY, imageKey)
+                .putExtra(Constants.ALBUM_KEY, albumKey)
+                .putExtra(Constants.IMAGE_INDEX, imageIndex)
                 .run { startActivity(this) }
     }
 }

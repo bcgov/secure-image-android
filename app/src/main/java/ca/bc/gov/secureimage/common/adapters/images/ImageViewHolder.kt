@@ -45,7 +45,7 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             if(selectMode) {
                 imageClickListener.imageSelected(cameraImage, adapterPosition)
             } else {
-                imageClickListener.imageClicked(cameraImage)
+                imageClickListener.imageClicked(cameraImage, adapterPosition)
             }
         }
 
@@ -68,7 +68,7 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     }
 
     interface ImageClickListener {
-        fun imageClicked(cameraImage: CameraImage)
+        fun imageClicked(cameraImage: CameraImage, position: Int)
         fun imageSelected(cameraImage: CameraImage, position: Int)
         fun imageLongClicked(cameraImage: CameraImage, position: Int)
     }

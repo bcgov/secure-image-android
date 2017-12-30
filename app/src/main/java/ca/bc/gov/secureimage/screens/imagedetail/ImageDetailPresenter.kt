@@ -6,6 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlin.math.roundToInt
 
 /**
  * Created by Aidan Laing on 2017-12-15.
@@ -13,7 +14,8 @@ import io.reactivex.schedulers.Schedulers
  */
 class ImageDetailPresenter(
         private val view: ImageDetailContract.View,
-        private val imageKey: String,
+        private val albumKey: String,
+        private val initialImageIndex: Int,
         private val cameraImagesRepo: CameraImagesRepo
 ) : ImageDetailContract.Presenter {
 
@@ -24,34 +26,57 @@ class ImageDetailPresenter(
     }
 
     override fun subscribe() {
-        view.addBackListener()
+        view.addCloseListener()
 
-        getImage()
+        view.setUpImagesList()
+        view.addImagesListScrollChangeListener()
+
+        getImages()
     }
 
     override fun dispose() {
         disposables.dispose()
     }
 
-    /**
-     * Grabs the image associated with the passed image key
-     * onSuccess shows image
-     */
-    fun getImage() {
-        cameraImagesRepo.getCameraImage(imageKey)
-                .firstOrError()
+    // Close
+    override fun closeClicked() {
+        view.finish()
+    }
+
+    // Images
+    fun getImages() {
+        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
+                .flatMapIterable { it }
+                .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
-                    view.showError(it.message ?: "Error retrieving image")
+                    view.showError(it.message ?: "Error getting all album images")
                 },
                 onSuccess = {
-                    view.showImage(it.byteArray)
-                })
-                .addTo(disposables)
+                    val items = ArrayList<Any>(it)
+                    view.showImages(items)
+                    view.scrollImagesListTo(initialImageIndex)
+                }
+        ).addTo(disposables)
     }
 
-    override fun backClicked() {
-        view.finish()
+    // Scroll change
+    override fun imagesListScrollChanged(currentIndex: Int, imagesSize: Int, currentProgress: Int) {
+        getProgress(currentIndex, imagesSize, currentProgress)
+        getTitle(currentIndex, imagesSize)
+    }
+
+    // Title
+    fun getTitle(currentIndex: Int, imagesSize: Int) {
+        val title = "Image ${currentIndex + 1} of $imagesSize"
+        view.setToolbarTitle(title)
+    }
+
+    // Progress
+    fun getProgress(currentIndex: Int, imagesSize: Int, currentProgress: Int) {
+        if (currentIndex + 1 > imagesSize || imagesSize == 0) return
+        val progress = (((currentIndex + 1).toDouble() / imagesSize.toDouble()) * 100).roundToInt()
+        if (currentProgress != progress) view.setViewedProgress(progress)
     }
 }
