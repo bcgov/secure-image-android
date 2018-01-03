@@ -191,7 +191,7 @@ class SecureCameraPresenter(
      * onSuccess current counter is shown
      */
     fun getAlbumImageCount() {
-        cameraImagesRepo.getImageCountInAlbum(albumKey)
+        cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(

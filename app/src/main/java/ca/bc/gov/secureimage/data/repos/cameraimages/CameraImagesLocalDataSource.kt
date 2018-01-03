@@ -53,7 +53,7 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
-    override fun getImageCountInAlbum(albumKey: String): Observable<Int> {
+    override fun getCameraImageCountInAlbum(albumKey: String): Observable<Int> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
@@ -68,7 +68,7 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
-    override fun getFixedAmountImagesInAlbum(albumKey: String, amount: Int): Observable<ArrayList<CameraImage>> {
+    override fun getCameraImagesInAlbum(albumKey: String, amount: Int): Observable<ArrayList<CameraImage>> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {

@@ -7,8 +7,8 @@ import android.os.StrictMode
 import android.preference.PreferenceManager
 import ca.bc.gov.secureimage.BuildConfig
 import com.squareup.leakcanary.LeakCanary
-import java.security.*
 import ca.bc.gov.secureimage.common.services.KeyStorageService
+import ca.bc.gov.secureimage.di.Injection
 
 /**
  * Created by Aidan Laing on 2017-12-12.
@@ -19,7 +19,9 @@ class BaseApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        setUpRealm(KeyStorageService(KeyStore.getInstance("AndroidKeyStore")))
+        val keyStorageService = Injection.provideKeyStorageService(Injection.provideKeyStore())
+
+        setUpRealm(keyStorageService)
         setUpStrictMode()
         setUpLeakCanary()
     }

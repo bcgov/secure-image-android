@@ -28,7 +28,7 @@ class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         nameTv.text = album.getDisplayName()
 
         // Update time
-        updatedTimeTv.text = album.getDisplayUpdateTime()
+        updatedTimeTv.text = album.getLastSavedTime()
 
         // Clicks
         layout.setOnClickListener {

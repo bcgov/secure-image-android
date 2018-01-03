@@ -33,8 +33,8 @@ open class Album : RealmObject() {
         return if (name.isNotBlank()) name else "Unnamed Album"
     }
 
-    fun getDisplayUpdateTime(): String {
-        return "Updated ${TimeUtils.getReadableTime(updatedTime)}"
+    fun getLastSavedTime(): String {
+        return "Last saved ${TimeUtils.getReadableTime(updatedTime)}"
     }
 
 }
