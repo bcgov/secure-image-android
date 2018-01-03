@@ -42,7 +42,7 @@ class KeyStorageService(private val keyStore: KeyStore) {
         return getDecryptedKey(alias, aesSecretKey, sharedPrefs)
     }
 
-    private fun getAESSecretKey(
+    fun getAESSecretKey(
             alias: String,
             keySize: Int
     ): SecretKey {
@@ -56,7 +56,7 @@ class KeyStorageService(private val keyStore: KeyStore) {
         return keyStore.getKey(alias, null) as SecretKey
     }
 
-    private fun generateAESSecretKey(alias: String, keySize: Int) {
+    fun generateAESSecretKey(alias: String, keySize: Int) {
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, keyStore.provider)
 
         keyGenerator.init(KeyGenParameterSpec.Builder(
@@ -69,7 +69,7 @@ class KeyStorageService(private val keyStore: KeyStore) {
         keyGenerator.generateKey()
     }
 
-    private fun generateRandomAESEncryptedKey(
+    fun generateRandomAESEncryptedKey(
             alias: String,
             keySize: Int,
             aesSecretKey: SecretKey,
@@ -93,7 +93,7 @@ class KeyStorageService(private val keyStore: KeyStore) {
         sharedPrefs.edit().putString(IV_KEY, base64IvString).apply()
     }
 
-    private fun getDecryptedKey(
+    fun getDecryptedKey(
             alias: String,
             aesSecretKey: SecretKey,
             sharedPrefs: SharedPreferences

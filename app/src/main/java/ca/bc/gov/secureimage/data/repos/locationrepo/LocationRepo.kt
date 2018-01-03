@@ -29,13 +29,13 @@ private constructor(
 
     private var cachedLocation: Location? = null
 
-    private fun cacheLatLon(location: Location) {
+    fun cacheLocation(location: Location) {
         cachedLocation = location
     }
 
     override fun getLocation(rxGps: RxGps, cache: Boolean): Observable<Location> {
         return remoteDataSource.getLocation(rxGps, cache)
-                .doAfterNext { if (cache) cacheLatLon(it) }
+                .doAfterNext { if (cache) cacheLocation(it) }
     }
 
     fun getCachedLocation(): Observable<Location> {
