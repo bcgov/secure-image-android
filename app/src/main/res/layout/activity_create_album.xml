@@ -30,7 +30,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
 
     <TextView
-        android:text="@string/create_album"
+        android:text="@string/album"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -76,7 +76,6 @@
         app:layout_constraintBottom_toBottomOf="parent">
         
         <android.support.constraint.ConstraintLayout
-            android:paddingBottom="88dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -120,6 +119,7 @@
                 app:layout_constraintRight_toRightOf="parent" />
 
             <View
+                android:id="@+id/viewAllDividerView"
                 android:background="@color/lightGray"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
@@ -135,7 +135,7 @@
                 android:layout_margin="16dp"
                 android:fontFamily="@font/open_sans_regular"
                 android:text="@string/album_name"
-                app:layout_constraintTop_toBottomOf="@+id/viewAllImagesTv"
+                app:layout_constraintTop_toBottomOf="@+id/viewAllDividerView"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
             <EditText
@@ -162,26 +162,27 @@
                 app:layout_constraintTop_toBottomOf="@+id/albumNameEt"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/uploadTv"
+                android:text="@string/upload"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textAllCaps="true"
+                android:fontFamily="@font/open_sans_bold"
+                android:elevation="8dp"
+                android:gravity="center"
+                android:background="@drawable/shape_rect_color_primary_light_rounded_28dp"
+                android:layout_margin="16dp"
+                android:layout_width="200dp"
+                android:layout_height="56dp"
+                app:layout_constraintTop_toBottomOf="@+id/albumNameDividerView"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
             
         </android.support.constraint.ConstraintLayout>
         
     </ScrollView>
-
-    <TextView
-        android:id="@+id/saveTv"
-        android:text="@string/save"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:textAllCaps="true"
-        android:fontFamily="@font/open_sans_bold"
-        android:elevation="8dp"
-        android:gravity="center"
-        android:background="@drawable/shape_rect_color_primary_light_rounded_28dp"
-        android:layout_marginBottom="16dp"
-        android:layout_width="200dp"
-        android:layout_height="56dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

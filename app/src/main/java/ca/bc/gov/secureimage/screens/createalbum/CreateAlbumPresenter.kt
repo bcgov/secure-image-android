@@ -39,8 +39,6 @@ class CreateAlbumPresenter(
 
         view.setUpViewAllImagesListener()
 
-        view.setUpSaveListener()
-
         view.setUpDeleteListener()
 
         view.setRefresh(true)
@@ -64,8 +62,9 @@ class CreateAlbumPresenter(
         addNetworkTypeListener()
     }
 
-    override fun viewHidden() {
+    override fun viewHidden(albumName: String) {
         disposables.clear()
+        saveAlbumFields(albumName)
     }
 
     /**
@@ -144,9 +143,8 @@ class CreateAlbumPresenter(
     /**
      * Add all current album fields to existing album and saves
      * Update time is set to current time in millis
-     * On success finishes
      */
-    override fun saveClicked(albumName: String) {
+    fun saveAlbumFields(albumName: String) {
         albumsRepo.getAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap {
@@ -156,14 +154,8 @@ class CreateAlbumPresenter(
                 }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-                onError = {
-                    view.showError(it.message ?: "Error saving album")
-                },
-                onSuccess = {
-                    view.showMessage("Album saved")
-                    view.finish()
-                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy()
                 .addTo(disposables)
     }
 

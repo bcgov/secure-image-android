@@ -64,7 +64,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
 
     override fun onPause() {
         super.onPause()
-        presenter?.viewHidden()
+        val albumName = albumNameEt.text.toString()
+        presenter?.viewHidden(albumName)
     }
 
     override fun onDestroy() {
@@ -153,13 +154,6 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         Intent(this, AllImagesActivity::class.java)
                 .putExtra(Constants.ALBUM_KEY, albumKey)
                 .run { startActivity(this) }
-    }
-
-    // Save
-    override fun setUpSaveListener() {
-        saveTv.setOnClickListener {
-            presenter?.saveClicked(albumNameEt.text.toString())
-        }
     }
 
     // Delete

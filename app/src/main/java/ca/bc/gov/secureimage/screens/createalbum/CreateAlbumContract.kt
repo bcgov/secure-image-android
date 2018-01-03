@@ -32,8 +32,6 @@ interface CreateAlbumContract {
         fun hideViewAllImages()
         fun goToAllImages(albumKey: String)
 
-        fun setUpSaveListener()
-
         fun setUpDeleteListener()
         fun showDeleteAlbumDialog()
         fun hideDeleteAlbumDialog()
@@ -46,11 +44,9 @@ interface CreateAlbumContract {
 
     interface Presenter: BasePresenter {
         fun viewShown(refresh: Boolean)
-        fun viewHidden()
+        fun viewHidden(albumName: String)
 
         fun backClicked()
-
-        fun saveClicked(albumName: String)
 
         fun deleteClicked()
         fun deleteForeverClicked()

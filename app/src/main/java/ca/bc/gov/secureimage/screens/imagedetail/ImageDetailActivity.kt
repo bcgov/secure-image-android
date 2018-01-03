@@ -63,7 +63,8 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailContract.View, View.
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putInt(Constants.IMAGE_INDEX, imageDetailLayoutManager?.findFirstVisibleItemPosition() ?: 0)
+        val currImageIndex = imageDetailLayoutManager?.findFirstVisibleItemPosition() ?: 0
+        outState?.putInt(Constants.IMAGE_INDEX, currImageIndex)
         super.onSaveInstanceState(outState)
     }
 

@@ -33,5 +33,6 @@
     <string name="select_mode">Select mode</string>
     <string name="albums">Albums</string>
     <string name="add_an_album_name">Add an album name</string>
+    <string name="album">Album</string>
 
 </resources>
