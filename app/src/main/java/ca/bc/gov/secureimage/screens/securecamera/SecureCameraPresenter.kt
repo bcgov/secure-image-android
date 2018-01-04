@@ -80,7 +80,7 @@ class SecureCameraPresenter(
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy()
+                .subscribeBy(onError = {})
                 .addTo(disposables)
     }
 
@@ -104,7 +104,7 @@ class SecureCameraPresenter(
     override fun onCameraImage(image: CameraKitImage?) {
         if (image == null) return
 
-        createCameraImage(image.jpeg, 50, 1080, 1920)
+        createCameraImage(image.jpeg, 100, 1920, 1920)
     }
 
     /**

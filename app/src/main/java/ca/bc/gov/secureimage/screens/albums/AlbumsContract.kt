@@ -21,6 +21,9 @@ interface AlbumsContract {
 
         fun setUpCreateAlbumListener()
         fun goToCreateAlbum(albumKey: String)
+
+        fun showOnboarding()
+        fun hideOnboarding()
     }
 
     interface Presenter: BasePresenter {

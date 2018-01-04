@@ -28,6 +28,8 @@ class AlbumsPresenter(
     }
 
     override fun subscribe() {
+        view.hideOnboarding()
+
         view.setUpSettingsListener()
 
         view.setUpAlbumsList()
@@ -62,13 +64,14 @@ class AlbumsPresenter(
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy()
+                .subscribeBy(onError = {})
                 .addTo(disposables)
     }
 
     /**
      * Grabs all the albums with preview image from the albums repo
      * Orders albums by updated time and displays in view
+     * On Success shows items and displays help text if no albums exist
      */
     fun getAlbums() {
         albumsRepo.getAllAlbums()
@@ -83,6 +86,12 @@ class AlbumsPresenter(
                     val items = ArrayList<Any>()
                     items.addAll(it)
                     view.showAlbumItems(items)
+
+                    if (items.isEmpty()) {
+                        view.showOnboarding()
+                    } else {
+                        view.hideOnboarding()
+                    }
                 })
                 .addTo(disposables)
     }

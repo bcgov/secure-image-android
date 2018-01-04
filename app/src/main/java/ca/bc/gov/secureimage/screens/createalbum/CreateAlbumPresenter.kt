@@ -155,7 +155,7 @@ class CreateAlbumPresenter(
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy()
+                .subscribeBy(onError = {})
                 .addTo(disposables)
     }
 

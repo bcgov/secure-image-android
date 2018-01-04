@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
@@ -98,5 +99,16 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
         Intent(this, CreateAlbumActivity::class.java)
                 .putExtra(Constants.ALBUM_KEY, albumKey)
                 .run { startActivity(this) }
+    }
+
+    // Onboarding
+    override fun showOnboarding() {
+        onboardingTitleTv.visibility = View.VISIBLE
+        onboardingInfoTv.visibility = View.VISIBLE
+    }
+
+    override fun hideOnboarding() {
+        onboardingTitleTv.visibility = View.GONE
+        onboardingInfoTv.visibility = View.GONE
     }
 }

@@ -34,5 +34,7 @@
     <string name="albums">Albums</string>
     <string name="add_an_album_name">Add an album name</string>
     <string name="album">Album</string>
+    <string name="hello_comma">Hello,</string>
+    <string name="onboarding_info">Welcome to the Secure Image App. On this page is where all of your albums will be located.\n\nIn order to create a new Album, simply tap on the Create Album button below to get started.\n\nOnce you are within the create album screen, you have the option to take an image or annoate your album.</string>
 
 </resources>
