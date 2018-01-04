@@ -48,6 +48,9 @@ interface AllImagesContract {
         fun hideSelectDelete()
         fun setUpSelectDeleteListener()
 
+        fun showDeletePhotos(cameraImages: ArrayList<CameraImage>)
+        fun hideDeletePhotos()
+
         fun setUpImagesList()
         fun showImages(items: ArrayList<Any>)
         fun setSelectMode(selectMode: Boolean)
@@ -69,6 +72,8 @@ interface AllImagesContract {
         fun closeSelectClicked()
 
         fun selectDeleteClicked(cameraImages: ArrayList<CameraImage>)
+
+        fun deleteConfirmed(cameraImages: ArrayList<CameraImage>)
 
         fun addImagesClicked()
 

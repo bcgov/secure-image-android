@@ -36,5 +36,7 @@
     <string name="album">Album</string>
     <string name="hello_comma">Hello,</string>
     <string name="onboarding_info">Welcome to the Secure Image App. On this page is where all of your albums will be located.\n\nIn order to create a new Album, simply tap on the Create Album button below to get started.\n\nOnce you are within the create album screen, you have the option to take an image or annoate your album.</string>
+    <string name="delete_photos">Delete Photos</string>
+    <string name="delete_photo_info">Are you sure you want to delete your selected photos?</string>
 
 </resources>

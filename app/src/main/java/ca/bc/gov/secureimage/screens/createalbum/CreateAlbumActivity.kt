@@ -20,7 +20,9 @@ import ca.bc.gov.secureimage.screens.allimages.AllImagesActivity
 import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_create_album.*
 
-class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener, DeleteAlbumDialog.DeleteListener {
+class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
+        AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener,
+        DeleteAlbumDialog.DeleteListener {
 
     override var presenter: CreateAlbumContract.Presenter? = null
 
@@ -172,8 +174,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View, AddIm
         deleteAlbumDialog?.hide()
     }
 
-    override fun deleteForeverClicked() {
-        presenter?.deleteForeverClicked()
+    override fun deleteConfirmed() {
+        presenter?.deleteConfirmed()
     }
 
     // Album name

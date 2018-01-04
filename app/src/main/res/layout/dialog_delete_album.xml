@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/deleteAlbumTitleTv"
+            android:id="@+id/deleteTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -22,14 +22,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/deleteAlbumInfoTv"
+            android:id="@+id/deleteInfoTv"
             android:text="@string/delete_album_info"
             android:fontFamily="@font/open_sans_regular"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/deleteAlbumTitleTv"
+            app:layout_constraintTop_toBottomOf="@+id/deleteTitleTv"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
@@ -45,12 +45,12 @@
             android:layout_marginEnd="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/deleteAlbumInfoTv"
-            app:layout_constraintRight_toLeftOf="@+id/deleteForeverTv"
+            app:layout_constraintTop_toBottomOf="@+id/deleteInfoTv"
+            app:layout_constraintRight_toLeftOf="@+id/deleteTv"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            android:id="@+id/deleteForeverTv"
+            android:id="@+id/deleteTv"
             android:text="@string/delete_album"
             android:textColor="@color/red"
             android:textAllCaps="true"
@@ -60,7 +60,7 @@
             android:padding="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/deleteAlbumInfoTv"
+            app:layout_constraintTop_toBottomOf="@+id/deleteInfoTv"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

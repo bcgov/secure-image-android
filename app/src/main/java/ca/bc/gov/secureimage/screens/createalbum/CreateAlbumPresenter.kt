@@ -167,7 +167,7 @@ class CreateAlbumPresenter(
     /**
      * Deletes album model then deletes all the images associated with that album
      */
-    override fun deleteForeverClicked() {
+    override fun deleteConfirmed() {
         albumsRepo.deleteAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap { cameraImagesRepo.deleteAllCameraImagesInAlbum(albumKey) }

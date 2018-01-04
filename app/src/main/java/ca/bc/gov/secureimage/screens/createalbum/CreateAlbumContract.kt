@@ -49,7 +49,7 @@ interface CreateAlbumContract {
         fun backClicked()
 
         fun deleteClicked()
-        fun deleteForeverClicked()
+        fun deleteConfirmed()
 
         fun viewAllImagesClicked()
 
