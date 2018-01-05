@@ -199,7 +199,8 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     // Images list
     override fun setUpImagesList() {
-        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this, this)
+        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this,
+                this, false)
         imagesRv.apply {
             layoutManager = GridLayoutManager(this@AllImagesActivity, 3)
             adapter = imagesAdapter
@@ -220,6 +221,10 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
     override fun imageLongClicked(cameraImage: CameraImage, position: Int) {
         presenter?.imageLongClicked(cameraImage, position, imagesAdapter?.getSelectedCount() ?: 0)
+    }
+
+    override fun imageDeleteClicked(cameraImage: CameraImage, position: Int) {
+
     }
 
     override fun showImages(items: ArrayList<Any>) {

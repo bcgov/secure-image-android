@@ -110,7 +110,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     // Image list
     override fun setUpImagesList() {
-        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this, this)
+        imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this,
+                this, true)
         imagesRv.apply {
             layoutManager = NoScrollGridLayoutManager(this@CreateAlbumActivity, 3)
             adapter = imagesAdapter
@@ -133,8 +134,16 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     }
 
+    override fun imageDeleteClicked(cameraImage: CameraImage, position: Int) {
+        presenter?.imageDeleteClicked(cameraImage, position)
+    }
+
     override fun showImages(items: ArrayList<Any>) {
         imagesAdapter?.replaceItems(items)
+    }
+
+    override fun notifyImageRemoved(cameraImage: CameraImage, position: Int) {
+        imagesAdapter?.notifyImageRemoved(cameraImage, position)
     }
 
     // View all images

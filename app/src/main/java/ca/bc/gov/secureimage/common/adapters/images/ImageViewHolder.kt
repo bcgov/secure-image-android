@@ -17,13 +17,25 @@ import kotlinx.android.synthetic.main.item_image.view.*
  */
 class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(cameraImage: CameraImage, selectMode: Boolean, imageClickListener: ImageClickListener) = with(itemView) {
+    fun bind(
+            cameraImage: CameraImage,
+            showDelete: Boolean,
+            selectMode: Boolean,
+            imageClickListener: ImageClickListener
+    ) = with(itemView) {
 
         // Image
         Glide.with(context)
                 .load(cameraImage.byteArray)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageIv)
+
+        // Show delete
+        if (showDelete) {
+            deleteIv.visibility = View.VISIBLE
+        } else {
+            deleteIv.visibility = View.GONE
+        }
 
         // Select mode
         if (selectMode) {
@@ -56,6 +68,12 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             true
         }
 
+        deleteIv.setOnClickListener {
+            if (showDelete) {
+                imageClickListener.imageDeleteClicked(cameraImage, adapterPosition)
+            }
+        }
+
     }
 
     companion object {
@@ -71,6 +89,7 @@ class ImageViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         fun imageClicked(cameraImage: CameraImage, position: Int)
         fun imageSelected(cameraImage: CameraImage, position: Int)
         fun imageLongClicked(cameraImage: CameraImage, position: Int)
+        fun imageDeleteClicked(cameraImage: CameraImage, position: Int)
     }
 
 }

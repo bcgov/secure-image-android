@@ -26,6 +26,7 @@ interface CreateAlbumContract {
 
         fun setUpImagesList()
         fun showImages(items: ArrayList<Any>)
+        fun notifyImageRemoved(cameraImage: CameraImage, position: Int)
 
         fun setUpViewAllImagesListener()
         fun showViewAllImages()
@@ -54,7 +55,10 @@ interface CreateAlbumContract {
         fun viewAllImagesClicked()
 
         fun addImagesClicked()
+
         fun imageClicked(cameraImage: CameraImage, position: Int)
+
+        fun imageDeleteClicked(cameraImage: CameraImage, position: Int)
     }
 
 }

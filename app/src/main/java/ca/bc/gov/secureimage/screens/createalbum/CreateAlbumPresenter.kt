@@ -118,7 +118,7 @@ class CreateAlbumPresenter(
      * On success show images with add images model so recycler view can display an add image tile
      */
     fun getImages() {
-        cameraImagesRepo.getCameraImagesInAlbum(albumKey, 5)
+        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
@@ -196,7 +196,32 @@ class CreateAlbumPresenter(
         view.goToSecureCamera(albumKey)
     }
 
+    // Image click
     override fun imageClicked(cameraImage: CameraImage, position: Int) {
         view.goToImageDetail(cameraImage.albumKey, position - 1)
+    }
+
+    // Image deletion
+    override fun imageDeleteClicked(cameraImage: CameraImage, position: Int) {
+        deleteImage(cameraImage, position)
+    }
+
+    /**
+     * Deletes camera image from local storage
+     * On success notifies image list that an item has been removed
+     */
+    fun deleteImage(cameraImage: CameraImage, position: Int) {
+        cameraImagesRepo.deleteCameraImage(cameraImage)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error deleting image")
+                },
+                onSuccess = {
+                    view.showMessage("Image deleted")
+                    view.notifyImageRemoved(it, position)
+                }
+        ).addTo(disposables)
     }
 }
