@@ -35,6 +35,8 @@ class CreateAlbumPresenter(
 
         view.setRefresh(true)
 
+        view.setAlbumDeleted(false)
+
         view.hideNetworkType()
 
         view.setUpBackListener()
@@ -43,7 +45,7 @@ class CreateAlbumPresenter(
 
         view.setUpViewAllImagesListener()
 
-        view.setUpDeleteListener()
+        view.setUpDeleteAlbumListener()
 
         view.hideImagesLoading()
 
@@ -52,6 +54,8 @@ class CreateAlbumPresenter(
 
     override fun dispose() {
         view.hideDeleteAlbumDialog()
+        view.hideDeleteImageDialog()
+        view.hideDeletingDialog()
         disposables.dispose()
     }
 
@@ -70,12 +74,12 @@ class CreateAlbumPresenter(
 
     /**
      * Clears all disposables
-     * Saves album fields if back was not clicked.
+     * Saves album fields if back was not clicked and album is not deleted
      */
-    override fun viewHidden(backed: Boolean, albumName: String) {
+    override fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String) {
         disposables.clear()
 
-        if (!backed) {
+        if (!backed && !albumDeleted) {
             saveAlbumFields(albumName, false)
         }
     }
@@ -186,14 +190,20 @@ class CreateAlbumPresenter(
     }
 
     // Delete
-    override fun deleteClicked() {
+    override fun deleteAlbumClicked() {
         view.showDeleteAlbumDialog()
+    }
+
+
+    override fun deleteAlbumConfirmed() {
+        deleteAlbum()
     }
 
     /**
      * Deletes album model then deletes all the images associated with that album
      */
-    override fun deleteConfirmed() {
+    fun deleteAlbum() {
+        view.showDeletingDialog()
         albumsRepo.deleteAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap { cameraImagesRepo.deleteAllCameraImagesInAlbum(albumKey) }
@@ -201,9 +211,12 @@ class CreateAlbumPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
+                    view.hideDeletingDialog()
                     view.showError(it.message ?: "Error deleting")
                 },
                 onSuccess = {
+                    view.setAlbumDeleted(true)
+                    view.hideDeletingDialog()
                     view.showMessage("Album deleted")
                     view.finish()
                 }
@@ -229,6 +242,10 @@ class CreateAlbumPresenter(
 
     // Image deletion
     override fun imageDeleteClicked(cameraImage: CameraImage, position: Int) {
+        view.showDeleteImageDialog(cameraImage, position)
+    }
+
+    override fun deleteImageConfirmed(cameraImage: CameraImage, position: Int) {
         deleteImage(cameraImage, position)
     }
 

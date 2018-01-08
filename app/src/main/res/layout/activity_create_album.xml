@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
 
     <ImageView
-        android:id="@+id/deleteIv"
+        android:id="@+id/deleteAlbumIv"
         android:contentDescription="@string/delete_album"
         android:src="@drawable/ic_delete_forever_black_24dp"
         android:tint="@color/white"

@@ -57,7 +57,7 @@ class AllImagesPresenter(
     }
 
     override fun viewHidden() {
-        view.hideDeletePhotos()
+        view.hideDeleteImages()
         disposables.clear()
     }
 
@@ -137,7 +137,7 @@ class AllImagesPresenter(
 
     // Delete
     override fun selectDeleteClicked(cameraImages: ArrayList<CameraImage>) {
-        view.showDeletePhotos(cameraImages)
+        view.showDeleteImages(cameraImages)
     }
 
     // Deletion confirmed

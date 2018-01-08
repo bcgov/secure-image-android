@@ -24,12 +24,12 @@ class DeleteAlbumDialog(
         }
 
         deleteTv.setOnClickListener {
-            deleteListener.deleteConfirmed()
+            deleteListener.deleteAlbumConfirmed()
             hide()
         }
     }
 
     interface DeleteListener {
-        fun deleteConfirmed()
+        fun deleteAlbumConfirmed()
     }
 }

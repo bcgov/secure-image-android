@@ -48,8 +48,8 @@ interface AllImagesContract {
         fun hideSelectDelete()
         fun setUpSelectDeleteListener()
 
-        fun showDeletePhotos(cameraImages: ArrayList<CameraImage>)
-        fun hideDeletePhotos()
+        fun showDeleteImages(cameraImages: ArrayList<CameraImage>)
+        fun hideDeleteImages()
 
         fun setUpImagesList()
         fun showImages(items: ArrayList<Any>)

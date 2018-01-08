@@ -19,13 +19,13 @@ import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_all_images.*
 
-class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener, DeletePhotosDialog.DeleteListener {
+class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener, DeleteImagesDialog.DeleteListener {
 
     override var presenter: AllImagesContract.Presenter? = null
 
     private var imagesAdapter: ImagesAdapter? = null
 
-    private var deletePhotosDialog: DeletePhotosDialog? = null
+    private var deleteImagesDialog: DeleteImagesDialog? = null
 
     private var refresh = true
 
@@ -183,14 +183,14 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         }
     }
 
-    // Delete photos confirmation
-    override fun showDeletePhotos(cameraImages: ArrayList<CameraImage>) {
-        deletePhotosDialog = DeletePhotosDialog(this, this, cameraImages)
-        deletePhotosDialog?.show()
+    // Delete images confirmation
+    override fun showDeleteImages(cameraImages: ArrayList<CameraImage>) {
+        deleteImagesDialog = DeleteImagesDialog(this, this, cameraImages)
+        deleteImagesDialog?.show()
     }
 
-    override fun hideDeletePhotos() {
-        deletePhotosDialog?.dismiss()
+    override fun hideDeleteImages() {
+        deleteImagesDialog?.dismiss()
     }
 
     override fun deleteConfirmed(cameraImages: ArrayList<CameraImage>) {

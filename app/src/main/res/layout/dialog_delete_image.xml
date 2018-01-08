@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@+id/deleteTitleTv"
-            android:text="@string/delete_photos"
+            android:text="@string/delete_image"
             android:textColor="@color/red"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/deleteInfoTv"
-            android:text="@string/delete_photo_info"
+            android:text="@string/delete_image_info"
             android:fontFamily="@font/open_sans_regular"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"

@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_create_album.*
 
 class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener,
-        DeleteAlbumDialog.DeleteListener {
+        DeleteAlbumDialog.DeleteListener, DeleteImageDialog.DeleteListener {
 
     override var presenter: CreateAlbumContract.Presenter? = null
 
@@ -30,9 +30,15 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     private var deleteAlbumDialog: DeleteAlbumDialog? = null
 
+    private var deleteImageDialog: DeleteImageDialog? = null
+
+    private var deletingDialog: DeletingDialog? = null
+
     private var backed = false
 
     private var refresh = true
+
+    private var albumDeleted = false
 
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +75,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     override fun onPause() {
         super.onPause()
         val albumName = albumNameEt.text.toString()
-        presenter?.viewHidden(backed, albumName)
+        presenter?.viewHidden(backed, albumDeleted, albumName)
     }
 
     override fun onDestroy() {
@@ -83,6 +89,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override fun setRefresh(refresh: Boolean) {
         this.refresh = refresh
+    }
+
+    override fun setAlbumDeleted(albumDeleted: Boolean) {
+        this.albumDeleted = albumDeleted
     }
 
     // Messages
@@ -195,10 +205,24 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 .run { startActivity(this) }
     }
 
-    // Delete
-    override fun setUpDeleteListener() {
-        deleteIv.setOnClickListener {
-            presenter?.deleteClicked()
+    // Image deletion confirmation
+    override fun showDeleteImageDialog(cameraImage: CameraImage, position: Int) {
+        deleteImageDialog = DeleteImageDialog(this, this, cameraImage, position)
+        deleteImageDialog?.show()
+    }
+
+    override fun hideDeleteImageDialog() {
+        deleteImageDialog?.hide()
+    }
+
+    override fun deleteImageConfirmed(cameraImage: CameraImage, position: Int) {
+        presenter?.deleteImageConfirmed(cameraImage, position)
+    }
+
+    // Delete album
+    override fun setUpDeleteAlbumListener() {
+        deleteAlbumIv.setOnClickListener {
+            presenter?.deleteAlbumClicked()
         }
     }
 
@@ -211,8 +235,18 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         deleteAlbumDialog?.hide()
     }
 
-    override fun deleteConfirmed() {
-        presenter?.deleteConfirmed()
+    override fun deleteAlbumConfirmed() {
+        presenter?.deleteAlbumConfirmed()
+    }
+
+    // Deleting dialog
+    override fun showDeletingDialog() {
+        deletingDialog = DeletingDialog(this)
+        deletingDialog?.show()
+    }
+
+    override fun hideDeletingDialog() {
+        deletingDialog?.hide()
     }
 
     // Album name

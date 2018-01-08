@@ -33,7 +33,7 @@
         android:src="@drawable/ic_close_black_24dp"
         android:tint="@color/white"
         android:background="@drawable/shape_rect_color_primary_light_rounded_bottom_left_12dp"
-        android:contentDescription="@string/delete_photo"
+        android:contentDescription="@string/delete_image"
         android:padding="4dp"
         android:layout_width="24dp"
         android:layout_height="24dp"

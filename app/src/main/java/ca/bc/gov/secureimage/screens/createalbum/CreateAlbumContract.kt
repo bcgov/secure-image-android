@@ -15,6 +15,7 @@ interface CreateAlbumContract {
 
         fun setBacked(backed: Boolean)
         fun setRefresh(refresh: Boolean)
+        fun setAlbumDeleted(albumDeleted: Boolean)
 
         fun showError(message: String)
         fun showMessage(message: String)
@@ -37,9 +38,15 @@ interface CreateAlbumContract {
         fun hideViewAllImages()
         fun goToAllImages(albumKey: String)
 
-        fun setUpDeleteListener()
+        fun showDeleteImageDialog(cameraImage: CameraImage, position: Int)
+        fun hideDeleteImageDialog()
+
+        fun setUpDeleteAlbumListener()
         fun showDeleteAlbumDialog()
         fun hideDeleteAlbumDialog()
+
+        fun showDeletingDialog()
+        fun hideDeletingDialog()
 
         fun setAlbumName(albumName: String)
 
@@ -49,12 +56,12 @@ interface CreateAlbumContract {
 
     interface Presenter: BasePresenter {
         fun viewShown(refresh: Boolean)
-        fun viewHidden(backed: Boolean, albumName: String)
+        fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String)
 
         fun backClicked(albumName: String)
 
-        fun deleteClicked()
-        fun deleteConfirmed()
+        fun deleteAlbumClicked()
+        fun deleteAlbumConfirmed()
 
         fun viewAllImagesClicked()
 
@@ -63,6 +70,8 @@ interface CreateAlbumContract {
         fun imageClicked(cameraImage: CameraImage, position: Int)
 
         fun imageDeleteClicked(cameraImage: CameraImage, position: Int)
+
+        fun deleteImageConfirmed(cameraImage: CameraImage, position: Int)
     }
 
 }
