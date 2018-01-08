@@ -30,6 +30,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     private var deleteAlbumDialog: DeleteAlbumDialog? = null
 
+    private var backed = false
+
     private var refresh = true
 
     // Life cycle
@@ -67,32 +69,49 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     override fun onPause() {
         super.onPause()
         val albumName = albumNameEt.text.toString()
-        presenter?.viewHidden(albumName)
+        presenter?.viewHidden(backed, albumName)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
     }
+    // Setters
+    override fun setBacked(backed: Boolean) {
+        this.backed = backed
+    }
 
     override fun setRefresh(refresh: Boolean) {
         this.refresh = refresh
     }
 
-    // Error
+    // Messages
     override fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        showToast(message)
     }
 
     override fun showMessage(message: String) {
+        showToast(message)
+    }
+
+    private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     // Back
+    override fun onBackPressed() {
+        backEvent()
+    }
+
     override fun setUpBackListener() {
         backIv.setOnClickListener {
-            presenter?.backClicked()
+            backEvent()
         }
+    }
+
+    private fun backEvent() {
+        val albumName = albumNameEt.text.toString()
+        presenter?.backClicked(albumName)
     }
 
     // Network type

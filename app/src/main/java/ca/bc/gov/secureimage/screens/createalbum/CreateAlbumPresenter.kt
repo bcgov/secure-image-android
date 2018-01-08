@@ -31,6 +31,10 @@ class CreateAlbumPresenter(
     }
 
     override fun subscribe() {
+        view.setBacked(false)
+
+        view.setRefresh(true)
+
         view.hideNetworkType()
 
         view.setUpBackListener()
@@ -40,8 +44,6 @@ class CreateAlbumPresenter(
         view.setUpViewAllImagesListener()
 
         view.setUpDeleteListener()
-
-        view.setRefresh(true)
 
         view.hideImagesLoading()
 
@@ -54,6 +56,8 @@ class CreateAlbumPresenter(
     }
 
     override fun viewShown(refresh: Boolean) {
+        view.setBacked(false)
+
         if(refresh) {
             view.showImages(ArrayList())
             getImages()
@@ -64,13 +68,21 @@ class CreateAlbumPresenter(
         addNetworkTypeListener()
     }
 
-    override fun viewHidden(albumName: String) {
+    /**
+     * Clears all disposables
+     * Saves album fields if back was not clicked.
+     */
+    override fun viewHidden(backed: Boolean, albumName: String) {
         disposables.clear()
-        saveAlbumFields(albumName)
+
+        if (!backed) {
+            saveAlbumFields(albumName, false)
+        }
     }
 
     /**
      * Pings the network every 5 seconds to check if connected/disconnected or on wifi/mobile
+     * Initial delay is 0 to instantly check on start up
      */
     fun addNetworkTypeListener() {
         networkService.getNetworkTypeListener(0, 5, TimeUnit.SECONDS)
@@ -140,16 +152,20 @@ class CreateAlbumPresenter(
         ).addTo(disposables)
     }
 
-    // back
-    override fun backClicked() {
-        view.finish()
+    /**
+     * Saves album fields
+     */
+    override fun backClicked(albumName: String) {
+        view.setBacked(true)
+        saveAlbumFields(albumName, true)
     }
 
     /**
      * Add all current album fields to existing album and saves
      * Update time is set to current time in millis
+     * On success finishes
      */
-    fun saveAlbumFields(albumName: String) {
+    fun saveAlbumFields(albumName: String, finish: Boolean) {
         albumsRepo.getAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap {
@@ -159,8 +175,13 @@ class CreateAlbumPresenter(
                 }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onError = {})
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving album fields")
+                },
+                onSuccess = {
+                    if (finish) view.finish()
+                })
                 .addTo(disposables)
     }
 
