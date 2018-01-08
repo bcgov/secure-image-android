@@ -57,6 +57,7 @@ class ImageDetailPresenter(
                     val items = ArrayList<Any>(it)
                     view.showImages(items)
                     view.scrollImagesListTo(initialImageIndex)
+                    getTitle(initialImageIndex, it.size)
                 }
         ).addTo(disposables)
     }
