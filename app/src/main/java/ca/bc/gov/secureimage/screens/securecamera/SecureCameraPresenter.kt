@@ -35,6 +35,9 @@ class SecureCameraPresenter(
 
     override fun subscribe() {
         view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
+        view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
+        view.showFlashOff()
+
         view.setCameraCropOutput(false)
         view.setCameraPermissions(CameraKit.Constants.PERMISSIONS_PICTURE)
         view.setCameraFocus(CameraKit.Constants.FOCUS_TAP_WITH_MARKER)
@@ -46,8 +49,6 @@ class SecureCameraPresenter(
 
         view.setUpBackListener()
 
-        view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
-        view.showFlashOff()
         view.setUpFlashControlListener()
     }
 
@@ -233,9 +234,18 @@ class SecureCameraPresenter(
     // Flash control
     override fun flashControlClicked(flashMode: Int) {
         when (flashMode) {
-            CameraKit.Constants.FLASH_OFF -> view.showFlashOff()
-            CameraKit.Constants.FLASH_ON -> view.showFlashOn()
-            CameraKit.Constants.FLASH_AUTO -> view.showFlashAuto()
+            CameraKit.Constants.FLASH_OFF -> {
+                view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
+                view.showFlashOff()
+            }
+            CameraKit.Constants.FLASH_ON -> {
+                view.showFlashOn()
+                view.setCameraMethod(CameraKit.Constants.METHOD_STANDARD)
+            }
+            CameraKit.Constants.FLASH_AUTO -> {
+                view.showFlashAuto()
+                view.setCameraMethod(CameraKit.Constants.METHOD_STANDARD)
+            }
         }
     }
 }
