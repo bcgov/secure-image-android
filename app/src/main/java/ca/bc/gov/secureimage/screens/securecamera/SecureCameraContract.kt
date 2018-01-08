@@ -51,6 +51,9 @@ interface SecureCameraContract {
         fun setImageCounterText(text: String)
         fun showImageCounter()
         fun hideImageCounter()
+
+        fun showShutter()
+        fun hideShutter()
     }
 
     interface Presenter : BasePresenter {
@@ -62,7 +65,7 @@ interface SecureCameraContract {
         fun onCameraImage(image: CameraKitImage?)
         fun onCameraVideo(video: CameraKitVideo?)
 
-        fun takeImageClicked()
+        fun captureImageClicked()
 
         fun backClicked()
 

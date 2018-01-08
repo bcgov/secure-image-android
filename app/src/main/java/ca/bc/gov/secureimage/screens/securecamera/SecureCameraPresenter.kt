@@ -34,6 +34,8 @@ class SecureCameraPresenter(
     }
 
     override fun subscribe() {
+        view.hideShutter()
+
         view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
         view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
         view.showFlashOff()
@@ -60,6 +62,7 @@ class SecureCameraPresenter(
         getLocationAndCache()
         getAlbumImageCount()
 
+        view.hideShutter()
         view.hideCaptureImage()
         view.hideBack()
         view.hideFlashControl()
@@ -101,6 +104,8 @@ class SecureCameraPresenter(
     }
 
     override fun onCameraImage(image: CameraKitImage?) {
+        view.hideShutter()
+
         if (image == null) return
 
         createCameraImage(image.jpeg, 100, 1920, 100, 300)
@@ -116,6 +121,7 @@ class SecureCameraPresenter(
             imageSize: Int,
             thumbnailQuality: Int,
             thumbnailSize: Int) {
+
         val cameraImage = CameraImage()
         cameraImage.albumKey = albumKey
 
@@ -136,8 +142,10 @@ class SecureCameraPresenter(
             thumbnailSize: Int) {
 
         Observable.zip(
-                compressionService.compressByteArrayAsObservable(imageBytes, imageQuality, imageSize, imageSize),
-                compressionService.compressByteArrayAsObservable(imageBytes, thumbnailQuality, thumbnailSize, thumbnailSize),
+                compressionService.compressByteArrayAsObservable(
+                        imageBytes, imageQuality, imageSize, imageSize),
+                compressionService.compressByteArrayAsObservable(
+                        imageBytes, thumbnailQuality, thumbnailSize, thumbnailSize),
                 BiFunction { compressedImageBytes: ByteArray, thumbnailBytes: ByteArray ->
                     Pair<ByteArray, ByteArray>(compressedImageBytes, thumbnailBytes)
                 })
@@ -222,7 +230,8 @@ class SecureCameraPresenter(
     }
 
     // Take image
-    override fun takeImageClicked() {
+    override fun captureImageClicked() {
+        view.showShutter()
         view.captureImage()
     }
 

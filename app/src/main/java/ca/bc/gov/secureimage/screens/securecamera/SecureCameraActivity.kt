@@ -130,7 +130,7 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     // Capture image
     override fun setUpCaptureImageListener() {
         captureImageIv.setOnClickListener {
-            presenter?.takeImageClicked()
+            presenter?.captureImageClicked()
         }
     }
 
@@ -210,6 +210,15 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
 
     override fun hideImageCounter() {
         imageCounterTv.visibility = View.GONE
+    }
+
+    // Shutter
+    override fun showShutter() {
+        shutterView.visibility = View.VISIBLE
+    }
+
+    override fun hideShutter() {
+        shutterView.visibility = View.GONE
     }
 }
 
