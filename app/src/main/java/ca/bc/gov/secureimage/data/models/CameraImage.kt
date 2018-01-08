@@ -2,6 +2,7 @@ package ca.bc.gov.secureimage.data.models
 
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
+import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
@@ -14,6 +15,7 @@ open class CameraImage : RealmObject() {
     @PrimaryKey
     var key: String = UUID.randomUUID().toString()
 
+    @Index
     var albumKey: String = ""
 
     var createdTime: Long = System.currentTimeMillis()

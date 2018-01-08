@@ -108,6 +108,15 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         networkTypeTv.text = text
     }
 
+    // Image loading
+    override fun showImagesLoading() {
+        imagesProgressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideImagesLoading() {
+        imagesProgressBar.visibility = View.GONE
+    }
+
     // Image list
     override fun setUpImagesList() {
         imagesAdapter = ImagesAdapter(LayoutInflater.from(this), this,

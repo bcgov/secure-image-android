@@ -9,8 +9,6 @@ import io.reactivex.Observable
  */
 interface CameraImagesDataSource {
 
-    fun getCameraImage(key: String): Observable<CameraImage>
-
     fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage>
 
     fun deleteCameraImage(cameraImage: CameraImage): Observable<CameraImage>
@@ -19,6 +17,6 @@ interface CameraImagesDataSource {
 
     fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>>
 
-    fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>>
+    fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<Boolean>
 
 }

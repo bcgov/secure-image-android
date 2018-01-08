@@ -24,6 +24,9 @@ interface CreateAlbumContract {
         fun hideNetworkType()
         fun setNetworkTypeText(text: String)
 
+        fun showImagesLoading()
+        fun hideImagesLoading()
+
         fun setUpImagesList()
         fun showImages(items: ArrayList<Any>)
         fun notifyImageRemoved(cameraImage: CameraImage, position: Int)

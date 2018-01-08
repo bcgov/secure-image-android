@@ -10,25 +10,12 @@ import io.realm.Realm
  */
 object CameraImagesLocalDataSource : CameraImagesDataSource {
 
-    override fun getCameraImage(key: String): Observable<CameraImage> {
-        return Observable.create { emitter ->
-            val realm = Realm.getDefaultInstance()
-            realm.executeTransaction {
-                val cameraImage = realm.where(CameraImage::class.java).equalTo("key", key).findFirst()
-                if(cameraImage != null) emitter.onNext(realm.copyFromRealm(cameraImage))
-                else emitter.onError(Throwable("Camera image not found"))
-            }
-            realm.close()
-
-            emitter.onComplete()
-        }
-    }
-
     override fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 realm.copyToRealmOrUpdate(cameraImage)
+
                 emitter.onNext(cameraImage)
             }
             realm.close()
@@ -59,6 +46,7 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
             realm.executeTransaction {
                 val cameraImages = realm.where(CameraImage::class.java)
                         .equalTo("albumKey", albumKey).findAll()
+
                 if(cameraImages != null) emitter.onNext(cameraImages.size)
                 else emitter.onNext(0)
             }
@@ -74,9 +62,8 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
             realm.executeTransaction {
                 val cameraImages = realm.where(CameraImage::class.java)
                         .equalTo("albumKey", albumKey).findAll()
-                val items = ArrayList<CameraImage>()
-                cameraImages.mapTo(items) { realm.copyFromRealm(it) }
-                emitter.onNext(items)
+
+                emitter.onNext(ArrayList<CameraImage>(realm.copyFromRealm(cameraImages)))
             }
             realm.close()
 
@@ -84,7 +71,7 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
-    override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
+    override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<Boolean> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
@@ -92,8 +79,7 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
                         .equalTo("albumKey", albumKey).findAll()
                 cameraImages.deleteAllFromRealm()
 
-                if(cameraImages != null) emitter.onNext(ArrayList(cameraImages))
-                else emitter.onNext(ArrayList())
+                emitter.onNext(true)
             }
             realm.close()
 

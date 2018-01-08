@@ -24,21 +24,63 @@ private constructor(val localDataSource: CameraImagesDataSource) : CameraImagesD
         }
     }
 
-    override fun getCameraImage(key: String): Observable<CameraImage> =
-            localDataSource.getCameraImage(key)
+    // Album that is currently being viewed. String is the album key
+    private var currentCachedAlbumCameraImages: Pair<String, ArrayList<CameraImage>>? = null
 
-    override fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
-            localDataSource.saveCameraImage(cameraImage)
+    // Operations
+    override fun saveCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
+        return localDataSource.saveCameraImage(cameraImage)
+                .doOnNext {
+                    val albumKey = it.albumKey
+                    if (currentCachedAlbumCameraImages?.first == albumKey) {
+                        val cameraImages = currentCachedAlbumCameraImages?.second ?: ArrayList()
+                        cameraImages.add(it)
+                        currentCachedAlbumCameraImages = Pair(albumKey, cameraImages)
+                    }
+                }
+    }
 
-    override fun deleteCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
-            localDataSource.deleteCameraImage(cameraImage)
+    override fun deleteCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
+        return localDataSource.deleteCameraImage(cameraImage)
+                .doOnNext {
+                    val albumKey = it.albumKey
+                    if (currentCachedAlbumCameraImages?.first == albumKey) {
+                        val cameraImages = currentCachedAlbumCameraImages?.second ?: ArrayList()
+                        val removed = cameraImages.remove(it)
+                        if (removed) currentCachedAlbumCameraImages = Pair(albumKey, cameraImages)
+                    }
+                }
+    }
 
-    override fun getCameraImageCountInAlbum(albumKey: String): Observable<Int> =
-            localDataSource.getCameraImageCountInAlbum(albumKey)
+    override fun getCameraImageCountInAlbum(albumKey: String): Observable<Int> {
 
-    override fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> =
-            localDataSource.getAllCameraImagesInAlbum(albumKey)
+        if (currentCachedAlbumCameraImages?.first == albumKey) {
+            val size = currentCachedAlbumCameraImages?.second?.size ?: 0
+            return Observable.just(size)
+        }
 
-    override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> =
-            localDataSource.deleteAllCameraImagesInAlbum(albumKey)
+        return localDataSource.getCameraImageCountInAlbum(albumKey)
+    }
+
+    override fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>> {
+
+        if (currentCachedAlbumCameraImages?.first == albumKey) {
+            val cameraImages = currentCachedAlbumCameraImages?.second ?: ArrayList()
+            return Observable.just(cameraImages)
+        }
+
+        return localDataSource.getAllCameraImagesInAlbum(albumKey)
+                .doOnNext {
+                    currentCachedAlbumCameraImages = Pair(albumKey, it)
+                }
+    }
+
+    override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<Boolean> {
+        return localDataSource.deleteAllCameraImagesInAlbum(albumKey)
+                .doOnNext { removed ->
+                    if (removed && currentCachedAlbumCameraImages?.first == albumKey) {
+                        currentCachedAlbumCameraImages = null
+                    }
+                }
+    }
 }

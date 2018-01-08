@@ -43,6 +43,8 @@ class CreateAlbumPresenter(
 
         view.setRefresh(true)
 
+        view.hideImagesLoading()
+
         getAlbumFields()
     }
 
@@ -114,16 +116,18 @@ class CreateAlbumPresenter(
     }
 
     /**
-     * Gets the first 5 album images and sorts by first created
+     * Gets album images and sorts by first created
      * On success show images with add images model so recycler view can display an add image tile
      */
     fun getImages() {
+        view.showImagesLoading()
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
+                    view.hideImagesLoading()
                     view.showError(it.message ?: "Error processing images")
                 },
                 onSuccess = {
@@ -131,6 +135,7 @@ class CreateAlbumPresenter(
                     items.add(AddImages())
                     items.addAll(it)
                     view.showImages(items)
+                    view.hideImagesLoading()
                 }
         ).addTo(disposables)
     }
