@@ -48,7 +48,7 @@ ext {
     retrofitRxAdapterVersion = '1.0.0'
     leakCanaryVersion = '1.5.4'
     glideVersion = '4.4.0'
-    camerakitVersion = '0.13.1'
+    camerakitVersion = '0.13.2'
     photoViewVersion = '2.0.0'
 
     // Testing

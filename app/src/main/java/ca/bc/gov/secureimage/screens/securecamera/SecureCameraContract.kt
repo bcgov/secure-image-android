@@ -40,10 +40,6 @@ interface SecureCameraContract {
         fun showBack()
         fun hideBack()
 
-        fun setUpDoneListener()
-        fun showDone()
-        fun hideDone()
-
         fun setCameraFlash(flash: Int)
         fun setUpFlashControlListener()
         fun showFlashControl()
@@ -69,8 +65,6 @@ interface SecureCameraContract {
         fun takeImageClicked()
 
         fun backClicked()
-
-        fun doneClicked()
 
         fun flashControlClicked(flashMode: Int)
     }

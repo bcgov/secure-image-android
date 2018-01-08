@@ -46,8 +46,6 @@ class SecureCameraPresenter(
 
         view.setUpBackListener()
 
-        view.setUpDoneListener()
-
         view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
         view.showFlashOff()
         view.setUpFlashControlListener()
@@ -63,7 +61,6 @@ class SecureCameraPresenter(
 
         view.hideCaptureImage()
         view.hideBack()
-        view.hideDone()
         view.hideFlashControl()
         view.hideImageCounter()
 
@@ -92,7 +89,6 @@ class SecureCameraPresenter(
             CameraKitEvent.TYPE_CAMERA_OPEN -> {
                 view.showCaptureImage()
                 view.showBack()
-                view.showDone()
                 view.showFlashControl()
                 view.showImageCounter()
             }
@@ -231,11 +227,6 @@ class SecureCameraPresenter(
 
     // Back
     override fun backClicked() {
-        view.finish()
-    }
-
-    // Done
-    override fun doneClicked() {
         view.finish()
     }
 

@@ -161,21 +161,6 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
         backIv.visibility = View.GONE
     }
 
-    // Done
-    override fun setUpDoneListener() {
-        doneIv.setOnClickListener {
-            presenter?.doneClicked()
-        }
-    }
-
-    override fun showDone() {
-        doneIv.visibility = View.VISIBLE
-    }
-
-    override fun hideDone() {
-        doneIv.visibility = View.GONE
-    }
-
     // Flash control
     override fun setCameraFlash(flash: Int) {
         cameraView.flash = flash
