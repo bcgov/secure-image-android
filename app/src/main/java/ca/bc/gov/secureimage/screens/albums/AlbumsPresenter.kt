@@ -28,6 +28,8 @@ class AlbumsPresenter(
     }
 
     override fun subscribe() {
+        view.hideLoading()
+
         view.hideOnboarding()
 
         view.setUpSettingsListener()
@@ -74,18 +76,21 @@ class AlbumsPresenter(
      * On Success shows items and displays help text if no albums exist
      */
     fun getAlbums() {
+        view.showLoading()
         albumsRepo.getAllAlbums()
                 .flatMapIterable { it }
                 .toSortedList { album1, album2 -> album1.compareTo(album2) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
+                    view.hideLoading()
                     view.showError(it.message ?: "Error retrieving albums")
                 },
                 onSuccess = {
                     val items = ArrayList<Any>()
                     items.addAll(it)
                     view.showAlbumItems(items)
+                    view.hideLoading()
 
                     if (items.isEmpty()) {
                         view.showOnboarding()

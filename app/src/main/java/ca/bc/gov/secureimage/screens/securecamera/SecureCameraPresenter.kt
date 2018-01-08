@@ -1,18 +1,18 @@
 package ca.bc.gov.secureimage.screens.securecamera
 
+import ca.bc.gov.secureimage.common.services.CompressionService
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
 import com.github.florent37.rxgps.RxGps
 import com.wonderkiln.camerakit.*
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import ca.bc.gov.secureimage.common.services.CompressionService
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 
 /**
  * Created by Aidan Laing on 2017-12-13.
@@ -34,7 +34,7 @@ class SecureCameraPresenter(
     }
 
     override fun subscribe() {
-        view.setCameraMethod(CameraKit.Constants.METHOD_STANDARD)
+        view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
         view.setCameraCropOutput(false)
         view.setCameraPermissions(CameraKit.Constants.PERMISSIONS_PICTURE)
         view.setCameraFocus(CameraKit.Constants.FOCUS_TAP_WITH_MARKER)

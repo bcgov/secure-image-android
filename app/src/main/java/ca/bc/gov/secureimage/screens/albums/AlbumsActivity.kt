@@ -59,6 +59,15 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
+    // Loading
+    override fun showLoading() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        progressBar.visibility = View.GONE
+    }
+
     // Settings
     override fun setUpSettingsListener() {
         settingsIv.setOnClickListener {

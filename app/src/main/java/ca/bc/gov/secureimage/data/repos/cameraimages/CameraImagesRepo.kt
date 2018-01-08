@@ -24,7 +24,10 @@ private constructor(val localDataSource: CameraImagesDataSource) : CameraImagesD
         }
     }
 
-    // Album that is currently being viewed. String is the album key
+    /**
+     * Pair is an album key and it's images. Only storing one at a time to preserve memory
+     * Cache is replace each time a new list of camera images is loaded.
+     */
     private var currentCachedAlbumCameraImages: Pair<String, ArrayList<CameraImage>>? = null
 
     // Operations

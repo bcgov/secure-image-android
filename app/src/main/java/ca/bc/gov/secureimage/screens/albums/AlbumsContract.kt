@@ -13,6 +13,9 @@ interface AlbumsContract {
     interface View: BaseView<Presenter> {
         fun showError(message: String)
 
+        fun showLoading()
+        fun hideLoading()
+
         fun setUpSettingsListener()
         fun goToSettings()
 
