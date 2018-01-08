@@ -9,9 +9,7 @@ import io.reactivex.Observable
  *
  */
 class LocationRepo
-private constructor(
-        private val remoteDataSource: LocationDataSource
-) : LocationDataSource {
+private constructor(private val remoteDataSource: LocationDataSource) : LocationDataSource {
 
     companion object {
 

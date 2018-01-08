@@ -7,9 +7,8 @@ import io.reactivex.Observable
  * Created by Aidan Laing on 2017-12-14.
  *
  */
-class AlbumsRepo(
-        private val localDataSource: AlbumsDataSource
-) : AlbumsDataSource {
+class AlbumsRepo
+private constructor(private val localDataSource: AlbumsDataSource) : AlbumsDataSource {
 
     companion object {
 

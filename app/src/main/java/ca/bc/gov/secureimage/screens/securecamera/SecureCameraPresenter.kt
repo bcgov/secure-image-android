@@ -11,6 +11,8 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import ca.bc.gov.secureimage.common.services.CompressionService
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 /**
  * Created by Aidan Laing on 2017-12-13.
@@ -104,18 +106,24 @@ class SecureCameraPresenter(
     override fun onCameraImage(image: CameraKitImage?) {
         if (image == null) return
 
-        createCameraImage(image.jpeg, 100, 1920, 1920)
+        createCameraImage(image.jpeg, 100, 1920, 100, 300)
     }
 
     /**
      * Creates camera image with album key
      * Calls to compress image
      */
-    fun createCameraImage(imageBytes: ByteArray, quality: Int, reqWidth: Int, reqHeight: Int) {
+    fun createCameraImage(
+            imageBytes: ByteArray,
+            imageQuality: Int,
+            imageSize: Int,
+            thumbnailQuality: Int,
+            thumbnailSize: Int) {
         val cameraImage = CameraImage()
         cameraImage.albumKey = albumKey
 
-        compressImageBytesForCameraImage(cameraImage, imageBytes, quality, reqWidth, reqHeight)
+        compressImageBytesForCameraImage(
+                cameraImage, imageBytes, imageQuality, imageSize, thumbnailQuality, thumbnailSize)
     }
 
     /**
@@ -125,11 +133,17 @@ class SecureCameraPresenter(
     fun compressImageBytesForCameraImage(
             cameraImage: CameraImage,
             imageBytes: ByteArray,
-            quality: Int,
-            reqWidth: Int,
-            reqHeight: Int) {
+            imageQuality: Int,
+            imageSize: Int,
+            thumbnailQuality: Int,
+            thumbnailSize: Int) {
 
-        compressionService.compressByteArrayAsObservable(imageBytes, quality, reqWidth, reqHeight)
+        Observable.zip(
+                compressionService.compressByteArrayAsObservable(imageBytes, imageQuality, imageSize, imageSize),
+                compressionService.compressByteArrayAsObservable(imageBytes, thumbnailQuality, thumbnailSize, thumbnailSize),
+                BiFunction { compressedImageBytes: ByteArray, thumbnailBytes: ByteArray ->
+                    Pair<ByteArray, ByteArray>(compressedImageBytes, thumbnailBytes)
+                })
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -137,7 +151,8 @@ class SecureCameraPresenter(
                     view.showError(it.message ?: "Error compressing image")
                 },
                 onSuccess = {
-                    cameraImage.byteArray = it
+                    cameraImage.imageByteArray = it.first
+                    cameraImage.thumbnailArray = it.second
                     getLocationForCameraImage(cameraImage)
                 }
         ).addTo(disposables)

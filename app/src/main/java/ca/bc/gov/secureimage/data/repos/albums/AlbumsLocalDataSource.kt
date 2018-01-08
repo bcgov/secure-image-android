@@ -49,7 +49,7 @@ object AlbumsLocalDataSource : AlbumsDataSource {
                             .equalTo("albumKey", album.key)
                             .sort("createdTime", Sort.DESCENDING)
                             .findAll()
-                    if(images.size > 0) album.previewByteArray = images[0]?.byteArray
+                    if(images.size > 0) album.previewByteArray = images[0]?.imageByteArray
                 }
                 emitter.onNext(ArrayList(albums))
             }

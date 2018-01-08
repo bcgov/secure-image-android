@@ -19,7 +19,9 @@ open class CameraImage : RealmObject() {
     var createdTime: Long = System.currentTimeMillis()
     var updatedTime: Long = System.currentTimeMillis()
 
-    var byteArray: ByteArray = ByteArray(64)
+    var imageByteArray: ByteArray = ByteArray(64)
+    var thumbnailArray: ByteArray = ByteArray(16)
+
     var lat: Double = 0.0
     var lon: Double = 0.0
 

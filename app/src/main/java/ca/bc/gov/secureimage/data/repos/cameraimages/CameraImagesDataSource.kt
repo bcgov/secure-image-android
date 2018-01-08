@@ -17,8 +17,6 @@ interface CameraImagesDataSource {
 
     fun getCameraImageCountInAlbum(albumKey: String): Observable<Int>
 
-    fun getCameraImagesInAlbum(albumKey: String, amount: Int): Observable<ArrayList<CameraImage>>
-
     fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>>
 
     fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>>

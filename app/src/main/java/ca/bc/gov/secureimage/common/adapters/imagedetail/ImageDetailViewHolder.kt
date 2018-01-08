@@ -20,7 +20,7 @@ class ImageDetailViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 
         // Image
         Glide.with(context)
-                .load(cameraImage.byteArray)
+                .load(cameraImage.imageByteArray)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageIv)
 
