@@ -14,10 +14,10 @@ object TimeUtils {
      */
     fun getReadableTime(
             timestamp: Long,
+            suffix: String = "ago",
             locale: Locale = Locale.getDefault(),
             timeZone: TimeZone = TimeZone.getDefault(),
-            format: String = "MMM d, yyyy",
-            suffix: String = "ago"
+            dateFormat: String = "MMM d, yyyy"
     ): String {
 
         // Time units in milliseconds
@@ -34,7 +34,7 @@ object TimeUtils {
             timeDifference < oneHour -> getTimeString(timeDifference / oneMinute, "min", suffix)
             timeDifference < oneDay -> getTimeString(timeDifference / oneHour, "hour", suffix)
             timeDifference < oneWeek -> getTimeString(timeDifference / oneDay, "day", suffix)
-            else -> getDateString(timestamp, locale, timeZone, format)
+            else -> getDateString(timestamp, dateFormat, locale, timeZone)
         }
     }
 
@@ -42,7 +42,7 @@ object TimeUtils {
      * Creates plural version of time unit if time is not equal to 1
      * Appends suffix at end of string
      */
-    fun getTimeString(timeValue: Long, timeUnit: String, suffix: String = "ago"): String {
+    fun getTimeString(timeValue: Long, timeUnit: String, suffix: String): String {
         var timeString = "$timeValue $timeUnit"
         if (timeValue != 1L) timeString += "s"
         return "$timeString $suffix"
@@ -53,9 +53,9 @@ object TimeUtils {
      */
     fun getDateString(
             timestamp: Long,
+            format: String,
             locale: Locale = Locale.getDefault(),
-            timeZone: TimeZone = TimeZone.getDefault(),
-            format: String = "MMM d, yyyy"
+            timeZone: TimeZone = TimeZone.getDefault()
     ): String {
         val date = Date(timestamp)
         val dateFormat = SimpleDateFormat(format, locale)

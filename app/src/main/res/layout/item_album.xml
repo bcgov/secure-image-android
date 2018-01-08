@@ -48,6 +48,18 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/createdTimeTv"/>
+
+        <TextView
+            android:id="@+id/createdTimeTv"
+            android:textColor="@color/white"
+            android:fontFamily="@font/open_sans_regular"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/updatedTimeTv"/>
 
         <TextView

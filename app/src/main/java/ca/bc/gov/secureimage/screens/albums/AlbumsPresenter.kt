@@ -72,7 +72,7 @@ class AlbumsPresenter(
 
     /**
      * Grabs all the albums with preview image from the albums repo
-     * Orders albums by updated time and displays in view
+     * Orders albums and displays in view
      * On Success shows items and displays help text if no albums exist
      */
     fun getAlbums() {

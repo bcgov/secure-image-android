@@ -24,8 +24,8 @@ open class Album : RealmObject() {
     var previewByteArray: ByteArray? = null
 
     fun compareTo(album: Album): Int = when {
-        updatedTime < album.updatedTime -> 1
-        updatedTime > album.updatedTime -> -1
+        createdTime < album.createdTime -> 1
+        createdTime > album.createdTime -> -1
         else -> 0
     }
 
@@ -33,8 +33,12 @@ open class Album : RealmObject() {
         return if (name.isNotBlank()) name else "Unnamed Album"
     }
 
-    fun getLastSavedTime(): String {
+    fun getLastSavedTimeString(): String {
         return "Last saved ${TimeUtils.getReadableTime(updatedTime)}"
+    }
+
+    fun getCreatedTimeString(): String {
+        return "Created ${TimeUtils.getReadableTime(createdTime)}"
     }
 
 }
