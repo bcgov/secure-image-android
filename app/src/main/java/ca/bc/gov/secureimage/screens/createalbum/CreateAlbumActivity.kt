@@ -139,6 +139,21 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         networkTypeTv.text = text
     }
 
+    // Add images
+    override fun setUpAddImagesListener() {
+        addImagesLayout.setOnClickListener {
+            presenter?.addImagesClicked()
+        }
+    }
+
+    override fun showAddImagesLayout() {
+        addImagesLayout.visibility = View.VISIBLE
+    }
+
+    override fun hideAddImagesLayout() {
+        addImagesLayout.visibility = View.GONE
+    }
+
     // Image loading
     override fun showImagesLoading() {
         imagesProgressBar.visibility = View.VISIBLE

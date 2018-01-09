@@ -49,6 +49,9 @@ class CreateAlbumPresenter(
 
         view.hideImagesLoading()
 
+        view.hideAddImagesLayout()
+        view.setUpAddImagesListener()
+
         view.setUpUploadListener()
 
         getAlbumFields()
@@ -149,11 +152,19 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error processing images")
                 },
                 onSuccess = { images ->
-                    val items = ArrayList<Any>()
-                    items.add(AddImages())
-                    items.addAll(images)
-                    view.showImages(items)
                     view.hideImagesLoading()
+
+                    if (images.size == 0) {
+                        view.showAddImagesLayout()
+
+                    } else {
+                        view.hideAddImagesLayout()
+
+                        val items = ArrayList<Any>()
+                        items.add(AddImages())
+                        items.addAll(images)
+                        view.showImages(items)
+                    }
                 }
         ).addTo(disposables)
     }

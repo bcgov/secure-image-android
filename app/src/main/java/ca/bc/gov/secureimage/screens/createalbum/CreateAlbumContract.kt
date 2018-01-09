@@ -26,6 +26,10 @@ interface CreateAlbumContract {
         fun hideNetworkType()
         fun setNetworkTypeText(text: String)
 
+        fun setUpAddImagesListener()
+        fun showAddImagesLayout()
+        fun hideAddImagesLayout()
+
         fun showImagesLoading()
         fun hideImagesLoading()
 
