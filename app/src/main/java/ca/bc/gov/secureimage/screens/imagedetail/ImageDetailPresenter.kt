@@ -53,11 +53,11 @@ class ImageDetailPresenter(
                 onError = {
                     view.showError(it.message ?: "Error getting all album images")
                 },
-                onSuccess = {
-                    val items = ArrayList<Any>(it)
+                onSuccess = { images ->
+                    val items = ArrayList<Any>(images)
                     view.showImages(items)
                     view.scrollImagesListTo(initialImageIndex)
-                    getTitle(initialImageIndex, it.size)
+                    getTitle(initialImageIndex, images.size)
                 }
         ).addTo(disposables)
     }

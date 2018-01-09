@@ -95,8 +95,8 @@ class CreateAlbumPresenter(
                 onError = {
                     view.showError(it.message ?: "Error listening to network status")
                 },
-                onNext = {
-                    when (it) {
+                onNext = { networkType ->
+                    when (networkType) {
                         is NetworkService.NetworkType.WifiConnection -> {
                             view.hideNetworkType()
                             view.setNetworkTypeText("")
@@ -125,8 +125,8 @@ class CreateAlbumPresenter(
                 onError = {
                     view.showError(it.message ?: "Error retrieving album")
                 },
-                onSuccess = {
-                    view.setAlbumName(it.name)
+                onSuccess = { album ->
+                    view.setAlbumName(album.name)
                 }
         ).addTo(disposables)
     }
@@ -146,10 +146,10 @@ class CreateAlbumPresenter(
                     view.hideImagesLoading()
                     view.showError(it.message ?: "Error processing images")
                 },
-                onSuccess = {
+                onSuccess = { images ->
                     val items = ArrayList<Any>()
                     items.add(AddImages())
-                    items.addAll(it)
+                    items.addAll(images)
                     view.showImages(items)
                     view.hideImagesLoading()
                 }
@@ -172,10 +172,10 @@ class CreateAlbumPresenter(
     fun saveAlbumFields(albumName: String, finish: Boolean) {
         albumsRepo.getAlbum(albumKey)
                 .observeOn(Schedulers.io())
-                .flatMap {
-                    it.name = albumName
-                    it.updatedTime = System.currentTimeMillis()
-                    albumsRepo.saveAlbum(it)
+                .flatMap { album ->
+                    album.name = albumName
+                    album.updatedTime = System.currentTimeMillis()
+                    albumsRepo.saveAlbum(album)
                 }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -261,9 +261,9 @@ class CreateAlbumPresenter(
                 onError = {
                     view.showError(it.message ?: "Error deleting image")
                 },
-                onSuccess = {
+                onSuccess = { image ->
                     view.showMessage("Image deleted")
-                    view.notifyImageRemoved(it, position)
+                    view.notifyImageRemoved(image, position)
                 }
         ).addTo(disposables)
     }

@@ -37,7 +37,7 @@ class LoginPresenter(
      */
     fun checkForExistingUser() {
         userRepo.getUser()
-                .filter { it.email.isNotBlank() }
+                .filter { user -> user.email.isNotBlank() }
                 .firstElement()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -72,9 +72,9 @@ class LoginPresenter(
     fun saveUser(govEmail: String) {
         userRepo.getUser()
                 .observeOn(Schedulers.io())
-                .flatMap {
-                    it.email = govEmail
-                    userRepo.saveUser(it)
+                .flatMap { user ->
+                    user.email = govEmail
+                    userRepo.saveUser(user)
                 }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())

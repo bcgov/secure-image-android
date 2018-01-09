@@ -86,9 +86,9 @@ class AlbumsPresenter(
                     view.hideLoading()
                     view.showError(it.message ?: "Error retrieving albums")
                 },
-                onSuccess = {
+                onSuccess = { albums ->
                     val items = ArrayList<Any>()
-                    items.addAll(it)
+                    items.addAll(albums)
                     view.showAlbumItems(items)
                     view.hideLoading()
 
@@ -117,8 +117,8 @@ class AlbumsPresenter(
                 onError = {
                     view.showError(it.message ?: "Error creating album")
                 },
-                onSuccess = {
-                    view.goToCreateAlbum(it.key)
+                onSuccess = { album ->
+                    view.goToCreateAlbum(album.key)
                 })
                 .addTo(disposables)
     }

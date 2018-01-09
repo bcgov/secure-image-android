@@ -79,10 +79,10 @@ class AllImagesPresenter(
                 onError = {
                     view.showError(it.message ?: "Error retrieving images")
                 },
-                onSuccess = {
+                onSuccess = { images ->
                     val items = ArrayList<Any>()
                     items.add(AddImages())
-                    items.addAll(it)
+                    items.addAll(images)
                     view.showImages(items)
                 }
         ).addTo(disposables)
