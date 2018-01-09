@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.screens.securecamera
 
+import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.services.CompressionService
 import ca.bc.gov.secureimage.data.models.CameraImage
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
@@ -34,6 +35,8 @@ class SecureCameraPresenter(
     }
 
     override fun subscribe() {
+        view.setCapturing(false)
+
         view.hideShutter()
 
         view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
@@ -62,6 +65,8 @@ class SecureCameraPresenter(
         getLocationAndCache()
         getAlbumImageCount()
 
+        view.setCapturing(false)
+
         view.hideShutter()
         view.hideCaptureImage()
         view.hideBack()
@@ -87,6 +92,19 @@ class SecureCameraPresenter(
                 .addTo(disposables)
     }
 
+    /**
+     * Tells view to capture image
+     * Shows shutter to indicate that an image is being taken
+     * Shutter is hidden after an image is returned in onCameraImage
+     */
+    override fun captureImageClicked(capturing: Boolean) {
+        if (!capturing) {
+            view.setCapturing(true)
+            view.showShutter()
+            view.captureImage()
+        }
+    }
+
     // Camera listener events
     override fun onCameraEvent(event: CameraKitEvent?) {
         when (event?.type) {
@@ -106,7 +124,10 @@ class SecureCameraPresenter(
     override fun onCameraImage(image: CameraKitImage?) {
         view.hideShutter()
 
-        if (image == null) return
+        if (image == null) {
+            view.setCapturing(false)
+            return
+        }
 
         createCameraImage(image.jpeg, 100, 1920, 100, 300)
     }
@@ -153,11 +174,12 @@ class SecureCameraPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
+                    view.setCapturing(false)
                     view.showError(it.message ?: "Error compressing image")
                 },
-                onSuccess = {
-                    cameraImage.imageByteArray = it.first
-                    cameraImage.thumbnailArray = it.second
+                onSuccess = { byteArrayPair ->
+                    cameraImage.imageByteArray = byteArrayPair.first
+                    cameraImage.thumbnailArray = byteArrayPair.second
                     getLocationForCameraImage(cameraImage)
                 }
         ).addTo(disposables)
@@ -177,9 +199,9 @@ class SecureCameraPresenter(
                 onError = {
                     saveCameraImage(cameraImage)
                 },
-                onSuccess = {
-                    cameraImage.lat = it.lat
-                    cameraImage.lon = it.lon
+                onSuccess = { location ->
+                    cameraImage.lat = location.lat
+                    cameraImage.lon = location.lon
                     saveCameraImage(cameraImage)
                 },
                 onComplete = {
@@ -190,17 +212,28 @@ class SecureCameraPresenter(
 
     /**
      * Saves camera image locally
+     * Checks to see if current album count is less than the limit before saving
      * On success gets album image count
      */
     fun saveCameraImage(cameraImage: CameraImage) {
-        cameraImagesRepo.saveCameraImage(cameraImage)
+        cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
+                .flatMap { albumSize ->
+                    if (albumSize < Constants.MAX_ALBUM_SIZE) {
+                        cameraImagesRepo.saveCameraImage(cameraImage)
+                    } else {
+                        val message = "Can not take more than ${Constants.MAX_ALBUM_SIZE} images per album"
+                        Observable.error(Throwable(message))
+                    }
+                }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
+                    view.setCapturing(false)
                     view.showError(it.message ?: "Error saving image")
                 },
                 onSuccess = {
+                    view.setCapturing(false)
                     getAlbumImageCount()
                 }
         ).addTo(disposables)
@@ -218,8 +251,8 @@ class SecureCameraPresenter(
                 onError = {
                     view.showError(it.message ?: "Error saving image")
                 },
-                onSuccess = {
-                    val imageCounterText = "$it ${if (it == 1) "Image" else "Images"}"
+                onSuccess = { albumSize ->
+                    val imageCounterText = "$albumSize ${if (albumSize == 1) "Image" else "Images"}"
                     view.setImageCounterText(imageCounterText)
                 }
         ).addTo(disposables)
@@ -227,12 +260,6 @@ class SecureCameraPresenter(
 
     override fun onCameraVideo(video: CameraKitVideo?) {
 
-    }
-
-    // Take image
-    override fun captureImageClicked() {
-        view.showShutter()
-        view.captureImage()
     }
 
     // Back
@@ -244,8 +271,8 @@ class SecureCameraPresenter(
     override fun flashControlClicked(flashMode: Int) {
         when (flashMode) {
             CameraKit.Constants.FLASH_OFF -> {
-                view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
                 view.showFlashOff()
+                view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
             }
             CameraKit.Constants.FLASH_ON -> {
                 view.showFlashOn()

@@ -17,6 +17,8 @@ interface SecureCameraContract {
     interface View : BaseView<Presenter> {
         fun finish()
 
+        fun setCapturing(capturing: Boolean)
+
         fun showMessage(message: String)
         fun showError(message: String)
 
@@ -60,12 +62,12 @@ interface SecureCameraContract {
         fun viewShown()
         fun viewHidden()
 
+        fun captureImageClicked(capturing: Boolean)
+
         fun onCameraEvent(event: CameraKitEvent?)
         fun onCameraError(error: CameraKitError?)
         fun onCameraImage(image: CameraKitImage?)
         fun onCameraVideo(video: CameraKitVideo?)
-
-        fun captureImageClicked()
 
         fun backClicked()
 

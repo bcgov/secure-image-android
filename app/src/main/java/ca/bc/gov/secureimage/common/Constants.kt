@@ -10,4 +10,6 @@ object Constants {
 
     val IMAGE_INDEX = "IMAGE_INDEX"
 
+    val MAX_ALBUM_SIZE = 100
+
 }

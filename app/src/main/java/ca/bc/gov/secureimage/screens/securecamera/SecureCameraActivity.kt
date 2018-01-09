@@ -17,6 +17,8 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
 
     override var presenter: SecureCameraContract.Presenter? = null
 
+    private var capturing = false
+
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,11 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
+    }
+
+    // Setters
+    override fun setCapturing(capturing: Boolean) {
+        this.capturing = capturing
     }
 
     // Message
@@ -130,7 +137,7 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     // Capture image
     override fun setUpCaptureImageListener() {
         captureImageIv.setOnClickListener {
-            presenter?.captureImageClicked()
+            presenter?.captureImageClicked(capturing)
         }
     }
 
