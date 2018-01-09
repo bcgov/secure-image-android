@@ -3,6 +3,7 @@ package ca.bc.gov.secureimage.screens.securecamera
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.services.CompressionService
 import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
 import com.github.florent37.rxgps.RxGps
@@ -23,6 +24,7 @@ class SecureCameraPresenter(
         private val view: SecureCameraContract.View,
         private val albumKey: String,
         private val cameraImagesRepo: CameraImagesRepo,
+        private val albumsRepo: AlbumsRepo,
         private val locationRepo: LocationRepo,
         private val rxGps: RxGps,
         private val compressionService: CompressionService
@@ -213,7 +215,7 @@ class SecureCameraPresenter(
     /**
      * Saves camera image locally
      * Checks to see if current album count is less than the limit before saving
-     * On success gets album image count
+     * On success gets album image count and refreshes album update time
      */
     fun saveCameraImage(cameraImage: CameraImage) {
         cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
@@ -235,6 +237,7 @@ class SecureCameraPresenter(
                 onSuccess = {
                     view.setCapturing(false)
                     getAlbumImageCount()
+                    refreshAlbumUpdateTime()
                 }
         ).addTo(disposables)
     }
@@ -256,6 +259,22 @@ class SecureCameraPresenter(
                     view.setImageCounterText(imageCounterText)
                 }
         ).addTo(disposables)
+    }
+
+    fun refreshAlbumUpdateTime() {
+        albumsRepo.getAlbum(albumKey)
+                .observeOn(Schedulers.io())
+                .flatMap { album ->
+                    album.updatedTime = System.currentTimeMillis()
+                    albumsRepo.saveAlbum(album)
+                }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving album")
+                })
+                .addTo(disposables)
     }
 
     override fun onCameraVideo(video: CameraKitVideo?) {
