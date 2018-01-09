@@ -43,7 +43,10 @@ class ImageDetailPresenter(
         view.finish()
     }
 
-    // Images
+    /**
+     * Grabs all images in the passed album key and sorts them
+     * OnSuccess shows images in list and gets new title
+     */
     fun getImages() {
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }

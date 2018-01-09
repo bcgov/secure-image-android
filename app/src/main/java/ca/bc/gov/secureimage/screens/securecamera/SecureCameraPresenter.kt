@@ -261,6 +261,9 @@ class SecureCameraPresenter(
         ).addTo(disposables)
     }
 
+    /**
+     * Refreshes album update time
+     */
     fun refreshAlbumUpdateTime() {
         albumsRepo.getAlbum(albumKey)
                 .observeOn(Schedulers.io())

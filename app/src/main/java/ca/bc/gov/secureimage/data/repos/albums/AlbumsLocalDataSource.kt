@@ -39,6 +39,9 @@ object AlbumsLocalDataSource : AlbumsDataSource {
         }
     }
 
+    /**
+     * Grabs all albums and also gets the newest camera image in each album for the preview
+     */
     override fun getAllAlbums(): Observable<ArrayList<Album>> {
         return Observable.create { emitter ->
             val realm = Realm.getDefaultInstance()
