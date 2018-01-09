@@ -34,7 +34,7 @@ object Injection {
 
     fun provideCompressionService(): CompressionService = CompressionService()
 
-    fun provideKeyStore(): KeyStore = KeyStore.getInstance("AndroidKeyStore")
+    fun provideKeyStore(type: String): KeyStore = KeyStore.getInstance(type)
 
     fun provideKeyStorageService(keyStore: KeyStore): KeyStorageService =
             KeyStorageService(keyStore)

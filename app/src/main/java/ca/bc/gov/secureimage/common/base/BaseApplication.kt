@@ -19,7 +19,8 @@ class BaseApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val keyStorageService = Injection.provideKeyStorageService(Injection.provideKeyStore())
+        val keyStorageService = Injection.provideKeyStorageService(
+                Injection.provideKeyStore("AndroidKeyStore"))
 
         setUpRealm(keyStorageService)
         setUpStrictMode()
