@@ -12,4 +12,7 @@ object Constants {
 
     val MAX_ALBUM_SIZE = 100
 
+    val READ_TIME_OUT = 20L
+    val CONNECT_TIME_OUT = 20L
+
 }
