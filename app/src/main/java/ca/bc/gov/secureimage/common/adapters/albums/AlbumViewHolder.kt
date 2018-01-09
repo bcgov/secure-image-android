@@ -19,10 +19,17 @@ class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     fun bind(album: Album, clickListener: ClickListener) = with(itemView) {
 
         // Image
+        val imageBytes = album.previewByteArray
         Glide.with(context)
-                .load(album.previewByteArray)
+                .load(imageBytes)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageIv)
+
+        if (imageBytes != null) {
+            imagePlaceholderIv.visibility = View.GONE
+        } else {
+            imagePlaceholderIv.visibility = View.VISIBLE
+        }
 
         // Name
         nameTv.text = album.getDisplayName()

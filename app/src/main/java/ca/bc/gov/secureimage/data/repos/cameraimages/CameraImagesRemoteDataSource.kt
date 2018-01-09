@@ -44,18 +44,14 @@ private constructor(private val appApi: AppApi) : CameraImagesDataSource {
 
     override fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
 
-        // Name
-        /*val name = RequestBody.create(
-                MediaType.parse("multipart/form-data"), "image-test")*/
-
         // Image
         val imageRequestBody = RequestBody.create(
                 MediaType.parse("multipart/form-data"), cameraImage.imageByteArray)
 
-        val image = MultipartBody.Part.createFormData(
+        val imagePart = MultipartBody.Part.createFormData(
                 "image", UUID.randomUUID().toString(), imageRequestBody)
 
-        return appApi.uploadImage(image)
+        return appApi.uploadImage(imagePart)
                 .flatMap { Observable.just(cameraImage) }
     }
 }
