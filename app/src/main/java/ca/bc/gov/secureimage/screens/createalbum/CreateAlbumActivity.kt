@@ -154,6 +154,12 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         addImagesLayout.visibility = View.GONE
     }
 
+    override fun goToSecureCamera(albumKey: String) {
+        Intent(this, SecureCameraActivity::class.java)
+                .putExtra(Constants.ALBUM_KEY, albumKey)
+                .run { startActivity(this) }
+    }
+
     // Image loading
     override fun showImagesLoading() {
         imagesProgressBar.visibility = View.VISIBLE
@@ -201,6 +207,13 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         imagesAdapter?.notifyImageRemoved(cameraImage, position)
     }
 
+    override fun goToImageDetail(albumKey: String, imageIndex: Int) {
+        Intent(this, ImageDetailActivity::class.java)
+                .putExtra(Constants.ALBUM_KEY, albumKey)
+                .putExtra(Constants.IMAGE_INDEX, imageIndex)
+                .run { startActivity(this) }
+    }
+
     // View all images
     override fun setUpViewAllImagesListener() {
         viewAllImagesTv.setOnClickListener {
@@ -214,6 +227,10 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override fun hideViewAllImages() {
         viewAllImagesTv.visibility = View.GONE
+    }
+
+    override fun setViewAllImagesText(text: String) {
+        viewAllImagesTv.text = text
     }
 
     override fun goToAllImages(albumKey: String) {
@@ -272,23 +289,17 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     }
 
     // Upload
+    override fun showUpload() {
+        uploadTv.visibility = View.VISIBLE
+    }
+
+    override fun hideUpload() {
+        uploadTv.visibility = View.GONE
+    }
+
     override fun setUpUploadListener() {
         uploadTv.setOnClickListener {
             presenter?.uploadClicked()
         }
-    }
-
-    // Routers
-    override fun goToSecureCamera(albumKey: String) {
-        Intent(this, SecureCameraActivity::class.java)
-                .putExtra(Constants.ALBUM_KEY, albumKey)
-                .run { startActivity(this) }
-    }
-
-    override fun goToImageDetail(albumKey: String, imageIndex: Int) {
-        Intent(this, ImageDetailActivity::class.java)
-                .putExtra(Constants.ALBUM_KEY, albumKey)
-                .putExtra(Constants.IMAGE_INDEX, imageIndex)
-                .run { startActivity(this) }
     }
 }

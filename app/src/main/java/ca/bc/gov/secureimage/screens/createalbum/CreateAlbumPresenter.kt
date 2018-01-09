@@ -37,8 +37,6 @@ class CreateAlbumPresenter(
 
         view.setAlbumDeleted(false)
 
-        view.hideNetworkType()
-
         view.setUpBackListener()
 
         view.setUpImagesList()
@@ -47,9 +45,6 @@ class CreateAlbumPresenter(
 
         view.setUpDeleteAlbumListener()
 
-        view.hideImagesLoading()
-
-        view.hideAddImagesLayout()
         view.setUpAddImagesListener()
 
         view.setUpUploadListener()
@@ -67,8 +62,16 @@ class CreateAlbumPresenter(
     override fun viewShown(refresh: Boolean) {
         view.setBacked(false)
 
-        if(refresh) {
+        view.hideNetworkType()
+
+        view.hideImagesLoading()
+
+        if (refresh) {
+            view.hideAddImagesLayout()
+            view.hideViewAllImages()
+            view.hideUpload()
             view.showImages(ArrayList())
+
             getImages()
 
             view.setRefresh(false)
@@ -156,9 +159,14 @@ class CreateAlbumPresenter(
 
                     if (images.size == 0) {
                         view.showAddImagesLayout()
+                        view.hideViewAllImages()
+                        view.hideUpload()
 
                     } else {
                         view.hideAddImagesLayout()
+                        view.showViewAllImages()
+                        view.setViewAllImagesText(getViewAllText(images.size))
+                        view.showUpload()
 
                         val items = ArrayList<Any>()
                         items.add(AddImages())
@@ -202,7 +210,7 @@ class CreateAlbumPresenter(
                 .addTo(disposables)
     }
 
-    // Delete
+    // Delete album
     override fun deleteAlbumClicked() {
         view.showDeleteAlbumDialog()
     }
@@ -242,6 +250,10 @@ class CreateAlbumPresenter(
         view.goToAllImages(albumKey)
     }
 
+    private fun getViewAllText(albumSize: Int): String {
+        return "View all Images ($albumSize)"
+    }
+
     // Add images
     override fun addImagesClicked() {
         view.setRefresh(true)
@@ -277,6 +289,35 @@ class CreateAlbumPresenter(
                 onSuccess = { image ->
                     view.showMessage("Image deleted")
                     view.notifyImageRemoved(image, position)
+                    getAlbumImageCount()
+                }
+        ).addTo(disposables)
+    }
+
+    /**
+     * Gets the current count of images in album
+     * onSuccess current counter is shown
+     */
+    fun getAlbumImageCount() {
+        cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving image")
+                },
+                onSuccess = { albumSize ->
+                    if (albumSize == 0) {
+                        view.showAddImagesLayout()
+                        view.hideViewAllImages()
+                        view.hideUpload()
+
+                    } else {
+                        view.hideAddImagesLayout()
+                        view.showViewAllImages()
+                        view.setViewAllImagesText(getViewAllText(albumSize))
+                        view.showUpload()
+                    }
                 }
         ).addTo(disposables)
     }

@@ -29,6 +29,7 @@ interface CreateAlbumContract {
         fun setUpAddImagesListener()
         fun showAddImagesLayout()
         fun hideAddImagesLayout()
+        fun goToSecureCamera(albumKey: String)
 
         fun showImagesLoading()
         fun hideImagesLoading()
@@ -40,7 +41,9 @@ interface CreateAlbumContract {
         fun setUpViewAllImagesListener()
         fun showViewAllImages()
         fun hideViewAllImages()
+        fun setViewAllImagesText(text: String)
         fun goToAllImages(albumKey: String)
+        fun goToImageDetail(albumKey: String, imageIndex: Int)
 
         fun showDeleteImageDialog(cameraImage: CameraImage, position: Int)
         fun hideDeleteImageDialog()
@@ -54,10 +57,9 @@ interface CreateAlbumContract {
 
         fun setAlbumName(albumName: String)
 
+        fun showUpload()
+        fun hideUpload()
         fun setUpUploadListener()
-
-        fun goToSecureCamera(albumKey: String)
-        fun goToImageDetail(albumKey: String, imageIndex: Int)
     }
 
     interface Presenter: BasePresenter {
