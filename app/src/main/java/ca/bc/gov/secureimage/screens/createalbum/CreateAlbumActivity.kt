@@ -15,7 +15,8 @@ import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImageViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.common.utils.InjectionUtils
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.screens.allimages.AllImagesActivity
 import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_create_album.*
@@ -60,7 +61,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 this,
                 albumKey,
                 Injection.provideAlbumsRepo(),
-                Injection.provideCameraImagesRepo(),
+                Injection.provideCameraImagesRepo(
+                        InjectionUtils.getAppApi()),
                 networkService
         )
 
@@ -254,14 +256,20 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         albumNameEt.setText(albumName)
     }
 
-    // Camera
+    // Upload
+    override fun setUpUploadListener() {
+        uploadTv.setOnClickListener {
+            presenter?.uploadClicked()
+        }
+    }
+
+    // Routers
     override fun goToSecureCamera(albumKey: String) {
         Intent(this, SecureCameraActivity::class.java)
                 .putExtra(Constants.ALBUM_KEY, albumKey)
                 .run { startActivity(this) }
     }
 
-    // Image detail
     override fun goToImageDetail(albumKey: String, imageIndex: Int) {
         Intent(this, ImageDetailActivity::class.java)
                 .putExtra(Constants.ALBUM_KEY, albumKey)

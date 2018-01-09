@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.data.repos.cameraimages
 
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import io.reactivex.Observable
 
 /**
@@ -18,5 +18,7 @@ interface CameraImagesDataSource {
     fun getAllCameraImagesInAlbum(albumKey: String): Observable<ArrayList<CameraImage>>
 
     fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<Boolean>
+
+    fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage>
 
 }

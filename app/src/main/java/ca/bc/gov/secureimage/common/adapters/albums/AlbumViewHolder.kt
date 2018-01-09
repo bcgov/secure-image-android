@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ca.bc.gov.secureimage.R
-import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.local.Album
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.item_album.view.*

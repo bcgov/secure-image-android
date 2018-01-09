@@ -11,7 +11,7 @@ import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.albums.AlbumViewHolder
 import ca.bc.gov.secureimage.common.adapters.albums.AlbumsAdapter
-import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.local.Album
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.createalbum.CreateAlbumActivity
 import ca.bc.gov.secureimage.screens.settings.SettingsActivity

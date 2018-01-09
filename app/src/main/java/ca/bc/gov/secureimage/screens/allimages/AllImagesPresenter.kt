@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.screens.allimages
 
 import ca.bc.gov.secureimage.data.models.AddImages
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

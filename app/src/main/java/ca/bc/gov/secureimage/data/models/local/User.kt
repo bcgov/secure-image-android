@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.data.models
+package ca.bc.gov.secureimage.data.models.local
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

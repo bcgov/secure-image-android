@@ -29,14 +29,14 @@ android {
     buildTypes {
 
         debug {
-            buildConfigField "String", "API_URL", "\"https://freshworks.blueskybooking.com/\""
+            buildConfigField "String", "API_URL", "\"https://minio-sandbox.pathfinder.gov.bc.ca/\""
         }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            
-            buildConfigField "String", "API_URL", "\"https://freshworks.blueskybooking.com/\""
+
+            buildConfigField "String", "API_URL", "\"https://minio-sandbox.pathfinder.gov.bc.ca/\""
         }
     }
 }

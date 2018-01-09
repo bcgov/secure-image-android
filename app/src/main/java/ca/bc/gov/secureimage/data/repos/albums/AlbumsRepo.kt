@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.data.repos.albums
 
-import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.local.Album
 import io.reactivex.Observable
 
 /**

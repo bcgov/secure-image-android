@@ -2,7 +2,7 @@ package ca.bc.gov.secureimage.screens.createalbum
 
 import ca.bc.gov.secureimage.common.services.NetworkService
 import ca.bc.gov.secureimage.data.models.AddImages
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -48,6 +48,8 @@ class CreateAlbumPresenter(
         view.setUpDeleteAlbumListener()
 
         view.hideImagesLoading()
+
+        view.setUpUploadListener()
 
         getAlbumFields()
     }
@@ -264,6 +266,28 @@ class CreateAlbumPresenter(
                 onSuccess = { image ->
                     view.showMessage("Image deleted")
                     view.notifyImageRemoved(image, position)
+                }
+        ).addTo(disposables)
+    }
+
+    // Upload album
+    override fun uploadClicked() {
+        uploadAlbum()
+    }
+
+    fun uploadAlbum() {
+        cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
+                .flatMapIterable { it }
+                .take(1)
+                .flatMap { cameraImagesRepo.uploadCameraImage(it) }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error uploading album")
+                },
+                onSuccess = {
+                    view.showMessage("Uploaded")
                 }
         ).addTo(disposables)
     }

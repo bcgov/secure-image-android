@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.data.repos.cameraimages
 
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import io.reactivex.Observable
 
 /**
@@ -8,15 +8,24 @@ import io.reactivex.Observable
  *
  */
 class CameraImagesRepo
-private constructor(val localDataSource: CameraImagesDataSource) : CameraImagesDataSource {
+private constructor(
+        private val localDataSource: CameraImagesDataSource,
+        private val remoteDataSource: CameraImagesDataSource
+) : CameraImagesDataSource {
 
     companion object {
 
         @Volatile private var INSTANCE: CameraImagesRepo? = null
 
-        fun getInstance(localDataSource: CameraImagesDataSource): CameraImagesRepo =
+        fun getInstance(
+                localDataSource: CameraImagesDataSource,
+                remoteDataSource: CameraImagesDataSource
+        ): CameraImagesRepo =
                 INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: CameraImagesRepo(localDataSource).also { INSTANCE = it }
+                    INSTANCE ?: CameraImagesRepo(
+                            localDataSource,
+                            remoteDataSource
+                    ).also { INSTANCE = it }
                 }
 
         fun destroyInstance() {
@@ -86,4 +95,7 @@ private constructor(val localDataSource: CameraImagesDataSource) : CameraImagesD
                     }
                 }
     }
+
+    override fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
+            remoteDataSource.uploadCameraImage(cameraImage)
 }

@@ -15,7 +15,8 @@ import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImageViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.common.utils.InjectionUtils
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity
 import kotlinx.android.synthetic.main.activity_all_images.*
 
@@ -44,7 +45,8 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
 
         AllImagesPresenter(this,
                 albumKey,
-                Injection.provideCameraImagesRepo())
+                Injection.provideCameraImagesRepo(
+                        InjectionUtils.getAppApi()))
 
         presenter?.subscribe()
     }

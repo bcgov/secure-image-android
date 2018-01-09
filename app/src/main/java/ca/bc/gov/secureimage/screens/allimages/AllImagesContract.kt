@@ -2,7 +2,7 @@ package ca.bc.gov.secureimage.screens.allimages
 
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 
 /**
  * Created by Aidan Laing on 2017-12-13.

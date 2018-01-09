@@ -8,6 +8,7 @@ import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsLocalDataSource
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesLocalDataSource
+import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRemoteDataSource
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRemoteDataSource
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
@@ -33,8 +34,11 @@ object Injection {
 
     fun provideAlbumsRepo(): AlbumsRepo = AlbumsRepo.getInstance(AlbumsLocalDataSource)
 
-    fun provideCameraImagesRepo(): CameraImagesRepo =
-            CameraImagesRepo.getInstance(CameraImagesLocalDataSource)
+    fun provideCameraImagesRepo(appApi: AppApi): CameraImagesRepo =
+            CameraImagesRepo.getInstance(
+                    CameraImagesLocalDataSource,
+                    CameraImagesRemoteDataSource.getInstance(appApi)
+            )
 
     fun provideUserRepo(): UserRepo = UserRepo.getInstance(UserLocalDataSource)
 

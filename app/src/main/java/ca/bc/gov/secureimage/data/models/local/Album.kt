@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.data.models
+package ca.bc.gov.secureimage.data.models.local
 
 import ca.bc.gov.secureimage.common.utils.TimeUtils
 import io.realm.RealmObject

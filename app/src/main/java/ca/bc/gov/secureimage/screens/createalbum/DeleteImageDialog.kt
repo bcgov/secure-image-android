@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import ca.bc.gov.secureimage.R
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import kotlinx.android.synthetic.main.dialog_delete_image.*
 
 /**

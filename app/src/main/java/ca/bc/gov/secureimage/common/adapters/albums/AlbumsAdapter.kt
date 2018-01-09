@@ -3,7 +3,7 @@ package ca.bc.gov.secureimage.common.adapters.albums
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.local.Album
 
 /**
  * Created by Aidan Laing on 2017-12-12.

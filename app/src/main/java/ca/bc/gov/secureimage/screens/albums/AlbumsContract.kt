@@ -2,7 +2,7 @@ package ca.bc.gov.secureimage.screens.albums
 
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
-import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.local.Album
 
 /**
  * Created by Aidan Laing on 2017-12-12.

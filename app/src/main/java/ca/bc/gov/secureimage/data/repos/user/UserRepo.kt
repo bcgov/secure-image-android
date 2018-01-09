@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.data.repos.user
 
-import ca.bc.gov.secureimage.data.models.User
+import ca.bc.gov.secureimage.data.models.local.User
 import io.reactivex.Observable
 
 /**
@@ -8,7 +8,7 @@ import io.reactivex.Observable
  *
  */
 class UserRepo
-private constructor(val localDataSource: UserDataSource) : UserDataSource {
+private constructor(private val localDataSource: UserDataSource) : UserDataSource {
 
     companion object {
 

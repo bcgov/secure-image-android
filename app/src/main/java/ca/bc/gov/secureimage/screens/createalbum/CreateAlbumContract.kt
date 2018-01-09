@@ -2,7 +2,7 @@ package ca.bc.gov.secureimage.screens.createalbum
 
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 
 /**
  * Created by Aidan Laing on 2017-12-12.
@@ -50,6 +50,8 @@ interface CreateAlbumContract {
 
         fun setAlbumName(albumName: String)
 
+        fun setUpUploadListener()
+
         fun goToSecureCamera(albumKey: String)
         fun goToImageDetail(albumKey: String, imageIndex: Int)
     }
@@ -72,6 +74,8 @@ interface CreateAlbumContract {
         fun imageDeleteClicked(cameraImage: CameraImage, position: Int)
 
         fun deleteImageConfirmed(cameraImage: CameraImage, position: Int)
+
+        fun uploadClicked()
     }
 
 }

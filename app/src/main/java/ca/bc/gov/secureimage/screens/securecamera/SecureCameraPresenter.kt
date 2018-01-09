@@ -2,7 +2,7 @@ package ca.bc.gov.secureimage.screens.securecamera
 
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.services.CompressionService
-import ca.bc.gov.secureimage.data.models.CameraImage
+import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo

@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.screens.albums
 
-import ca.bc.gov.secureimage.data.models.Album
+import ca.bc.gov.secureimage.data.models.local.Album
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
 import com.github.florent37.rxgps.RxGps
