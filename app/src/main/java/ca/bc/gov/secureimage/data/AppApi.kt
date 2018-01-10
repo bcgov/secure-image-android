@@ -14,7 +14,7 @@ import retrofit2.http.Part
 interface AppApi {
 
     @Multipart
-    @POST("/minio/secure-image/")
+    @POST("/v1/album/123/")
     fun uploadImage(
             @Part imagePart: MultipartBody.Part
     ): Observable<UploadImageResponse>

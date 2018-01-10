@@ -5,10 +5,9 @@ import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import io.reactivex.Observable
 import okhttp3.MediaType
-import okhttp3.RequestBody
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.util.*
-
 
 /**
  * Created by Aidan Laing on 2018-01-09.
@@ -49,7 +48,7 @@ private constructor(private val appApi: AppApi) : CameraImagesDataSource {
                 MediaType.parse("multipart/form-data"), cameraImage.imageByteArray)
 
         val imagePart = MultipartBody.Part.createFormData(
-                "image", UUID.randomUUID().toString(), imageRequestBody)
+                "file", UUID.randomUUID().toString(), imageRequestBody)
 
         return appApi.uploadImage(imagePart)
                 .flatMap { Observable.just(cameraImage) }

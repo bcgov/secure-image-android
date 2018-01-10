@@ -105,7 +105,7 @@
         android:textStyle="bold"
         android:textAllCaps="true"
         android:fontFamily="@font/open_sans_bold"
-        android:background="@drawable/shape_rect_color_primary_light_rounded_28dp"
+        android:background="@drawable/selector_rect_color_primary_light_rounded_28dp"
         android:gravity="center"
         android:layout_margin="16dp"
         android:layout_width="200dp"
