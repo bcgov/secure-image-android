@@ -37,9 +37,8 @@ class AllImagesPresenter(
 
         showToolbarMode()
 
-        view.setUpImagesList()
-
         view.setRefresh(true)
+        view.setUpImagesList()
     }
 
     override fun dispose() {

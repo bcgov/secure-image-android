@@ -31,21 +31,19 @@ class CreateAlbumPresenter(
     }
 
     override fun subscribe() {
+        view.hideNetworkType()
+
         view.setBacked(false)
-
-        view.setRefresh(true)
-
-        view.setAlbumDeleted(false)
-
         view.setUpBackListener()
 
-        view.setUpImagesList()
-
-        view.setUpViewAllImagesListener()
-
+        view.setAlbumDeleted(false)
         view.setUpDeleteAlbumListener()
 
+        view.setRefresh(true)
         view.setUpAddImagesListener()
+        view.hideImagesLoading()
+        view.setUpImagesList()
+        view.setUpViewAllImagesListener()
 
         view.setUpUploadListener()
 
@@ -56,15 +54,12 @@ class CreateAlbumPresenter(
         view.hideDeleteAlbumDialog()
         view.hideDeleteImageDialog()
         view.hideDeletingDialog()
+
         disposables.dispose()
     }
 
     override fun viewShown(refresh: Boolean) {
         view.setBacked(false)
-
-        view.hideNetworkType()
-
-        view.hideImagesLoading()
 
         if (refresh) {
             view.hideAddImagesLayout()
@@ -156,18 +151,9 @@ class CreateAlbumPresenter(
                 },
                 onSuccess = { images ->
                     view.hideImagesLoading()
+                    albumSizeReturned(images.size)
 
-                    if (images.size == 0) {
-                        view.showAddImagesLayout()
-                        view.hideViewAllImages()
-                        view.hideUpload()
-
-                    } else {
-                        view.hideAddImagesLayout()
-                        view.showViewAllImages()
-                        view.setViewAllImagesText(getViewAllText(images.size))
-                        view.showUpload()
-
+                    if (images.size > 0) {
                         val items = ArrayList<Any>()
                         items.add(AddImages())
                         items.addAll(images)
@@ -307,19 +293,23 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error saving image")
                 },
                 onSuccess = { albumSize ->
-                    if (albumSize == 0) {
-                        view.showAddImagesLayout()
-                        view.hideViewAllImages()
-                        view.hideUpload()
-
-                    } else {
-                        view.hideAddImagesLayout()
-                        view.showViewAllImages()
-                        view.setViewAllImagesText(getViewAllText(albumSize))
-                        view.showUpload()
-                    }
+                    albumSizeReturned(albumSize)
                 }
         ).addTo(disposables)
+    }
+
+    fun albumSizeReturned(albumSize: Int) {
+        if (albumSize == 0) {
+            view.showAddImagesLayout()
+            view.hideViewAllImages()
+            view.hideUpload()
+
+        } else {
+            view.hideAddImagesLayout()
+            view.showViewAllImages()
+            view.setViewAllImagesText(getViewAllText(albumSize))
+            view.showUpload()
+        }
     }
 
     // Upload album

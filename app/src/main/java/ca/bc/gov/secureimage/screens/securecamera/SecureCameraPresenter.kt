@@ -37,13 +37,12 @@ class SecureCameraPresenter(
     }
 
     override fun subscribe() {
-        view.setCapturing(false)
-
         view.hideShutter()
 
         view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
         view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
         view.showFlashOff()
+        view.setUpFlashControlListener()
 
         view.setCameraCropOutput(false)
         view.setCameraPermissions(CameraKit.Constants.PERMISSIONS_PICTURE)
@@ -53,10 +52,9 @@ class SecureCameraPresenter(
         view.setUpCameraListener()
 
         view.setUpCaptureImageListener()
+        view.setCapturing(false)
 
         view.setUpBackListener()
-
-        view.setUpFlashControlListener()
     }
 
     override fun dispose() {

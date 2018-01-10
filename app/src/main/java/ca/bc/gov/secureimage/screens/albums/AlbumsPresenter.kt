@@ -29,13 +29,11 @@ class AlbumsPresenter(
 
     override fun subscribe() {
         view.hideLoading()
-
         view.hideOnboarding()
 
         view.setUpSettingsListener()
 
         view.setUpAlbumsList()
-
         view.setUpCreateAlbumListener()
     }
 
