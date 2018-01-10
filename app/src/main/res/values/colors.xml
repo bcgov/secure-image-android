@@ -14,6 +14,6 @@
     <color name="darkGray">#333333</color>
     <color name="black">#000000</color>
 
-    <color name="alpha_black">#dd000000</color>
+    <color name="alpha_black">#bb000000</color>
 
 </resources>
