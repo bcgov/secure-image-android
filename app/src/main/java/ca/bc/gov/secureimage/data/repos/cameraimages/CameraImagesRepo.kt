@@ -96,6 +96,8 @@ private constructor(
                 }
     }
 
-    override fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
-            remoteDataSource.uploadCameraImage(cameraImage)
+    override fun uploadCameraImage(
+            remoteAlbumId: String,
+            cameraImage: CameraImage
+    ): Observable<CameraImage> = remoteDataSource.uploadCameraImage(remoteAlbumId, cameraImage)
 }

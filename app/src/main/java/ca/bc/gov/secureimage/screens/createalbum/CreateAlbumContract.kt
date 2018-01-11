@@ -60,6 +60,8 @@ interface CreateAlbumContract {
         fun showUpload()
         fun hideUpload()
         fun setUpUploadListener()
+
+        fun showEmailChooser(emailTo: String, subject: String, body: String, chooserTitle: String)
     }
 
     interface Presenter: BasePresenter {

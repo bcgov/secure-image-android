@@ -19,6 +19,6 @@ interface CameraImagesDataSource {
 
     fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<Boolean>
 
-    fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage>
+    fun uploadCameraImage(remoteAlbumId: String, cameraImage: CameraImage): Observable<CameraImage>
 
 }

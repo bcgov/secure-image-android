@@ -41,16 +41,19 @@ private constructor(private val appApi: AppApi) : CameraImagesDataSource {
     override fun deleteAllCameraImagesInAlbum(albumKey: String): Observable<Boolean> =
             Observable.error(InvalidOperationException())
 
-    override fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage> {
+    override fun uploadCameraImage(
+            remoteAlbumId: String,
+            cameraImage: CameraImage
+    ): Observable<CameraImage> {
 
         // Image
         val imageRequestBody = RequestBody.create(
-                MediaType.parse("multipart/form-data"), cameraImage.imageByteArray)
+                MediaType.parse("image/*"), cameraImage.imageByteArray)
 
         val imagePart = MultipartBody.Part.createFormData(
                 "file", UUID.randomUUID().toString(), imageRequestBody)
 
-        return appApi.uploadImage(imagePart)
+        return appApi.uploadImage(remoteAlbumId, imagePart)
                 .flatMap { Observable.just(cameraImage) }
     }
 }

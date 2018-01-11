@@ -88,6 +88,8 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
         }
     }
 
-    override fun uploadCameraImage(cameraImage: CameraImage): Observable<CameraImage> =
-            Observable.error(InvalidOperationException())
+    override fun uploadCameraImage(
+            remoteAlbumId: String,
+            cameraImage: CameraImage
+    ): Observable<CameraImage> = Observable.error(InvalidOperationException())
 }

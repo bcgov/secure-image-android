@@ -1,6 +1,7 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
 import ca.bc.gov.secureimage.common.services.NetworkService
+import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
@@ -21,7 +22,8 @@ class CreateAlbumPresenter(
         private val albumKey: String,
         private val albumsRepo: AlbumsRepo,
         private val cameraImagesRepo: CameraImagesRepo,
-        private val networkService: NetworkService
+        private val networkService: NetworkService,
+        private val appApi: AppApi
 ) : CreateAlbumContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -314,22 +316,56 @@ class CreateAlbumPresenter(
 
     // Upload album
     override fun uploadClicked() {
-        uploadAlbum()
+        getRemoteAlbumId()
     }
 
-    fun uploadAlbum() {
+    fun getRemoteAlbumId() {
+        appApi.getRemoteAlbumId()
+                .map { it.remoteAlbumId }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error getting remote album id")
+                },
+                onSuccess = { remoteAlbumId ->
+                    uploadImages(remoteAlbumId)
+                }
+        ).addTo(disposables)
+    }
+
+    fun uploadImages(remoteAlbumId: String) {
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
-                .take(1)
-                .flatMap { cameraImagesRepo.uploadCameraImage(it) }
-                .firstOrError()
+                .flatMap { cameraImagesRepo.uploadCameraImage(remoteAlbumId, it) }
+                .ignoreElements()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error uploading album")
                 },
-                onSuccess = {
-                    view.showMessage("Uploaded")
+                onComplete = {
+                    getDownloadUrl(remoteAlbumId)
+                }
+        ).addTo(disposables)
+    }
+
+    fun getDownloadUrl(remoteAlbumId: String) {
+        appApi.getDownloadUrl(remoteAlbumId)
+                .map { it.getCleanedDownloadUrl() }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error getting download url")
+                },
+                onSuccess = { downloadUrl ->
+                    view.showEmailChooser(
+                            "aidancappy@gmail.com",
+                            "Secure image",
+                            downloadUrl,
+                            "Send download link using...."
+                    )
                 }
         ).addTo(disposables)
     }

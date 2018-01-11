@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ShareCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -63,7 +64,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 Injection.provideAlbumsRepo(),
                 Injection.provideCameraImagesRepo(
                         InjectionUtils.getAppApi()),
-                networkService
+                networkService,
+                InjectionUtils.getAppApi()
         )
 
         presenter?.subscribe()
@@ -301,5 +303,20 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         uploadTv.setOnClickListener {
             presenter?.uploadClicked()
         }
+    }
+
+    override fun showEmailChooser(
+            emailTo: String,
+            subject: String,
+            body: String,
+            chooserTitle: String) {
+
+        ShareCompat.IntentBuilder.from(this)
+                .setType("message/rfc822")
+                .addEmailTo(emailTo)
+                .setSubject(subject)
+                .setHtmlText(body)
+                .setChooserTitle(chooserTitle)
+                .startChooser();
     }
 }
