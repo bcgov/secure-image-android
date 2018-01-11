@@ -41,5 +41,12 @@
     <string name="delete_image">Delete Image</string>
     <string name="delete_image_info">Are you sure you want to delete this image?</string>
     <string name="deleting">Deleting…</string>
+    <string name="uploading">Uploading…</string>
+    <string name="upload_anyway">Upload Anyway</string>
+    <string name="mobile_data">Mobile Data</string>
+    <string name="you_are_currently_offline">You are currently offline</string>
+    <string name="no_connection_info">Please connect to a network to upload your album</string>
+    <string name="close">Close</string>
+    <string name="mobile_data_warning_info">You are currently connected to mobile data. Uploading images can require a large amount of data affecting your cellular data plan.</string>
 
 </resources>

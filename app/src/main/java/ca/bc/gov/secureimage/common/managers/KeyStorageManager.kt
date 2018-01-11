@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.common.services
+package ca.bc.gov.secureimage.common.managers
 
 import android.content.SharedPreferences
 import android.security.keystore.KeyGenParameterSpec
@@ -15,7 +15,7 @@ import javax.crypto.spec.GCMParameterSpec
  * Created by Aidan Laing on 2017-12-31.
  *
  */
-class KeyStorageService(private val keyStore: KeyStore) {
+class KeyStorageManager(private val keyStore: KeyStore) {
 
     init {
         keyStore.load(null)

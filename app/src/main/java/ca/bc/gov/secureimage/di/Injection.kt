@@ -1,9 +1,9 @@
 package ca.bc.gov.secureimage.di
 
 import android.net.ConnectivityManager
-import ca.bc.gov.secureimage.common.services.CompressionService
-import ca.bc.gov.secureimage.common.services.KeyStorageService
-import ca.bc.gov.secureimage.common.services.NetworkService
+import ca.bc.gov.secureimage.common.managers.CompressionManager
+import ca.bc.gov.secureimage.common.managers.KeyStorageManager
+import ca.bc.gov.secureimage.common.managers.NetworkManager
 import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsLocalDataSource
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
@@ -44,15 +44,15 @@ object Injection {
 
     fun provideLocationRepo(): LocationRepo = LocationRepo.getInstance(LocationRemoteDataSource)
 
-    fun provideNetworkService(connectivityManager: ConnectivityManager): NetworkService =
-            NetworkService(connectivityManager)
+    fun provideNetworkService(connectivityManager: ConnectivityManager): NetworkManager =
+            NetworkManager(connectivityManager)
 
-    fun provideCompressionService(): CompressionService = CompressionService()
+    fun provideCompressionService(): CompressionManager = CompressionManager()
 
     fun provideKeyStore(type: String): KeyStore = KeyStore.getInstance(type)
 
-    fun provideKeyStorageService(keyStore: KeyStore): KeyStorageService =
-            KeyStorageService(keyStore)
+    fun provideKeyStorageService(keyStore: KeyStore): KeyStorageManager =
+            KeyStorageManager(keyStore)
 
     // OkHttpClient
     private var cachedOkHttpClient: OkHttpClient? = null

@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_create_album.*
 
 class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         AddImagesViewHolder.Listener, ImageViewHolder.ImageClickListener,
-        DeleteAlbumDialog.DeleteListener, DeleteImageDialog.DeleteListener {
+        DeleteAlbumDialog.DeleteListener, DeleteImageDialog.DeleteListener, MobileNetworkWarningDialog.UploadListener {
 
     override var presenter: CreateAlbumContract.Presenter? = null
 
@@ -35,6 +35,12 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     private var deleteImageDialog: DeleteImageDialog? = null
 
     private var deletingDialog: DeletingDialog? = null
+
+    private var uploadingDialog: UploadingDialog? = null
+
+    private var mobileNetworkWarningDialog: MobileNetworkWarningDialog? = null
+
+    private var noConnectionDialog: NoConnectionDialog? = null
 
     private var backed = false
 
@@ -65,7 +71,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 Injection.provideCameraImagesRepo(
                         InjectionUtils.getAppApi()),
                 networkService,
-                InjectionUtils.getAppApi()
+                InjectionUtils.getAppApi(),
+                Injection.provideUserRepo()
         )
 
         presenter?.subscribe()
@@ -305,6 +312,45 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         }
     }
 
+    // Uploading
+    override fun showUploadingDialog(maxUploadCount: Int) {
+        uploadingDialog = UploadingDialog(this, maxUploadCount)
+        uploadingDialog?.show()
+    }
+
+    override fun hideUploadingDialog() {
+        uploadingDialog?.hide()
+    }
+
+    override fun incrementUploadedCount() {
+        uploadingDialog?.incrementUploadedCount()
+    }
+
+    // Mobile network
+    override fun showMobileNetworkWarningDialog() {
+        mobileNetworkWarningDialog = MobileNetworkWarningDialog(this, this)
+        mobileNetworkWarningDialog?.show()
+    }
+
+    override fun hideMobileNetworkWarningDialog() {
+        mobileNetworkWarningDialog?.hide()
+    }
+
+    override fun uploadAnywayClicked() {
+        presenter?.uploadAnywayClicked()
+    }
+
+    // No connection
+    override fun showNoConnectionDialog() {
+        noConnectionDialog = NoConnectionDialog(this)
+        noConnectionDialog?.show()
+    }
+
+    override fun hideNoConnectionDialog() {
+        noConnectionDialog?.hide()
+    }
+
+    // Email
     override fun showEmailChooser(
             emailTo: String,
             subject: String,

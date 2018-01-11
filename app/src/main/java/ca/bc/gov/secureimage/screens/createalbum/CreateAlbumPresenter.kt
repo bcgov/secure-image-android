@@ -1,11 +1,12 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
-import ca.bc.gov.secureimage.common.services.NetworkService
+import ca.bc.gov.secureimage.common.managers.NetworkManager
 import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
+import ca.bc.gov.secureimage.data.repos.user.UserRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -22,8 +23,9 @@ class CreateAlbumPresenter(
         private val albumKey: String,
         private val albumsRepo: AlbumsRepo,
         private val cameraImagesRepo: CameraImagesRepo,
-        private val networkService: NetworkService,
-        private val appApi: AppApi
+        private val networkManager: NetworkManager,
+        private val appApi: AppApi,
+        private val userRepo: UserRepo
 ) : CreateAlbumContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -56,6 +58,9 @@ class CreateAlbumPresenter(
         view.hideDeleteAlbumDialog()
         view.hideDeleteImageDialog()
         view.hideDeletingDialog()
+        view.hideUploadingDialog()
+        view.hideMobileNetworkWarningDialog()
+        view.hideNoConnectionDialog()
 
         disposables.dispose()
     }
@@ -94,7 +99,7 @@ class CreateAlbumPresenter(
      * Initial delay is 0 to instantly check on start up
      */
     fun addNetworkTypeListener() {
-        networkService.getNetworkTypeListener(0, 5, TimeUnit.SECONDS)
+        networkManager.getNetworkTypeListener(0, 5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
@@ -102,15 +107,15 @@ class CreateAlbumPresenter(
                 },
                 onNext = { networkType ->
                     when (networkType) {
-                        is NetworkService.NetworkType.WifiConnection -> {
+                        is NetworkManager.NetworkType.WifiConnection -> {
                             view.hideNetworkType()
                             view.setNetworkTypeText("")
                         }
-                        is NetworkService.NetworkType.MobileConnection -> {
+                        is NetworkManager.NetworkType.MobileConnection -> {
                             view.showNetworkType()
                             view.setNetworkTypeText("Mobile connection")
                         }
-                        is NetworkService.NetworkType.NoConnection -> {
+                        is NetworkManager.NetworkType.NoConnection -> {
                             view.showNetworkType()
                             view.setNetworkTypeText("No internet connection")
                         }
@@ -277,16 +282,15 @@ class CreateAlbumPresenter(
                 onSuccess = { image ->
                     view.showMessage("Image deleted")
                     view.notifyImageRemoved(image, position)
-                    getAlbumImageCount()
+                    checkAlbumImageCountForNewState()
                 }
         ).addTo(disposables)
     }
 
     /**
-     * Gets the current count of images in album
-     * onSuccess current counter is shown
+     * Gets the current count of images in album to check to see
      */
-    fun getAlbumImageCount() {
+    fun checkAlbumImageCountForNewState() {
         cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -300,6 +304,7 @@ class CreateAlbumPresenter(
         ).addTo(disposables)
     }
 
+    // Updates state of view based on if the album is empty or not
     fun albumSizeReturned(albumSize: Int) {
         if (albumSize == 0) {
             view.showAddImagesLayout()
@@ -316,56 +321,128 @@ class CreateAlbumPresenter(
 
     // Upload album
     override fun uploadClicked() {
-        getRemoteAlbumId()
+        getNetworkTypeForUpload()
     }
 
-    fun getRemoteAlbumId() {
-        appApi.getRemoteAlbumId()
+    /**
+     * Grabs the current network type to determine if upload is
+     * viable, a warning needs to be showed, or not possible
+     */
+    fun getNetworkTypeForUpload() {
+        val networkType = networkManager.getNetworkType()
+        when (networkType) {
+            is NetworkManager.NetworkType.WifiConnection -> getCameraImageCountForUploadingDialog()
+            is NetworkManager.NetworkType.MobileConnection -> view.showMobileNetworkWarningDialog()
+            is NetworkManager.NetworkType.NoConnection -> view.showNoConnectionDialog()
+        }
+    }
+
+    override fun uploadAnywayClicked() {
+        getCameraImageCountForUploadingDialog()
+    }
+
+    /**
+     * Gets the image count to populate the uploading dialog with the number of images to be
+     * uploaded.
+     */
+    fun getCameraImageCountForUploadingDialog() {
+        cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving image")
+                },
+                onSuccess = { albumSize ->
+                    view.showUploadingDialog(albumSize)
+                    createRemoteAlbumId()
+                }
+        ).addTo(disposables)
+    }
+
+    /**
+     * Gets a remote album id that can be used to upload images to and build a download url
+     */
+    fun createRemoteAlbumId() {
+        appApi.createRemoteAlbumId()
                 .map { it.remoteAlbumId }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error getting remote album id")
+                    view.hideUploadingDialog()
                 },
                 onSuccess = { remoteAlbumId ->
-                    uploadImages(remoteAlbumId)
+                    uploadImagesToRemoteAlbum(remoteAlbumId)
                 }
         ).addTo(disposables)
     }
 
-    fun uploadImages(remoteAlbumId: String) {
+    /**
+     * Uploads all the images to the specified remote album id
+     * Updates uploaded count in uploading dialog after each upload has finished
+     * Builds download url once all images have been uploaded
+     */
+    fun uploadImagesToRemoteAlbum(remoteAlbumId: String) {
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .flatMap { cameraImagesRepo.uploadCameraImage(remoteAlbumId, it) }
-                .ignoreElements()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error uploading album")
+                    view.hideUploadingDialog()
+                },
+                onNext = {
+                    view.incrementUploadedCount()
                 },
                 onComplete = {
-                    getDownloadUrl(remoteAlbumId)
+                    buildDownloadUrl(remoteAlbumId)
                 }
         ).addTo(disposables)
     }
 
-    fun getDownloadUrl(remoteAlbumId: String) {
-        appApi.getDownloadUrl(remoteAlbumId)
-                .map { it.getCleanedDownloadUrl() }
+    /**
+     * Gets a download url which will download a zip file of all the uploaded image associated with
+     * that remote album id.
+     */
+    fun buildDownloadUrl(remoteAlbumId: String) {
+        appApi.buildDownloadUrl(remoteAlbumId)
+                .map { it.downloadUrl }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error getting download url")
+                    view.hideUploadingDialog()
                 },
                 onSuccess = { downloadUrl ->
+                    getUserForEmailChooser(downloadUrl)
+                }
+        ).addTo(disposables)
+    }
+
+    /**
+     * Gets the current user for it's email.
+     * Shows email chooser on success
+     */
+    fun getUserForEmailChooser(downloadUrl: String) {
+        userRepo.getUser()
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error getting user")
+                    view.hideUploadingDialog()
+                },
+                onSuccess = {
                     view.showEmailChooser(
-                            "aidancappy@gmail.com",
+                            it.email,
                             "Secure image",
                             downloadUrl,
-                            "Send download link using...."
-                    )
+                            "Send download link using....")
+                    view.hideUploadingDialog()
                 }
         ).addTo(disposables)
     }

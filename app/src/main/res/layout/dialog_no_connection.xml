@@ -10,20 +10,21 @@
 
         <TextView
             android:id="@+id/titleTv"
+            android:text="@string/you_are_currently_offline"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="@font/open_sans_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="@string/delete_device_album"
-            android:textColor="@color/red"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/open_sans_bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/infoTv"
-            android:text="@string/delete_album_info"
+            android:text="@string/no_connection_info"
             android:fontFamily="@font/open_sans_regular"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -34,25 +35,9 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
         <TextView
-            android:id="@+id/cancelTv"
-            android:text="@string/cancel"
+            android:id="@+id/closeTv"
+            android:text="@string/close"
             android:textColor="@color/darkGray"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:fontFamily="@font/open_sans_bold"
-            android:background="?attr/selectableItemBackground"
-            android:padding="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/infoTv"
-            app:layout_constraintRight_toLeftOf="@+id/deleteTv"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/deleteTv"
-            android:text="@string/delete_album"
-            android:textColor="@color/red"
             android:textAllCaps="true"
             android:textStyle="bold"
             android:fontFamily="@font/open_sans_bold"

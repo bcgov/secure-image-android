@@ -7,7 +7,7 @@ import android.os.StrictMode
 import android.preference.PreferenceManager
 import ca.bc.gov.secureimage.BuildConfig
 import com.squareup.leakcanary.LeakCanary
-import ca.bc.gov.secureimage.common.services.KeyStorageService
+import ca.bc.gov.secureimage.common.managers.KeyStorageManager
 import ca.bc.gov.secureimage.di.Injection
 
 /**
@@ -27,11 +27,11 @@ class BaseApplication: Application() {
         setUpLeakCanary()
     }
 
-    private fun setUpRealm(keyStorageService: KeyStorageService) {
+    private fun setUpRealm(keyStorageManager: KeyStorageManager) {
 
         Realm.init(this)
 
-        val key = keyStorageService.getSecureKey(
+        val key = keyStorageManager.getSecureKey(
                 "realm",
                 64,
                 PreferenceManager.getDefaultSharedPreferences(this))

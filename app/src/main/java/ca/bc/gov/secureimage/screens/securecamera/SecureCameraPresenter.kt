@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.screens.securecamera
 
 import ca.bc.gov.secureimage.common.Constants
-import ca.bc.gov.secureimage.common.services.CompressionService
+import ca.bc.gov.secureimage.common.managers.CompressionManager
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
@@ -27,7 +27,7 @@ class SecureCameraPresenter(
         private val albumsRepo: AlbumsRepo,
         private val locationRepo: LocationRepo,
         private val rxGps: RxGps,
-        private val compressionService: CompressionService
+        private val compressionManager: CompressionManager
 ) : SecureCameraContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -163,9 +163,9 @@ class SecureCameraPresenter(
             thumbnailSize: Int) {
 
         Observable.zip(
-                compressionService.compressByteArrayAsObservable(
+                compressionManager.compressByteArrayAsObservable(
                         imageBytes, imageQuality, imageSize, imageSize),
-                compressionService.compressByteArrayAsObservable(
+                compressionManager.compressByteArrayAsObservable(
                         imageBytes, thumbnailQuality, thumbnailSize, thumbnailSize),
                 BiFunction { compressedImageBytes: ByteArray, thumbnailBytes: ByteArray ->
                     Pair<ByteArray, ByteArray>(compressedImageBytes, thumbnailBytes)

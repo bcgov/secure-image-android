@@ -61,6 +61,16 @@ interface CreateAlbumContract {
         fun hideUpload()
         fun setUpUploadListener()
 
+        fun showUploadingDialog(maxUploadCount: Int)
+        fun hideUploadingDialog()
+        fun incrementUploadedCount()
+
+        fun showMobileNetworkWarningDialog()
+        fun hideMobileNetworkWarningDialog()
+
+        fun showNoConnectionDialog()
+        fun hideNoConnectionDialog()
+
         fun showEmailChooser(emailTo: String, subject: String, body: String, chooserTitle: String)
     }
 
@@ -84,6 +94,8 @@ interface CreateAlbumContract {
         fun deleteImageConfirmed(cameraImage: CameraImage, position: Int)
 
         fun uploadClicked()
+
+        fun uploadAnywayClicked()
     }
 
 }

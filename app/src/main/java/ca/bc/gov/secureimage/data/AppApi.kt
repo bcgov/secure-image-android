@@ -1,7 +1,7 @@
 package ca.bc.gov.secureimage.data
 
-import ca.bc.gov.secureimage.data.models.remote.RemoteAlbumIdResponse
-import ca.bc.gov.secureimage.data.models.remote.DownloadUrlResponse
+import ca.bc.gov.secureimage.data.models.remote.CreateRemoteAlbumIdResponse
+import ca.bc.gov.secureimage.data.models.remote.BuildDownloadUrlResponse
 import ca.bc.gov.secureimage.data.models.remote.UploadImageResponse
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -13,9 +13,11 @@ import retrofit2.http.*
  */
 interface AppApi {
 
+    // Create remote album
     @POST("/v1/album/")
-    fun getRemoteAlbumId(): Observable<RemoteAlbumIdResponse>
+    fun createRemoteAlbumId(): Observable<CreateRemoteAlbumIdResponse>
 
+    // Upload image
     @Multipart
     @POST("/v1/album/{remoteAlbumId}/")
     fun uploadImage(
@@ -23,9 +25,10 @@ interface AppApi {
             @Part imagePart: MultipartBody.Part
     ): Observable<UploadImageResponse>
 
+    // Download url
     @GET("/v1/album/{remoteAlbumId}/")
-    fun getDownloadUrl(
+    fun buildDownloadUrl(
             @Path("remoteAlbumId") remoteAlbumId: String
-    ): Observable<DownloadUrlResponse>
+    ): Observable<BuildDownloadUrlResponse>
 
 }

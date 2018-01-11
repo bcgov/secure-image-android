@@ -29,14 +29,14 @@ android {
     buildTypes {
 
         debug {
-            buildConfigField "String", "API_URL", "\"http://10.10.10.73:8000\""
+            buildConfigField "String", "API_URL", "\"http://10.10.10.74:8000\""
         }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "API_URL", "\"http://10.10.10.73:8000\""
+            buildConfigField "String", "API_URL", "\"http://10.10.10.74:8000\""
         }
     }
 }
