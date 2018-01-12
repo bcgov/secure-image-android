@@ -29,11 +29,18 @@ android {
     buildTypes {
 
         debug {
+            shrinkResources true
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
             buildConfigField "String", "API_URL", "\"http://10.10.10.74:8000\""
         }
 
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", "\"http://10.10.10.74:8000\""
@@ -66,7 +73,12 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation("com.wonderkiln:camerakit:$rootProject.ext.camerakitVersion") {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+
+    implementation "com.github.chrisbanes:PhotoView:$rootProject.ext.photoViewVersion"
+
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
@@ -78,10 +90,4 @@ dependencies {
 
     androidTestImplementation "com.android.support.test:runner:$rootProject.ext.testRunnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
-
-    implementation("com.wonderkiln:camerakit:$rootProject.ext.camerakitVersion") {
-        exclude group: 'com.android.support', module: 'support-compat'
-    }
-
-    implementation "com.github.chrisbanes:PhotoView:$rootProject.ext.photoViewVersion"
 }

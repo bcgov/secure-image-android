@@ -19,3 +19,31 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# App Models
+-keep public class ca.bc.gov.secureimage.data.models.** { *; }
+
+# apache http
+-dontnote org.apache.http.**
+
+# android http
+-dontnote android.net.http.**
+
+# Retrofit
+-dontwarn retrofit2.Platform$Java8
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn retrofit.**
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+# Camera kit
+-dontwarn com.google.android.gms.**
+
+

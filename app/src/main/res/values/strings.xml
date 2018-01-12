@@ -2,6 +2,7 @@
 
     <string name="app_name">SecureImage</string>
     <string name="email">Email</string>
+    <string name="email_lowercase">email</string>
     <string name="gov_bc_ca">\@gov.bc.ca</string>
     <string name="login">Login</string>
     <string name="create_album">Create Album</string>
