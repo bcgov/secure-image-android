@@ -1,6 +1,9 @@
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
+
+    ext.gradleVersion = '3.0.1'
+    ext.kotlinVersion = '1.2.10'
+    ext.realmVersion = '4.3.1'
 
     repositories {
         google()
@@ -8,9 +11,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "io.realm:realm-gradle-plugin:4.3.1"
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "io.realm:realm-gradle-plugin:$realmVersion"
     }
 }
 
@@ -28,7 +31,6 @@ task clean(type: Delete) {
 
 
 ext {
-
     minSdkVersion = 23
     targetSdkVersion = 26
     compileSdkVersion = 26
@@ -47,11 +49,8 @@ ext {
     glideVersion = '4.4.0'
     camerakitVersion = '0.13.2'
     photoViewVersion = '2.0.0'
-
-    // Testing
     junitVersion = '4.12'
     mockitoKotlinVersion = '1.5.0'
     testRunnerVersion = '1.0.1'
     espressoVersion = '3.0.1'
-
 }
