@@ -29,7 +29,7 @@ class UploadingDialog(
         updateProgressText()
     }
 
-    private fun updateProgressText() {
+    fun updateProgressText() {
         val progressText = "$currentUploadedCount of $maxUploadCount"
         progressTv.text = progressText
     }

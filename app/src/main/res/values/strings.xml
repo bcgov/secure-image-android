@@ -8,17 +8,12 @@
     <string name="create_album">Create Album</string>
     <string name="back">Back</string>
     <string name="album_name">Album Name</string>
-    <string name="case_number">Case Number</string>
-    <string name="address">Address</string>
-    <string name="comments">Comments</string>
     <string name="upload">Upload</string>
     <string name="add_image">Add Image</string>
     <string name="add_images">Add Images</string>
     <string name="view_all_images">View all Images</string>
     <string name="all_images">All Images</string>
-    <string name="save">Save</string>
     <string name="take_image">Take image</string>
-    <string name="done">Done</string>
     <string name="flash_off">Flash off</string>
     <string name="flash_on">Flash on</string>
     <string name="flash_auto">Flash auto</string>

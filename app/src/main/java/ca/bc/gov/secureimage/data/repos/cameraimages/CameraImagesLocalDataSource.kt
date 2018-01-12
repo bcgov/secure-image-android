@@ -64,7 +64,7 @@ object CameraImagesLocalDataSource : CameraImagesDataSource {
                 val cameraImages = realm.where(CameraImage::class.java)
                         .equalTo("albumKey", albumKey).findAll()
 
-                emitter.onNext(ArrayList<CameraImage>(realm.copyFromRealm(cameraImages)))
+                emitter.onNext(ArrayList(realm.copyFromRealm(cameraImages)))
             }
             realm.close()
 

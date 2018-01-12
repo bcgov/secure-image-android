@@ -19,7 +19,6 @@ open class CameraImage : RealmObject() {
     var albumKey: String = ""
 
     var createdTime: Long = System.currentTimeMillis()
-    var updatedTime: Long = System.currentTimeMillis()
 
     var imageByteArray: ByteArray = ByteArray(64)
     var thumbnailArray: ByteArray = ByteArray(16)

@@ -103,8 +103,8 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     }
 
     // Pinch to zoom
-    override fun setPinchToZoom(pinchToZooom: Boolean) {
-        cameraView.setPinchToZoom(pinchToZooom)
+    override fun setPinchToZoom(pinchToZoom: Boolean) {
+        cameraView.setPinchToZoom(pinchToZoom)
     }
 
     // Camera lifecycle

@@ -195,8 +195,8 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
         deleteImagesDialog?.dismiss()
     }
 
-    override fun deleteConfirmed(cameraImages: ArrayList<CameraImage>) {
-        presenter?.deleteConfirmed(cameraImages)
+    override fun deleteImagesConfirmed(cameraImages: ArrayList<CameraImage>) {
+        presenter?.deleteImagesConfirmed(cameraImages)
     }
 
     // Images list

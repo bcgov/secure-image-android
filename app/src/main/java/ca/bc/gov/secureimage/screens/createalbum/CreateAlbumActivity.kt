@@ -115,7 +115,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         showToast(message)
     }
 
-    private fun showToast(message: String) {
+    fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -130,7 +130,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         }
     }
 
-    private fun backEvent() {
+    fun backEvent() {
         val albumName = albumNameEt.text.toString()
         presenter?.backClicked(albumName)
     }
@@ -363,6 +363,6 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 .setSubject(subject)
                 .setHtmlText(body)
                 .setChooserTitle(chooserTitle)
-                .startChooser();
+                .startChooser()
     }
 }

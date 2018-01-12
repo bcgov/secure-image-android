@@ -63,7 +63,7 @@ class SecureCameraPresenter(
 
     override fun viewShown() {
         getLocationAndCache()
-        getAlbumImageCount()
+        getAlbumImageCountForCounter()
 
         view.setCapturing(false)
 
@@ -168,7 +168,7 @@ class SecureCameraPresenter(
                 compressionManager.compressByteArrayAsObservable(
                         imageBytes, thumbnailQuality, thumbnailSize, thumbnailSize),
                 BiFunction { compressedImageBytes: ByteArray, thumbnailBytes: ByteArray ->
-                    Pair<ByteArray, ByteArray>(compressedImageBytes, thumbnailBytes)
+                    Pair(compressedImageBytes, thumbnailBytes)
                 })
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -234,7 +234,7 @@ class SecureCameraPresenter(
                 },
                 onSuccess = {
                     view.setCapturing(false)
-                    getAlbumImageCount()
+                    getAlbumImageCountForCounter()
                     refreshAlbumUpdateTime()
                 }
         ).addTo(disposables)
@@ -244,7 +244,7 @@ class SecureCameraPresenter(
      * Gets the current count of images in album
      * onSuccess current counter is shown
      */
-    fun getAlbumImageCount() {
+    fun getAlbumImageCountForCounter() {
         cameraImagesRepo.getCameraImageCountInAlbum(albumKey)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())

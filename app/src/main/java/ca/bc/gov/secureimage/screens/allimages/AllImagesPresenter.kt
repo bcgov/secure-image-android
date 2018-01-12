@@ -140,7 +140,7 @@ class AllImagesPresenter(
     }
 
     // Deletion confirmed
-    override fun deleteConfirmed(cameraImages: ArrayList<CameraImage>) {
+    override fun deleteImagesConfirmed(cameraImages: ArrayList<CameraImage>) {
         showToolbarMode()
         deleteImages(cameraImages)
     }

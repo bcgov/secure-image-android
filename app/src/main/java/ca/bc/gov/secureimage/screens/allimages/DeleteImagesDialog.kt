@@ -26,12 +26,12 @@ class DeleteImagesDialog(
         }
 
         deleteTv.setOnClickListener {
-            deleteListener.deleteConfirmed(cameraImages)
+            deleteListener.deleteImagesConfirmed(cameraImages)
             hide()
         }
     }
 
     interface DeleteListener {
-        fun deleteConfirmed(cameraImages: ArrayList<CameraImage>)
+        fun deleteImagesConfirmed(cameraImages: ArrayList<CameraImage>)
     }
 }

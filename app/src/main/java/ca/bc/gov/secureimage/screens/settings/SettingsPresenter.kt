@@ -37,14 +37,14 @@ class SettingsPresenter(
     }
 
     override fun logoutClicked() {
-        logout()
+        deleteUser()
     }
 
     /**
      * Deletes the current user data.
      * OnSuccess user goes back to the login page.
      */
-    fun logout() {
+    fun deleteUser() {
         userRepo.deleteUser()
                 .firstOrError()
                 .subscribeOn(Schedulers.io())

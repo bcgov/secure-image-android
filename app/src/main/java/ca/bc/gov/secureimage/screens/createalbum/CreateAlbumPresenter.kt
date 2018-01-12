@@ -243,7 +243,7 @@ class CreateAlbumPresenter(
         view.goToAllImages(albumKey)
     }
 
-    private fun getViewAllText(albumSize: Int): String {
+    fun getViewAllText(albumSize: Int): String {
         return "View all Images ($albumSize)"
     }
 

@@ -27,7 +27,7 @@ class BaseApplication: Application() {
         setUpLeakCanary()
     }
 
-    private fun setUpRealm(keyStorageManager: KeyStorageManager) {
+    fun setUpRealm(keyStorageManager: KeyStorageManager) {
 
         Realm.init(this)
 
@@ -46,7 +46,7 @@ class BaseApplication: Application() {
     }
 
     // Strict mode
-    private fun setUpStrictMode() {
+    fun setUpStrictMode() {
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
                     .detectAll()
@@ -56,7 +56,7 @@ class BaseApplication: Application() {
     }
 
     // Leak canary
-    private fun setUpLeakCanary() {
+    fun setUpLeakCanary() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.

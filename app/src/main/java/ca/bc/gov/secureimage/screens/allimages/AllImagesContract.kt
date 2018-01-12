@@ -73,7 +73,7 @@ interface AllImagesContract {
 
         fun selectDeleteClicked(cameraImages: ArrayList<CameraImage>)
 
-        fun deleteConfirmed(cameraImages: ArrayList<CameraImage>)
+        fun deleteImagesConfirmed(cameraImages: ArrayList<CameraImage>)
 
         fun addImagesClicked()
 
