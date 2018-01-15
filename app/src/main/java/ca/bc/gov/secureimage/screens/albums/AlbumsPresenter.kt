@@ -43,8 +43,6 @@ class AlbumsPresenter(
 
     override fun viewShown() {
         getLocationAndCache()
-
-        view.showAlbumItems(ArrayList())
         getAlbums()
     }
 
@@ -74,6 +72,7 @@ class AlbumsPresenter(
      * On Success shows items and displays help text if no albums exist
      */
     fun getAlbums() {
+        view.showAlbumItems(ArrayList())
         view.showLoading()
         albumsRepo.getAllAlbums()
                 .flatMapIterable { it }
@@ -87,12 +86,12 @@ class AlbumsPresenter(
                 onSuccess = { albums ->
                     val items = ArrayList<Any>()
                     items.addAll(albums)
-                    view.showAlbumItems(items)
                     view.hideLoading()
 
                     if (items.isEmpty()) {
                         view.showOnboarding()
                     } else {
+                        view.showAlbumItems(items)
                         view.hideOnboarding()
                     }
                 })
