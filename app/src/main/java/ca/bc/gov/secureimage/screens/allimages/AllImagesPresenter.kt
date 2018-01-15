@@ -65,22 +65,25 @@ class AllImagesPresenter(
      * Gets all images in album by key
      * Adds a Add images model so recycler view can display an add image tile
      */
-    fun getImages() {
-        view.showImages(ArrayList())
+    fun getImages(addImages: AddImages = AddImages()) {
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { view.showLoading() }
-                .doOnError { view.hideLoading() }
-                .doOnSuccess { view.hideLoading() }.subscribeBy(
+                .doOnSubscribe {
+                    view.showImages(ArrayList())
+                    view.showLoading()
+                }.subscribeBy(
                 onError = {
+                    view.hideLoading()
                     view.showError(it.message ?: "Error retrieving images")
                 },
                 onSuccess = { images ->
+                    view.hideLoading()
+
                     val items = ArrayList<Any>()
-                    items.add(AddImages())
+                    items.add(addImages)
                     items.addAll(images)
                     view.showImages(items)
                 }
@@ -142,28 +145,30 @@ class AllImagesPresenter(
     // Deletion confirmed
     override fun deleteImagesConfirmed(cameraImages: ArrayList<CameraImage>) {
         showToolbarMode()
-        deleteImages(cameraImages)
+        deleteImages(cameraImages, true)
     }
 
     /**
      * Deletes all images passed through.
      * On complete gets new images.
      */
-    fun deleteImages(cameraImages: ArrayList<CameraImage>) {
-        view.showImages(ArrayList())
+    fun deleteImages(cameraImages: ArrayList<CameraImage>, refreshImages: Boolean) {
         Observable.fromIterable(cameraImages)
                 .flatMap { cameraImagesRepo.deleteCameraImage(it) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { view.showLoading() }
-                .doOnError { view.hideLoading() }
-                .doOnComplete { view.hideLoading() }.subscribeBy(
+                .doOnSubscribe {
+                    view.showImages(ArrayList())
+                    view.showLoading()
+                }.subscribeBy(
                 onError = {
+                    view.hideLoading()
                     view.showError(it.message ?: "Error deleting images")
                 },
                 onComplete = {
-                    view.showMessage("Deleted successfully")
-                    getImages()
+                    view.hideLoading()
+                    view.showDeletedSuccessfullyMessage()
+                    if (refreshImages) getImages()
                 }
         ).addTo(disposables)
     }

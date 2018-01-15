@@ -81,12 +81,16 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
     }
 
     // Message
-    override fun showMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun showDeletedSuccessfullyMessage() {
+        showToast(getString(R.string.deleted_successfully))
     }
 
     // Error
     override fun showError(message: String) {
+        showToast(message)
+    }
+
+    fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 

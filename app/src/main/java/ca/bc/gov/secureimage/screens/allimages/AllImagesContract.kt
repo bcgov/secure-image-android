@@ -18,7 +18,7 @@ interface AllImagesContract {
         fun showLoading()
         fun hideLoading()
 
-        fun showMessage(message: String)
+        fun showDeletedSuccessfullyMessage()
         fun showError(message: String)
 
         fun setToolbarColorPrimary()

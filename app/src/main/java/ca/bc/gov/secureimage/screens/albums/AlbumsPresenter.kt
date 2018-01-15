@@ -72,13 +72,15 @@ class AlbumsPresenter(
      * On Success shows items and displays help text if no albums exist
      */
     fun getAlbums() {
-        view.showAlbumItems(ArrayList())
-        view.showLoading()
         albumsRepo.getAllAlbums()
                 .flatMapIterable { it }
                 .toSortedList { album1, album2 -> album1.compareTo(album2) }
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    view.showAlbumItems(ArrayList())
+                    view.showLoading()
+                }.subscribeBy(
                 onError = {
                     view.hideLoading()
                     view.showError(it.message ?: "Error retrieving albums")
