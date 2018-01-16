@@ -8,6 +8,12 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'realm-android'
 
+apply plugin: 'io.fabric'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -33,7 +39,8 @@ android {
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "API_URL", "\"http://10.10.10.74:8000\""
+            buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
+            manifestPlaceholders = [FABRIC_API_KEY:keystoreProperties['FABRIC_API_KEY']]
         }
 
         release {
@@ -42,7 +49,8 @@ android {
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "API_URL", "\"http://10.10.10.74:8000\""
+            buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
+            manifestPlaceholders = [FABRIC_API_KEY:keystoreProperties['FABRIC_API_KEY']]
         }
     }
 }
@@ -89,4 +97,8 @@ dependencies {
 
     androidTestImplementation "com.android.support.test:runner:$rootProject.ext.testRunnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
+
+    implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
+        transitive = true;
+    }
 }

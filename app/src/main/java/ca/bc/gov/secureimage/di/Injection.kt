@@ -44,14 +44,14 @@ object Injection {
 
     fun provideLocationRepo(): LocationRepo = LocationRepo.getInstance(LocationRemoteDataSource)
 
-    fun provideNetworkService(connectivityManager: ConnectivityManager): NetworkManager =
+    fun provideNetworkManager(connectivityManager: ConnectivityManager): NetworkManager =
             NetworkManager(connectivityManager)
 
-    fun provideCompressionService(): CompressionManager = CompressionManager()
+    fun provideCompressionManager(): CompressionManager = CompressionManager()
 
     fun provideKeyStore(type: String): KeyStore = KeyStore.getInstance(type)
 
-    fun provideKeyStorageService(keyStore: KeyStore): KeyStorageManager =
+    fun provideKeyStorageManager(keyStore: KeyStore): KeyStorageManager =
             KeyStorageManager(keyStore)
 
     // OkHttpClient

@@ -23,9 +23,9 @@ class CreateAlbumPresenter(
         private val albumKey: String,
         private val albumsRepo: AlbumsRepo,
         private val cameraImagesRepo: CameraImagesRepo,
+        private val userRepo: UserRepo,
         private val networkManager: NetworkManager,
-        private val appApi: AppApi,
-        private val userRepo: UserRepo
+        private val appApi: AppApi
 ) : CreateAlbumContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -65,21 +65,19 @@ class CreateAlbumPresenter(
         disposables.dispose()
     }
 
-    override fun viewShown(refresh: Boolean) {
+    override fun viewShown(refresh: Boolean, addNetworkListener: Boolean) {
         view.setBacked(false)
 
         if (refresh) {
+            view.setRefresh(false)
+
             view.hideAddImagesLayout()
             view.hideViewAllImages()
             view.hideUpload()
-            view.showImages(ArrayList())
-
             getImages()
-
-            view.setRefresh(false)
         }
 
-        addNetworkTypeListener()
+        if (addNetworkListener) addNetworkTypeListener()
     }
 
     /**
@@ -98,30 +96,38 @@ class CreateAlbumPresenter(
      * Pings the network every 5 seconds to check if connected/disconnected or on wifi/mobile
      * Initial delay is 0 to instantly check on start up
      */
-    fun addNetworkTypeListener() {
-        networkManager.getNetworkTypeListener(0, 5, TimeUnit.SECONDS)
+    fun addNetworkTypeListener(
+            initialDelay: Long = 0,
+            period: Long = 5,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
+    ) {
+        networkManager.getNetworkTypeListener(initialDelay, period, timeUnit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
                     view.showError(it.message ?: "Error listening to network status")
                 },
                 onNext = { networkType ->
-                    when (networkType) {
-                        is NetworkManager.NetworkType.WifiConnection -> {
-                            view.hideNetworkType()
-                            view.setNetworkTypeText("")
-                        }
-                        is NetworkManager.NetworkType.MobileConnection -> {
-                            view.showNetworkType()
-                            view.setNetworkTypeText("Mobile connection")
-                        }
-                        is NetworkManager.NetworkType.NoConnection -> {
-                            view.showNetworkType()
-                            view.setNetworkTypeText("No internet connection")
-                        }
-                    }
+                    networkTypeChanged(networkType)
                 }
         ).addTo(disposables)
+    }
+
+    fun networkTypeChanged(networkType: NetworkManager.NetworkType) {
+        when (networkType) {
+            is NetworkManager.NetworkType.WifiConnection -> {
+                view.hideNetworkType()
+                view.clearNetworkTypeText()
+            }
+            is NetworkManager.NetworkType.MobileConnection -> {
+                view.showNetworkType()
+                view.setNetworkTypeTextMobileConnection()
+            }
+            is NetworkManager.NetworkType.NoConnection -> {
+                view.showNetworkType()
+                view.setNetworkTypeTextNoConnection()
+            }
+        }
     }
 
     /**
@@ -145,13 +151,16 @@ class CreateAlbumPresenter(
      * Gets album images and sorts by first created
      * On success show images with add images model so recycler view can display an add image tile
      */
-    fun getImages() {
-        view.showImagesLoading()
+    fun getImages(addImages: AddImages = AddImages()) {
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .toSortedList { cameraImage1, cameraImage2 -> cameraImage1.compareTo(cameraImage2) }
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    view.showImages(ArrayList())
+                    view.showImagesLoading()
+                }.subscribeBy(
                 onError = {
                     view.hideImagesLoading()
                     view.showError(it.message ?: "Error processing images")
@@ -162,7 +171,7 @@ class CreateAlbumPresenter(
 
                     if (images.size > 0) {
                         val items = ArrayList<Any>()
-                        items.add(AddImages())
+                        items.add(addImages)
                         items.addAll(images)
                         view.showImages(items)
                     }
@@ -173,9 +182,9 @@ class CreateAlbumPresenter(
     /**
      * Saves album fields
      */
-    override fun backClicked(albumName: String) {
+    override fun backClicked(saveAlbum: Boolean, albumName: String) {
         view.setBacked(true)
-        saveAlbumFields(albumName, true)
+        if (saveAlbum) saveAlbumFields(albumName, true)
     }
 
     /**
@@ -217,13 +226,15 @@ class CreateAlbumPresenter(
      * Deletes album model then deletes all the images associated with that album
      */
     fun deleteAlbum() {
-        view.showDeletingDialog()
         albumsRepo.deleteAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap { cameraImagesRepo.deleteAllCameraImagesInAlbum(albumKey) }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    view.showDeletingDialog()
+                }.subscribeBy(
                 onError = {
                     view.hideDeletingDialog()
                     view.showError(it.message ?: "Error deleting")
@@ -231,7 +242,7 @@ class CreateAlbumPresenter(
                 onSuccess = {
                     view.setAlbumDeleted(true)
                     view.hideDeletingDialog()
-                    view.showMessage("Album deleted")
+                    view.showAlbumDeletedMessage()
                     view.finish()
                 }
         ).addTo(disposables)
@@ -280,7 +291,7 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error deleting image")
                 },
                 onSuccess = { image ->
-                    view.showMessage("Image deleted")
+                    view.showImageDeletedMessage()
                     view.notifyImageRemoved(image, position)
                     checkAlbumImageCountForNewState()
                 }
@@ -321,15 +332,13 @@ class CreateAlbumPresenter(
 
     // Upload album
     override fun uploadClicked() {
-        getNetworkTypeForUpload()
+        checkNetworkTypeForUpload(networkManager.getNetworkType())
     }
 
     /**
-     * Grabs the current network type to determine if upload is
-     * viable, a warning needs to be showed, or not possible
+     * Determines if upload is viable, a warning needs to be showed, or not possible
      */
-    fun getNetworkTypeForUpload() {
-        val networkType = networkManager.getNetworkType()
+    fun checkNetworkTypeForUpload(networkType: NetworkManager.NetworkType) {
         when (networkType) {
             is NetworkManager.NetworkType.WifiConnection -> getCameraImageCountForUploadingDialog()
             is NetworkManager.NetworkType.MobileConnection -> view.showMobileNetworkWarningDialog()

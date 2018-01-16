@@ -15,19 +15,24 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".screens.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".screens.albums.AlbumsActivity" />
         <activity android:name=".screens.createalbum.CreateAlbumActivity" />
         <activity android:name=".screens.allimages.AllImagesActivity" />
         <activity android:name=".screens.securecamera.SecureCameraActivity" />
         <activity android:name=".screens.imagedetail.ImageDetailActivity" />
         <activity android:name=".screens.settings.SettingsActivity" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${FABRIC_API_KEY}" />
 
     </application>
 

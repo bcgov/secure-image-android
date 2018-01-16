@@ -61,18 +61,19 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
             return
         }
 
-        val networkService = Injection.provideNetworkService(
+        val appApi = InjectionUtils.getAppApi()
+
+        val networkManager = Injection.provideNetworkManager(
                 getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
 
         CreateAlbumPresenter(
                 this,
                 albumKey,
                 Injection.provideAlbumsRepo(),
-                Injection.provideCameraImagesRepo(
-                        InjectionUtils.getAppApi()),
-                networkService,
-                InjectionUtils.getAppApi(),
-                Injection.provideUserRepo()
+                Injection.provideCameraImagesRepo(appApi),
+                Injection.provideUserRepo(),
+                networkManager,
+                appApi
         )
 
         presenter?.subscribe()
@@ -80,7 +81,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override fun onResume() {
         super.onResume()
-        presenter?.viewShown(refresh)
+        presenter?.viewShown(refresh, true)
     }
 
     override fun onPause() {
@@ -107,11 +108,15 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     }
 
     // Messages
-    override fun showError(message: String) {
-        showToast(message)
+    override fun showAlbumDeletedMessage() {
+        showToast(getString(R.string.album_deleted))
     }
 
-    override fun showMessage(message: String) {
+    override fun showImageDeletedMessage() {
+        showToast(getString(R.string.image_deleted))
+    }
+
+    override fun showError(message: String) {
         showToast(message)
     }
 
@@ -132,7 +137,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     fun backEvent() {
         val albumName = albumNameEt.text.toString()
-        presenter?.backClicked(albumName)
+        presenter?.backClicked(true, albumName)
     }
 
     // Network type
@@ -144,8 +149,16 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         networkTypeTv.visibility = View.GONE
     }
 
-    override fun setNetworkTypeText(text: String) {
-        networkTypeTv.text = text
+    override fun clearNetworkTypeText() {
+        networkTypeTv.text = null
+    }
+
+    override fun setNetworkTypeTextMobileConnection() {
+        networkTypeTv.setText(R.string.mobile_connection)
+    }
+
+    override fun setNetworkTypeTextNoConnection() {
+        networkTypeTv.setText(R.string.no_internet_connection)
     }
 
     // Add images

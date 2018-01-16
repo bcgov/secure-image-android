@@ -17,14 +17,17 @@ interface CreateAlbumContract {
         fun setRefresh(refresh: Boolean)
         fun setAlbumDeleted(albumDeleted: Boolean)
 
+        fun showAlbumDeletedMessage()
+        fun showImageDeletedMessage()
         fun showError(message: String)
-        fun showMessage(message: String)
 
         fun setUpBackListener()
 
         fun showNetworkType()
         fun hideNetworkType()
-        fun setNetworkTypeText(text: String)
+        fun clearNetworkTypeText()
+        fun setNetworkTypeTextMobileConnection()
+        fun setNetworkTypeTextNoConnection()
 
         fun setUpAddImagesListener()
         fun showAddImagesLayout()
@@ -75,10 +78,10 @@ interface CreateAlbumContract {
     }
 
     interface Presenter: BasePresenter {
-        fun viewShown(refresh: Boolean)
+        fun viewShown(refresh: Boolean, addNetworkListener: Boolean)
         fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String)
 
-        fun backClicked(albumName: String)
+        fun backClicked(saveAlbum: Boolean = false, albumName: String = "")
 
         fun deleteAlbumClicked()
         fun deleteAlbumConfirmed()

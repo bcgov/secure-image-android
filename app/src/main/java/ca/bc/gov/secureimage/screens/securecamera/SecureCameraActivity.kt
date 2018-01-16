@@ -46,7 +46,7 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
                 Injection.provideAlbumsRepo(),
                 Injection.provideLocationRepo(),
                 RxGps(this),
-                Injection.provideCompressionService()
+                Injection.provideCompressionManager()
         )
 
         presenter?.subscribe()

@@ -45,5 +45,9 @@
     <string name="close">Close</string>
     <string name="mobile_data_warning_info">You are currently connected to mobile data. Uploading images can require a large amount of data affecting your cellular data plan.</string>
     <string name="deleted_successfully">Deleted Successfully</string>
+    <string name="mobile_connection">Mobile Connection</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="album_deleted">Album Deleted</string>
+    <string name="image_deleted">Image deleted</string>
 
 </resources>

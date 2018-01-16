@@ -4,16 +4,19 @@ buildscript {
     ext.gradleVersion = '3.0.1'
     ext.kotlinVersion = '1.2.10'
     ext.realmVersion = '4.3.1'
+    ext.fabricToolsVersion = '1.21.6'
 
     repositories {
         google()
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "io.realm:realm-gradle-plugin:$realmVersion"
+        classpath "io.fabric.tools:gradle:$fabricToolsVersion"
     }
 }
 
@@ -22,6 +25,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
     }
 }
 
@@ -53,4 +57,5 @@ ext {
     mockitoKotlinVersion = '1.5.0'
     testRunnerVersion = '1.0.1'
     espressoVersion = '3.0.1'
+    crashlyticsVersion = '2.8.0@aar'
 }

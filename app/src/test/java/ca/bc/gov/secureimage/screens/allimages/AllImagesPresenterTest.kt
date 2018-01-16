@@ -11,7 +11,6 @@ import org.junit.Test
 
 import org.junit.Before
 import org.junit.ClassRule
-import org.mockito.internal.verification.Times
 
 /**
  * Created by Aidan Laing on 2018-01-15.
@@ -75,7 +74,7 @@ class AllImagesPresenterTest {
     }
 
     @Test
-    fun viewShownDoNotRefresh() {
+    fun viewShownNoRefresh() {
         presenter.viewShown(false)
 
         verify(view).presenter = presenter
