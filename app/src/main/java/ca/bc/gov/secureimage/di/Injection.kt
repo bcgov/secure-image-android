@@ -55,29 +55,23 @@ object Injection {
             KeyStorageManager(keyStore)
 
     // OkHttpClient
-    private var cachedOkHttpClient: OkHttpClient? = null
-
     @JvmStatic
     fun provideOkHttpClient(
             readTimeOut: Long,
             connectTimeOut: Long,
             interceptor: HttpLoggingInterceptor
-    ): OkHttpClient = cachedOkHttpClient ?: OkHttpClient.Builder()
+    ): OkHttpClient = OkHttpClient.Builder()
             .readTimeout(readTimeOut, TimeUnit.SECONDS)
             .connectTimeout(connectTimeOut, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
             .build()
-            .also { cachedOkHttpClient = it }
 
     // Logging interceptor
-    private var cachedHttpLoggingInterceptor: HttpLoggingInterceptor? = null
-
     @JvmStatic
     fun provideHttpLoggingInterceptor(
             loggingLevel: HttpLoggingInterceptor.Level
-    ): HttpLoggingInterceptor = cachedHttpLoggingInterceptor ?: HttpLoggingInterceptor()
+    ): HttpLoggingInterceptor = HttpLoggingInterceptor()
             .apply { level = loggingLevel }
-            .also { cachedHttpLoggingInterceptor = it }
 
     // Gson
     private var cachedGson: Gson? = null
@@ -89,12 +83,8 @@ object Injection {
             .also { cachedGson = it }
 
     // Converter Factory
-    private var cachedConverterFactory: Converter.Factory? = null
-
     @JvmStatic
-    fun provideConverterFactory(gson: Gson): Converter.Factory = cachedConverterFactory ?:
-            GsonConverterFactory.create(gson)
-                    .also { cachedConverterFactory = it }
+    fun provideConverterFactory(gson: Gson): Converter.Factory = GsonConverterFactory.create(gson)
 
     // Call Adapter Factory
     private var cachedCallAdapterFactory: CallAdapter.Factory? = null
@@ -105,23 +95,19 @@ object Injection {
                     .also { cachedCallAdapterFactory = it }
 
     // Retrofit
-    private val cachedRetrofitMap: HashMap<String, Retrofit> = HashMap()
-
     @JvmStatic
     fun provideRetrofit(
             apiDomain: String,
             okHttpClient: OkHttpClient,
             converterFactory: Converter.Factory,
             callAdapterFactory: CallAdapter.Factory
-    ): Retrofit = cachedRetrofitMap[apiDomain] ?: Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
             .baseUrl(apiDomain)
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)
             .build()
-            .also { cachedRetrofitMap.put(apiDomain, it) }
 
     // App Api
     fun provideAppApi(retrofit: Retrofit): AppApi = retrofit.create(AppApi::class.java)
-
 }

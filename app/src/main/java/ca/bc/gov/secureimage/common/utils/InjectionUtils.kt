@@ -33,5 +33,4 @@ object InjectionUtils {
                     apiDomain, okHttpClient, converterFactory, callAdapterFactory)
     ): AppApi = Injection.provideAppApi(retrofit)
 
-
 }

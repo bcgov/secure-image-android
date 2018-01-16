@@ -129,7 +129,7 @@ class SecureCameraPresenter(
             return
         }
 
-        createCameraImage(image.jpeg, 100, 1920, 100, 300)
+        createCameraImage(image.jpeg, 80, 1920, 80, 300)
     }
 
     /**
