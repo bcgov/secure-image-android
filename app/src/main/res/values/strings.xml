@@ -49,5 +49,7 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="album_deleted">Album Deleted</string>
     <string name="image_deleted">Image deleted</string>
+    <string name="authenticate">Authenticate</string>
+    <string name="authentication_info_message">This app may contain sensitive information so we require that you use your device\'s local authentication to gain access</string>
 
 </resources>

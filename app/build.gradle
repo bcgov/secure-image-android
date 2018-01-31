@@ -40,7 +40,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
-            manifestPlaceholders = [FABRIC_API_KEY:keystoreProperties['FABRIC_API_KEY']]
+            manifestPlaceholders = [FABRIC_API_KEY: keystoreProperties['FABRIC_API_KEY']]
 
             buildConfigField "String", "SSO_BASE_URL", keystoreProperties['SSO_BASE_URL']
             buildConfigField "String", "SSO_REALM_NAME", keystoreProperties['SSO_REALM_NAME']
@@ -56,7 +56,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
-            manifestPlaceholders = [FABRIC_API_KEY:keystoreProperties['FABRIC_API_KEY']]
+            manifestPlaceholders = [FABRIC_API_KEY: keystoreProperties['FABRIC_API_KEY']]
 
             buildConfigField "String", "SSO_BASE_URL", keystoreProperties['SSO_BASE_URL']
             buildConfigField "String", "SSO_REALM_NAME", keystoreProperties['SSO_REALM_NAME']
@@ -92,6 +92,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
 
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     implementation("com.wonderkiln:camerakit:$rootProject.camerakitVersion") {
