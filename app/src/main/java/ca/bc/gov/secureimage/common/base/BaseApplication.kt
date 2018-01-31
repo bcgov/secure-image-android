@@ -24,7 +24,7 @@ class BaseApplication: Application() {
         setUpFabric()
 
         val keyStorageManager = Injection.provideKeyStorageManager(
-                Injection.provideKeyStore("AndroidKeyStore"))
+                Injection.provideKeyStore())
 
         setUpRealm(keyStorageManager)
         setUpStrictMode()

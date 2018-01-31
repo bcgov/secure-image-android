@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ca.bc.gov.mobileauthentication">
+
+    <application>
+
+        <activity
+            android:name="ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity"
+            android:theme="@style/AppTheme" />
+
+    </application>
+
+</manifest>

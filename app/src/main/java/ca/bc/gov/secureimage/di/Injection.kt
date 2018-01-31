@@ -32,25 +32,33 @@ import java.util.concurrent.TimeUnit
  */
 object Injection {
 
+    @JvmStatic
     fun provideAlbumsRepo(): AlbumsRepo = AlbumsRepo.getInstance(AlbumsLocalDataSource)
 
+    @JvmStatic
     fun provideCameraImagesRepo(appApi: AppApi): CameraImagesRepo =
             CameraImagesRepo.getInstance(
                     CameraImagesLocalDataSource,
                     CameraImagesRemoteDataSource.getInstance(appApi)
             )
 
+    @JvmStatic
     fun provideUserRepo(): UserRepo = UserRepo.getInstance(UserLocalDataSource)
 
+    @JvmStatic
     fun provideLocationRepo(): LocationRepo = LocationRepo.getInstance(LocationRemoteDataSource)
 
+    @JvmStatic
     fun provideNetworkManager(connectivityManager: ConnectivityManager): NetworkManager =
             NetworkManager(connectivityManager)
 
+    @JvmStatic
     fun provideCompressionManager(): CompressionManager = CompressionManager()
 
-    fun provideKeyStore(type: String): KeyStore = KeyStore.getInstance(type)
+    @JvmStatic
+    fun provideKeyStore(): KeyStore = KeyStore.getInstance("AndroidKeyStore")
 
+    @JvmStatic
     fun provideKeyStorageManager(keyStore: KeyStore): KeyStorageManager =
             KeyStorageManager(keyStore)
 
@@ -109,5 +117,6 @@ object Injection {
             .build()
 
     // App Api
+    @JvmStatic
     fun provideAppApi(retrofit: Retrofit): AppApi = retrofit.create(AppApi::class.java)
 }

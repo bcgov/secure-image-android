@@ -16,7 +16,7 @@ import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.images.AddImagesViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImageViewHolder
 import ca.bc.gov.secureimage.common.adapters.images.ImagesAdapter
-import ca.bc.gov.secureimage.common.utils.InjectionUtils
+import ca.bc.gov.secureimage.di.InjectionUtils
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.screens.allimages.AllImagesActivity
 import ca.bc.gov.secureimage.screens.imagedetail.ImageDetailActivity

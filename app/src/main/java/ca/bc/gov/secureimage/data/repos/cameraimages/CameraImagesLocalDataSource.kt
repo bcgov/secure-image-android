@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.data.repos.cameraimages
 
-import ca.bc.gov.secureimage.common.exceptions.InvalidOperationException
+import ca.bc.gov.mobileauthentication.common.exceptions.InvalidOperationException
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import io.reactivex.Observable
 import io.realm.Realm

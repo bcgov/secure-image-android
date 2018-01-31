@@ -16,19 +16,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".screens.login.LoginActivity">
+        <activity android:name=".screens.albums.AlbumsActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <activity android:name=".screens.albums.AlbumsActivity" />
         <activity android:name=".screens.createalbum.CreateAlbumActivity" />
+
         <activity android:name=".screens.allimages.AllImagesActivity" />
         <activity android:name=".screens.securecamera.SecureCameraActivity" />
         <activity android:name=".screens.imagedetail.ImageDetailActivity" />
         <activity android:name=".screens.settings.SettingsActivity" />
+
+        <activity
+            android:name="ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity"
+            android:launchMode="singleInstance">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="bcgov" />
+            </intent-filter>
+
+        </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"

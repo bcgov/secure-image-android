@@ -17,7 +17,6 @@ interface SettingsContract {
         fun setUpBackListener()
 
         fun setUpLogoutListener()
-        fun goToLogin()
     }
 
     interface Presenter : BasePresenter {

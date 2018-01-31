@@ -7,6 +7,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
+import ca.bc.gov.mobileauthentication.data.models.Token
+import ca.bc.gov.secureimage.BuildConfig
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.albums.AlbumViewHolder
@@ -24,6 +27,8 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
 
     private var albumsAdapter: AlbumsAdapter? = null
 
+    private var mobileAuthenticationClient: MobileAuthenticationClient? = null
+
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +42,41 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
         )
 
         presenter?.subscribe()
+
+        val baseUrl = BuildConfig.SSO_BASE_URL
+        val realmName = BuildConfig.SSO_REALM_NAME
+        val authEndpoint = BuildConfig.SSO_AUTH_ENDPOINT
+        val redirectUri = BuildConfig.SSO_REDIRECT_URI
+        val clientId = BuildConfig.SSO_CLIENT_ID
+
+        mobileAuthenticationClient =
+                MobileAuthenticationClient(this, baseUrl, realmName, authEndpoint, redirectUri, clientId)
+
+        mobileAuthenticationClient?.authenticate(1012)
+
+        mobileAuthenticationClient?.getToken(object : MobileAuthenticationClient.TokenCallback {
+            override fun onError(throwable: Throwable) {
+
+            }
+
+            override fun onSuccess(token: Token) {
+
+            }
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mobileAuthenticationClient?.handleAuthResult(requestCode, resultCode, data,
+                object : MobileAuthenticationClient.TokenCallback {
+                    override fun onError(throwable: Throwable) {
+
+                    }
+
+                    override fun onSuccess(token: Token) {
+
+                    }
+                })
     }
 
     override fun onResume() {
@@ -52,6 +92,7 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
+        mobileAuthenticationClient?.clear()
     }
 
     // Error

@@ -90,7 +90,7 @@ class KeyStorageManager(private val keyStore: KeyStore) {
 
         // Saving base 64 encoded initialization vector
         val base64IvString = Base64.encodeToString(encryptionCipher.iv, Base64.DEFAULT)
-        sharedPrefs.edit().putString(IV_KEY, base64IvString).apply()
+        sharedPrefs.edit().putString(getIvAlias(alias), base64IvString).apply()
     }
 
     fun getDecryptedKey(
@@ -104,7 +104,7 @@ class KeyStorageManager(private val keyStore: KeyStore) {
         val encryptedBytes = Base64.decode(base64EncryptedBytesString, Base64.DEFAULT)
 
         // Decoding saved initialization vector
-        val base64IvString = sharedPrefs.getString(IV_KEY, "")
+        val base64IvString = sharedPrefs.getString(getIvAlias(alias), "")
         val savedIv = Base64.decode(base64IvString, Base64.DEFAULT)
 
         // Decryption setup
@@ -116,9 +116,12 @@ class KeyStorageManager(private val keyStore: KeyStore) {
         return decryptionCipher.doFinal(encryptedBytes)
     }
 
+    private fun getIvAlias(alias: String): String {
+        return "iv_key_$alias"
+    }
+
     companion object {
         private val AES_TRANSFORMATION = "AES/GCM/NoPadding"
-        private val IV_KEY = "IV_KEY"
     }
 
 }

@@ -53,7 +53,7 @@ class SettingsPresenter(
                     view.showError(it.message ?: "Error logging out")
                 },
                 onSuccess = {
-                    view.goToLogin()
+
                 }
         ).addTo(disposables)
     }

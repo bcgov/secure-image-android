@@ -94,7 +94,7 @@ class CreateAlbumPresenter(
 
     /**
      * Pings the network every 5 seconds to check if connected/disconnected or on wifi/mobile
-     * Initial delay is 0 to instantly check on start up
+     * Initial delay is 0 to instantly check on authenticate up
      */
     fun addNetworkTypeListener(
             initialDelay: Long = 0,

@@ -14,7 +14,7 @@ import ca.bc.gov.secureimage.di.Injection
 import kotlinx.android.synthetic.main.activity_image_detail.*
 import android.support.v7.widget.LinearSnapHelper
 import android.view.View
-import ca.bc.gov.secureimage.common.utils.InjectionUtils
+import ca.bc.gov.secureimage.di.InjectionUtils
 
 class ImageDetailActivity : AppCompatActivity(), ImageDetailContract.View, View.OnScrollChangeListener {
 

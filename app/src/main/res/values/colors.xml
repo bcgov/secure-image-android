@@ -6,6 +6,8 @@
     <color name="colorAccent">#FCBA19</color>
 
     <color name="colorPrimaryLight">#5475A7</color>
+    <color name="colorPrimaryLightPressed">#4b6996</color>
+
     <color name="red">#cc0000</color>
 
     <color name="white">#FFFFFF</color>

@@ -1,9 +1,10 @@
 
 buildscript {
+    ext.kotlin_version = '1.2.20'
 
     ext.gradleVersion = '3.0.1'
-    ext.kotlinVersion = '1.2.10'
-    ext.realmVersion = '4.3.1'
+    ext.kotlinVersion = '1.2.21'
+    ext.realmVersion = '4.3.3'
     ext.fabricToolsVersion = '1.21.6'
 
     repositories {
@@ -17,6 +18,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "io.realm:realm-gradle-plugin:$realmVersion"
         classpath "io.fabric.tools:gradle:$fabricToolsVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

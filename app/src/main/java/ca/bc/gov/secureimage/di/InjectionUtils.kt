@@ -1,4 +1,4 @@
-package ca.bc.gov.secureimage.common.utils
+package ca.bc.gov.secureimage.di
 
 import ca.bc.gov.secureimage.BuildConfig
 import ca.bc.gov.secureimage.common.Constants
