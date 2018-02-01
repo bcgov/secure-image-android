@@ -7,7 +7,7 @@
     android:background="@color/colorPrimary">
 
     <ImageView
-        android:id="@+id/bcLogoIv"
+        android:id="@+id/logoIv"
         android:src="@drawable/ic_bc_logo"
         android:contentDescription="@null"
         android:layout_marginTop="48dp"
@@ -41,7 +41,7 @@
         android:background="@drawable/selector_rect_color_primary_light_rounded_28dp"
         android:layout_width="200dp"
         android:layout_height="56dp"
-        app:layout_constraintTop_toBottomOf="@+id/bcLogoIv"
+        app:layout_constraintTop_toBottomOf="@+id/logoIv"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

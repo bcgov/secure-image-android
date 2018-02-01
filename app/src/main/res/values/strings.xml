@@ -51,5 +51,6 @@
     <string name="image_deleted">Image deleted</string>
     <string name="authenticate">Authenticate</string>
     <string name="authentication_info_message">This app may contain sensitive information so we require that you use your device\'s local authentication to gain access</string>
+    <string name="device_not_secured">App requires a pin, pattern, or password setup on your phone</string>
 
 </resources>
