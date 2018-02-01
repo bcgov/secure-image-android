@@ -32,6 +32,7 @@
     <ImageView
         android:id="@+id/settingsIv"
         android:src="@drawable/ic_settings_black_24dp"
+        android:visibility="gone"
         android:tint="@color/white"
         android:padding="16dp"
         android:contentDescription="@string/settings"

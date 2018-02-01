@@ -41,7 +41,7 @@ class AuthenticatePresenter(
         if (isResultOk && isCredentialsRequestCode) {
             view.goToAlbums()
             view.finish()
-            
+
         } else {
             view.showLogo()
             view.showInfo()
