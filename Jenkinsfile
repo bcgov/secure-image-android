@@ -1,4 +1,4 @@
-node {
+node('maven'){
 
   stage('Checkout') {
     echo "Checking out source"
