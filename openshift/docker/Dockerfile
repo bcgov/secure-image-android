@@ -42,4 +42,17 @@ RUN yum repolist > /dev/null && \
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
+# Create an ANDROID_HOME and install the SDK tools
+RUN cd /tmp && \
+    curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -O && \
+    mkdir -p /opt/android && \
+    unzip -q -d /opt/android sdk-tools-linux-3859397.zip && \
+    rm -f sdk-tools-linux-3859397.zip && \
+    cd -
+
+# Install the build tools, agree to the licensing.
+RUN mkdir -p /root/.android/ && \
+    touch /root/.android/repositories.cfg && \
+    yes | /opt/android/tools/bin/sdkmanager --licenses
+
 USER 1001
