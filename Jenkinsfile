@@ -21,6 +21,8 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
 
     stage('Test') {
       echo "Testing: ${BUILD_ID}"
+      sh "ls -lah /opt"
+      sh "ls -lah /opt/android"
       sh "ANDROID_HOME=/opt/android ./gradlew test"
     }
     
