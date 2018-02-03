@@ -38,6 +38,7 @@ RUN yum repolist > /dev/null && \
     chmod 777 /home/jenkins/.pki
 
 RUN yum list java-1.8.0-openjdk*
+RUN yum list openssl*
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 

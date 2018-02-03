@@ -21,7 +21,7 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
 
     stage('Setup') {
       echo "Build setup"
-      sh "which openssl"
+      sh "openssl version"
     }
 
     stage('Test') {
