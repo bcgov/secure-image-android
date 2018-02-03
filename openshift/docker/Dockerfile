@@ -47,6 +47,8 @@ RUN cd /tmp && \
     rm -f sdk-tools-linux-3859397.zip && \
     cd -
 
+ENV ANDROID_HOME=/opt/android
+
 # Install the build tools, agree to the licensing.
 RUN mkdir -p /root/.android/ && \
     touch /root/.android/repositories.cfg && \
