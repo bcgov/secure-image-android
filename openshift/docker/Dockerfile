@@ -36,9 +36,11 @@ RUN yum repolist > /dev/null && \
     yum clean all -y && \
     if [ ! -d /home/jenkins/.pki ] ; then mkdir /home/jenkins/.pki; fi && \
     chmod 777 /home/jenkins/.pki
-RUN ls -lah /usr/lib/jvm
+
 RUN ls -lah /usr/lib
+RUN ls -lah /usr/lib/jvm
 RUN ls -lah /usr/lib/java-1.8.0
+RUN ls -lah /usr/lib/java
 RUN ls -lah /usr/lib/java-1.8.0-openjdk-1.8.0.151-1.b12.el7_4.x86_64
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
