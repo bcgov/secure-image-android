@@ -28,7 +28,6 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-fastrack-rpms && \
-    UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686" &&\
     INSTALL_PKGS="wget curl" && \
     yum remove -y $UNINSTALL_PKGS &&\
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
