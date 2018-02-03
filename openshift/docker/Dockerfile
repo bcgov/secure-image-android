@@ -53,6 +53,7 @@ RUN cd /tmp && \
 # Install the build tools, agree to the licensing.
 RUN mkdir -p /root/.android/ && \
     touch /root/.android/repositories.cfg && \
+    /opt/android/tools/bin/sdkmanager --update && \
     yes | /opt/android/tools/bin/sdkmanager --licenses
 
 USER 1001

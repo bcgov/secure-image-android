@@ -12,7 +12,7 @@ node('maven'){
   
   stage('Build') {
     echo "Build: ${BUILD_ID}"
-    sh "./gradlew build"
+    sh "ANDROID_HOME=/opt/android ./gradlew build"
   }
 
 }
