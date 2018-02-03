@@ -6,15 +6,15 @@ ENV PATH=$HOME/.local/bin/:$PATH \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
    
-ENV SUMMARY="Jenkins slave with chrome and firefox installed for use with functional/BDD tests that use BDDStack." \
-    DESCRIPTION="Jenkins pipeline slave with chrome and firefox for testing application with headless browser. (aka 'BDDStack')"
+ENV SUMMARY="Jenkins slave with Android SDK tools for Android build and test." \
+    DESCRIPTION="Jenkins slave with Android SDK tools for Android build and test."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Jenkins-Pipeline-BDDStack" \
+      io.k8s.display-name="Jenkins-Pipeline-Android" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,jenkins-jnlp-chrome,jenkins-jnlp-firefox,jenkins-jnlp" \
+      io.openshift.tags="builder,jenkins-jnlp" \
       release="1"
 
 # NOTES:
@@ -28,17 +28,16 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-fastrack-rpms && \
-    UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686" &&\
-    INSTALL_PKGS="redhat-lsb libXScrnSaver gdk-pixbuf2 xorg-x11-server-Xvfb wget firefox" && \
-    yum remove -y $UNINSTALL_PKGS &&\
+    UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686" && \
+    INSTALL_PKGS="wget curl" && \
+    yum remove -y $UNINSTALL_PKGS && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y && \
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    yum -y localinstall google-chrome-stable_current_x86_64.rpm && \
-    rm google-chrome-stable_current_x86_64.rpm && \
     if [ ! -d /home/jenkins/.pki ] ; then mkdir /home/jenkins/.pki; fi && \
     chmod 777 /home/jenkins/.pki
+
+RUN yum list java-1.8.0-openjdk*
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
@@ -50,9 +49,12 @@ RUN cd /tmp && \
     rm -f sdk-tools-linux-3859397.zip && \
     cd -
 
+ENV ANDROID_HOME=/opt/android
+
 # Install the build tools, agree to the licensing.
 RUN mkdir -p /root/.android/ && \
     touch /root/.android/repositories.cfg && \
+    /opt/android/tools/bin/sdkmanager --update && \
     yes | /opt/android/tools/bin/sdkmanager --licenses
 
 USER 1001
