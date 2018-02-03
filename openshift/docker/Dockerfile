@@ -38,7 +38,9 @@ RUN yum repolist > /dev/null && \
     chmod 777 /home/jenkins/.pki
 RUN ls -lah /usr/lib/jvm
 RUN ls -lah /usr/lib
-# java-1.8.0-openjdk-headless.x86_64
+RUN ls -lah /usr/lib/java-1.8.0
+RUN ls -lah /usr/lib/java-1.8.0-openjdk-1.8.0.151-1.b12.el7_4.x86_64
+
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
 # Create an ANDROID_HOME and install the SDK tools
