@@ -42,6 +42,7 @@ RUN ls -lah /usr/lib/jvm
 RUN ls -lah /usr/lib/java-1.8.0
 RUN ls -lah /usr/lib/java
 RUN find /usr/lib -iname javac
+RUN /usr/sbin/alternatives --config java
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
