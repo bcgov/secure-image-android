@@ -29,14 +29,11 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-fastrack-rpms && \
     UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686" &&\
-    INSTALL_PKGS="redhat-lsb libXScrnSaver gdk-pixbuf2 xorg-x11-server-Xvfb wget firefox" && \
+    INSTALL_PKGS="wget curl" && \
     yum remove -y $UNINSTALL_PKGS &&\
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y && \
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    yum -y localinstall google-chrome-stable_current_x86_64.rpm && \
-    rm google-chrome-stable_current_x86_64.rpm && \
     if [ ! -d /home/jenkins/.pki ] ; then mkdir /home/jenkins/.pki; fi && \
     chmod 777 /home/jenkins/.pki
 
