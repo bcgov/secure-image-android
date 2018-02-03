@@ -6,15 +6,15 @@ ENV PATH=$HOME/.local/bin/:$PATH \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
    
-ENV SUMMARY="Jenkins slave with chrome and firefox installed for use with functional/BDD tests that use BDDStack." \
-    DESCRIPTION="Jenkins pipeline slave with chrome and firefox for testing application with headless browser. (aka 'BDDStack')"
+ENV SUMMARY="Jenkins slave with Android SDK tools for Android build and test." \
+    DESCRIPTION="Jenkins slave with Android SDK tools for Android build and test."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Jenkins-Pipeline-BDDStack" \
+      io.k8s.display-name="Jenkins-Pipeline-Android" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,jenkins-jnlp-chrome,jenkins-jnlp-firefox,jenkins-jnlp" \
+      io.openshift.tags="builder,jenkins-jnlp" \
       release="1"
 
 # NOTES:
