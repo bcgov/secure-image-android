@@ -29,7 +29,7 @@ RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum-config-manager --enable rhel-7-server-fastrack-rpms && \
     UNINSTALL_PKGS="java-1.8.0-openjdk-headless.i686" && \
-    INSTALL_PKGS="wget curl" && \
+    INSTALL_PKGS="wget curl openssl" && \
     yum remove -y $UNINSTALL_PKGS && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
@@ -38,7 +38,6 @@ RUN yum repolist > /dev/null && \
     chmod 777 /home/jenkins/.pki
 
 RUN yum list java-1.8.0-openjdk*
-RUN yum list openssl*
 
 ENV OPENSHIFT_JENKINS_JVM_ARCH=x86_64
 
