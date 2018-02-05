@@ -87,7 +87,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     override fun onPause() {
         super.onPause()
         val albumName = albumNameEt.text.toString()
-        presenter?.viewHidden(backed, albumDeleted, albumName)
+        val comments = commentsEt.text.toString()
+        presenter?.viewHidden(backed, albumDeleted, albumName, comments)
     }
 
     override fun onDestroy() {
@@ -137,7 +138,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     fun backEvent() {
         val albumName = albumNameEt.text.toString()
-        presenter?.backClicked(true, albumName)
+        val comments = commentsEt.text.toString()
+        presenter?.backClicked(true, albumName, comments)
     }
 
     // Network type
@@ -310,6 +312,11 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         albumNameEt.setText(albumName)
     }
 
+    // Comments
+    override fun setComments(comments: String) {
+        commentsEt.setText(comments)
+    }
+
     // Upload
     override fun showUpload() {
         uploadTv.visibility = View.VISIBLE
@@ -321,7 +328,9 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override fun setUpUploadListener() {
         uploadTv.setOnClickListener {
-            presenter?.uploadClicked()
+            val albumName = albumNameEt.text.toString()
+            val comments = commentsEt.text.toString()
+            presenter?.uploadClicked(albumName, comments)
         }
     }
 
@@ -374,7 +383,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 .setType("message/rfc822")
                 .addEmailTo(emailTo)
                 .setSubject(subject)
-                .setHtmlText(body)
+                .setText(body)
                 .setChooserTitle(chooserTitle)
                 .startChooser()
     }

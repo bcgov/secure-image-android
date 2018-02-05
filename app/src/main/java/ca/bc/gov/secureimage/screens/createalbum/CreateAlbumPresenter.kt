@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 /**
@@ -84,11 +85,11 @@ class CreateAlbumPresenter(
      * Clears all disposables
      * Saves album fields if back was not clicked and album is not deleted
      */
-    override fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String) {
+    override fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String, comments: String) {
         disposables.clear()
 
         if (!backed && !albumDeleted) {
-            saveAlbumFields(albumName, false)
+            saveAlbumFields(albumName, comments, false)
         }
     }
 
@@ -115,15 +116,15 @@ class CreateAlbumPresenter(
 
     fun networkTypeChanged(networkType: NetworkManager.NetworkType) {
         when (networkType) {
-            is NetworkManager.NetworkType.WifiConnection -> {
+            NetworkManager.NetworkType.WifiConnection -> {
                 view.hideNetworkType()
                 view.clearNetworkTypeText()
             }
-            is NetworkManager.NetworkType.MobileConnection -> {
+            NetworkManager.NetworkType.MobileConnection -> {
                 view.showNetworkType()
                 view.setNetworkTypeTextMobileConnection()
             }
-            is NetworkManager.NetworkType.NoConnection -> {
+            NetworkManager.NetworkType.NoConnection -> {
                 view.showNetworkType()
                 view.setNetworkTypeTextNoConnection()
             }
@@ -143,6 +144,7 @@ class CreateAlbumPresenter(
                 },
                 onSuccess = { album ->
                     view.setAlbumName(album.name)
+                    view.setComments(album.comments)
                 }
         ).addTo(disposables)
     }
@@ -182,9 +184,9 @@ class CreateAlbumPresenter(
     /**
      * Saves album fields
      */
-    override fun backClicked(saveAlbum: Boolean, albumName: String) {
+    override fun backClicked(saveAlbum: Boolean, albumName: String, comments: String) {
         view.setBacked(true)
-        if (saveAlbum) saveAlbumFields(albumName, true)
+        if (saveAlbum) saveAlbumFields(albumName, comments, true)
     }
 
     /**
@@ -192,11 +194,12 @@ class CreateAlbumPresenter(
      * Update time is set to current time in millis
      * On success finishes
      */
-    fun saveAlbumFields(albumName: String, finish: Boolean) {
+    fun saveAlbumFields(albumName: String, comments: String, finish: Boolean) {
         albumsRepo.getAlbum(albumKey)
                 .observeOn(Schedulers.io())
                 .flatMap { album ->
                     album.name = albumName
+                    album.comments = comments
                     album.updatedTime = System.currentTimeMillis()
                     albumsRepo.saveAlbum(album)
                 }
@@ -331,8 +334,32 @@ class CreateAlbumPresenter(
     }
 
     // Upload album
-    override fun uploadClicked() {
-        checkNetworkTypeForUpload(networkManager.getNetworkType())
+    override fun uploadClicked(albumName: String, comments: String) {
+        saveAlbumFieldsForUpload(albumName, comments)
+    }
+
+    /**
+     * Saves the fields before upload
+     */
+    fun saveAlbumFieldsForUpload(albumName: String, comments: String) {
+        albumsRepo.getAlbum(albumKey)
+                .observeOn(Schedulers.io())
+                .flatMap { album ->
+                    album.name = albumName
+                    album.comments = comments
+                    album.updatedTime = System.currentTimeMillis()
+                    albumsRepo.saveAlbum(album)
+                }
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error saving album fields")
+                },
+                onSuccess = {
+                    checkNetworkTypeForUpload(networkManager.getNetworkType())
+                })
+                .addTo(disposables)
     }
 
     /**
@@ -340,9 +367,9 @@ class CreateAlbumPresenter(
      */
     fun checkNetworkTypeForUpload(networkType: NetworkManager.NetworkType) {
         when (networkType) {
-            is NetworkManager.NetworkType.WifiConnection -> getCameraImageCountForUploadingDialog()
-            is NetworkManager.NetworkType.MobileConnection -> view.showMobileNetworkWarningDialog()
-            is NetworkManager.NetworkType.NoConnection -> view.showNoConnectionDialog()
+            NetworkManager.NetworkType.WifiConnection -> getCameraImageCountForUploadingDialog()
+            NetworkManager.NetworkType.MobileConnection -> view.showMobileNetworkWarningDialog()
+            NetworkManager.NetworkType.NoConnection -> view.showNoConnectionDialog()
         }
     }
 
@@ -364,7 +391,21 @@ class CreateAlbumPresenter(
                 },
                 onSuccess = { albumSize ->
                     view.showUploadingDialog(albumSize)
-                    createRemoteAlbumId()
+                    getAlbumNameForUpload()
+                }
+        ).addTo(disposables)
+    }
+
+    fun getAlbumNameForUpload() {
+        albumsRepo.getAlbum(albumKey)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error retrieving album")
+                },
+                onSuccess = { album ->
+                    createRemoteAlbumId(album.name)
                 }
         ).addTo(disposables)
     }
@@ -372,7 +413,7 @@ class CreateAlbumPresenter(
     /**
      * Gets a remote album id that can be used to upload images to and build a download url
      */
-    fun createRemoteAlbumId() {
+    fun createRemoteAlbumId(albumName: String) {
         appApi.createRemoteAlbumId()
                 .map { it.remoteAlbumId }
                 .firstOrError()
@@ -383,7 +424,7 @@ class CreateAlbumPresenter(
                     view.hideUploadingDialog()
                 },
                 onSuccess = { remoteAlbumId ->
-                    uploadImagesToRemoteAlbum(remoteAlbumId)
+                    uploadImagesToRemoteAlbum(remoteAlbumId, albumName)
                 }
         ).addTo(disposables)
     }
@@ -393,7 +434,7 @@ class CreateAlbumPresenter(
      * Updates uploaded count in uploading dialog after each upload has finished
      * Builds download url once all images have been uploaded
      */
-    fun uploadImagesToRemoteAlbum(remoteAlbumId: String) {
+    fun uploadImagesToRemoteAlbum(remoteAlbumId: String, albumName: String) {
         cameraImagesRepo.getAllCameraImagesInAlbum(albumKey)
                 .flatMapIterable { it }
                 .flatMap { cameraImagesRepo.uploadCameraImage(remoteAlbumId, it) }
@@ -407,7 +448,7 @@ class CreateAlbumPresenter(
                     view.incrementUploadedCount()
                 },
                 onComplete = {
-                    buildDownloadUrl(remoteAlbumId)
+                    buildDownloadUrl(remoteAlbumId, albumName)
                 }
         ).addTo(disposables)
     }
@@ -416,8 +457,16 @@ class CreateAlbumPresenter(
      * Gets a download url which will download a zip file of all the uploaded image associated with
      * that remote album id.
      */
-    fun buildDownloadUrl(remoteAlbumId: String) {
-        appApi.buildDownloadUrl(remoteAlbumId)
+    fun buildDownloadUrl(remoteAlbumId: String, albumName: String) {
+        val buildObservable = if (albumName.isBlank()) {
+            appApi.buildDownloadUrl(remoteAlbumId)
+        } else {
+            var fileName = albumName.toLowerCase().replace(" ", "_")
+            fileName = URLEncoder.encode(fileName, "utf-8")
+            appApi.buildDownloadUrl(remoteAlbumId, fileName)
+        }
+
+        buildObservable
                 .map { it.downloadUrl }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -427,7 +476,24 @@ class CreateAlbumPresenter(
                     view.hideUploadingDialog()
                 },
                 onSuccess = { downloadUrl ->
-                    getUserForEmailChooser(downloadUrl)
+                    getFieldsForEmailChooser(downloadUrl)
+                }
+        ).addTo(disposables)
+    }
+
+    /**
+     * Gets all the current fields so they can be sent with the body
+     */
+    fun getFieldsForEmailChooser(downloadUrl: String) {
+        albumsRepo.getAlbum(albumKey)
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    view.showError(it.message ?: "Error retrieving album")
+                },
+                onSuccess = { album ->
+                    getUserForEmailChooser(album.name, album.comments, downloadUrl)
                 }
         ).addTo(disposables)
     }
@@ -436,7 +502,7 @@ class CreateAlbumPresenter(
      * Gets the current user for it's email.
      * Shows email chooser on success
      */
-    fun getUserForEmailChooser(downloadUrl: String) {
+    fun getUserForEmailChooser(albumName: String, comments: String, downloadUrl: String) {
         userRepo.getUser()
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -446,10 +512,12 @@ class CreateAlbumPresenter(
                     view.hideUploadingDialog()
                 },
                 onSuccess = {
+                    val subject = if (albumName.isBlank()) "Secure Image Album"
+                    else "Secure Image Album: $albumName"
                     view.showEmailChooser(
                             it.email,
-                            "Secure image",
-                            downloadUrl,
+                            subject,
+                            "Album name:\n$albumName\n\nComments:\n$comments\n\n$downloadUrl",
                             "Send download link using....")
                     view.hideUploadingDialog()
                 }

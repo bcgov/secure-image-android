@@ -60,6 +60,8 @@ interface CreateAlbumContract {
 
         fun setAlbumName(albumName: String)
 
+        fun setComments(comments: String)
+
         fun showUpload()
         fun hideUpload()
         fun setUpUploadListener()
@@ -79,9 +81,9 @@ interface CreateAlbumContract {
 
     interface Presenter: BasePresenter {
         fun viewShown(refresh: Boolean, addNetworkListener: Boolean)
-        fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String)
+        fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String, comments: String)
 
-        fun backClicked(saveAlbum: Boolean = false, albumName: String = "")
+        fun backClicked(saveAlbum: Boolean = false, albumName: String, comments: String)
 
         fun deleteAlbumClicked()
         fun deleteAlbumConfirmed()
@@ -96,7 +98,7 @@ interface CreateAlbumContract {
 
         fun deleteImageConfirmed(cameraImage: CameraImage, position: Int)
 
-        fun uploadClicked()
+        fun uploadClicked(albumName: String, comments: String)
 
         fun uploadAnywayClicked()
     }

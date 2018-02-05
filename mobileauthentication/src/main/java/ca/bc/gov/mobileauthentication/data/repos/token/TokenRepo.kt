@@ -53,7 +53,8 @@ private constructor(
     }
 
     override fun refreshToken(token: Token): Observable<Token> {
-        return remoteDataSource.refreshToken(token)
+        return if (token.isRefreshExpired()) Observable.error(RefreshExpiredException())
+        else remoteDataSource.refreshToken(token)
                 .flatMap { localDataSource.saveToken(it) }
     }
 

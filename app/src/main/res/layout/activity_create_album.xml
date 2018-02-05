@@ -239,6 +239,42 @@
                 app:layout_constraintRight_toRightOf="parent"/>
 
             <TextView
+                android:id="@+id/commentsTv"
+                android:text="@string/comments"
+                android:textColor="@color/mediumGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:fontFamily="@font/open_sans_regular"
+                app:layout_constraintTop_toBottomOf="@+id/albumNameDividerView"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <EditText
+                android:id="@+id/commentsEt"
+                android:fontFamily="@font/open_sans_regular"
+                android:hint="@string/note_something_down_for_later"
+                android:inputType="textMultiLine"
+                android:background="@null"
+                android:paddingTop="12dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/commentsTv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <View
+                android:id="@+id/commentsDividerView"
+                android:background="@color/lightGray"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@+id/commentsEt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
                 android:id="@+id/uploadTv"
                 android:text="@string/upload"
                 android:textStyle="bold"
@@ -252,7 +288,7 @@
                 android:layout_marginBottom="16dp"
                 android:layout_width="200dp"
                 android:layout_height="56dp"
-                app:layout_constraintTop_toBottomOf="@+id/albumNameDividerView"
+                app:layout_constraintTop_toBottomOf="@+id/commentsDividerView"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

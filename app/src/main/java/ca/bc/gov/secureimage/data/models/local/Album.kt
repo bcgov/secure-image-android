@@ -19,6 +19,7 @@ open class Album : RealmObject() {
     var updatedTime: Long = System.currentTimeMillis()
 
     var name: String = ""
+    var comments: String = ""
 
     @Ignore
     var previewByteArray: ByteArray? = null

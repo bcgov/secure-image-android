@@ -52,5 +52,7 @@
     <string name="authenticate">Authenticate</string>
     <string name="authentication_info_message">This app may contain sensitive information so we require that you use your device\'s local authentication to gain access</string>
     <string name="device_not_secured">App requires a pin, pattern, or password setup on your phone</string>
+    <string name="note_something_down_for_later">Note something down for later</string>
+    <string name="comments">Comments</string>
 
 </resources>
