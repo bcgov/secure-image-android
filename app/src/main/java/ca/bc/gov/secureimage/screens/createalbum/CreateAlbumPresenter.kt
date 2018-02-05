@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
 import ca.bc.gov.mobileauthentication.common.exceptions.RefreshExpiredException
 import ca.bc.gov.mobileauthentication.common.exceptions.TokenNotFoundException
 import ca.bc.gov.secureimage.common.managers.NetworkManager
@@ -26,7 +27,8 @@ class CreateAlbumPresenter(
         private val albumsRepo: AlbumsRepo,
         private val cameraImagesRepo: CameraImagesRepo,
         private val networkManager: NetworkManager,
-        private val appApi: AppApi
+        private val appApi: AppApi,
+        override val mobileAuthenticationClient: MobileAuthenticationClient
 ) : CreateAlbumContract.Presenter {
 
     private val disposables = CompositeDisposable()
@@ -86,7 +88,7 @@ class CreateAlbumPresenter(
      * Saves album fields if back was not clicked and album is not deleted
      */
     override fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String, comments: String) {
-        view.mobileAuthenticationClient?.clear()
+        mobileAuthenticationClient.clear()
         disposables.clear()
 
         if (!backed && !albumDeleted) {
@@ -379,21 +381,13 @@ class CreateAlbumPresenter(
     }
 
     /**
-     * Called when an unexpected error happened during upload.
-     */
-    fun showUnexpectedUploadingError() {
-        view.hideUploadingDialog()
-        view.showError("Sorry an unexpected error has occurred. Please re-boot your app and retry.")
-    }
-
-    /**
      * Checks a throwable to see if authentication flow needs to be reinitiated
      */
     fun checkThrowableForAuthenticateLaunch(throwable: Throwable) {
         when (throwable) {
-            is TokenNotFoundException -> view.mobileAuthenticationClient?.authenticate()
-            is RefreshExpiredException -> view.mobileAuthenticationClient?.authenticate()
-            is NoSuchElementException -> view.mobileAuthenticationClient?.authenticate()
+            is TokenNotFoundException -> mobileAuthenticationClient.authenticate()
+            is RefreshExpiredException -> mobileAuthenticationClient.authenticate()
+            is NoSuchElementException -> mobileAuthenticationClient.authenticate()
             else -> view.showError(throwable.message ?: "Error uploading")
         }
     }
@@ -402,8 +396,7 @@ class CreateAlbumPresenter(
      * Checks to make sure a valid token is stored in the mobile authentication client
      */
     fun checkAuthClientForValidToken() {
-        val authClient = view.mobileAuthenticationClient ?: return showUnexpectedUploadingError()
-        authClient.getTokenAsObservable()
+        mobileAuthenticationClient.getTokenAsObservable()
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -416,9 +409,6 @@ class CreateAlbumPresenter(
         ).addTo(disposables)
     }
 
-    /**
-     * Called when authentication response is successful
-     */
     override fun authenticationSuccess() {
         getCameraImageCountForUploadingDialog()
     }
@@ -463,8 +453,7 @@ class CreateAlbumPresenter(
      * Gets a remote album id that can be used to upload images to and build a download url
      */
     fun createRemoteAlbumId(albumName: String) {
-        val authClient = view.mobileAuthenticationClient ?: return showUnexpectedUploadingError()
-        authClient.getTokenAsObservable()
+        mobileAuthenticationClient.getTokenAsObservable()
                 .flatMap { appApi.createRemoteAlbumId() }
                 .map { it.remoteAlbumId }
                 .firstOrError()

@@ -130,7 +130,7 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
     }
 
     override fun onImage(image: CameraKitImage?) {
-        presenter?.onCameraImage(image)
+        presenter?.onCameraImage(image, true)
     }
 
     override fun onVideo(video: CameraKitVideo?) {

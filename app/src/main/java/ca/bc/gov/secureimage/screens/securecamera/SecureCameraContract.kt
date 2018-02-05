@@ -66,7 +66,7 @@ interface SecureCameraContract {
 
         fun onCameraEvent(event: CameraKitEvent?)
         fun onCameraError(error: CameraKitError?)
-        fun onCameraImage(image: CameraKitImage?)
+        fun onCameraImage(image: CameraKitImage?, createCameraImage: Boolean)
         fun onCameraVideo(video: CameraKitVideo?)
 
         fun backClicked()

@@ -53,23 +53,19 @@ class AlbumsPresenterTest {
     }
 
     @Test
+    fun presenterSet() {
+        verify(view).presenter = presenter
+    }
+
+    @Test
     fun subscribe() {
         presenter.subscribe()
 
         verify(view).hideLoading()
         verify(view).hideOnboarding()
 
-        verify(view).setUpSettingsListener()
-
         verify(view).setUpAlbumsList()
         verify(view).setUpCreateAlbumListener()
-    }
-
-    @Test
-    fun settingsClicked() {
-        presenter.settingsClicked()
-
-        verify(view).goToSettings()
     }
 
     @Test

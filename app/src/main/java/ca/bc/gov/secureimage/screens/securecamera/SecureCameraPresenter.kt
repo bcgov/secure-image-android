@@ -121,7 +121,7 @@ class SecureCameraPresenter(
 
     }
 
-    override fun onCameraImage(image: CameraKitImage?) {
+    override fun onCameraImage(image: CameraKitImage?, createCameraImage: Boolean) {
         view.hideShutter()
 
         if (image == null) {
@@ -129,7 +129,7 @@ class SecureCameraPresenter(
             return
         }
 
-        createCameraImage(image.jpeg, 80, 1920, 80, 300)
+        if (createCameraImage) createCameraImage(image.jpeg, 80, 1920, 80, 300)
     }
 
     /**

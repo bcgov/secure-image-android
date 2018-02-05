@@ -31,8 +31,6 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override var presenter: CreateAlbumContract.Presenter? = null
 
-    override var mobileAuthenticationClient: MobileAuthenticationClient? = null
-
     private var imagesAdapter: ImagesAdapter? = null
 
     private var deleteAlbumDialog: DeleteAlbumDialog? = null
@@ -77,7 +75,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         val redirectUri = BuildConfig.SSO_REDIRECT_URI
         val clientId = BuildConfig.SSO_CLIENT_ID
 
-        mobileAuthenticationClient =
+        val mobileAuthenticationClient =
                 MobileAuthenticationClient(
                         this, baseUrl, realmName, authEndpoint, redirectUri, clientId)
 
@@ -87,7 +85,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 Injection.provideAlbumsRepo(),
                 Injection.provideCameraImagesRepo(appApi),
                 networkManager,
-                appApi)
+                appApi,
+                mobileAuthenticationClient)
 
         presenter?.subscribe()
     }
@@ -111,7 +110,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mobileAuthenticationClient?.handleAuthResult(requestCode, resultCode, data, object : MobileAuthenticationClient.TokenCallback {
+        presenter?.mobileAuthenticationClient?.handleAuthResult(requestCode, resultCode, data, object : MobileAuthenticationClient.TokenCallback {
             override fun onError(throwable: Throwable) {
                 showToast(throwable.message ?: "Error logging in")
             }

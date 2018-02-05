@@ -12,8 +12,6 @@ import ca.bc.gov.secureimage.data.models.local.CameraImage
 interface CreateAlbumContract {
 
     interface View: BaseView<Presenter> {
-        var mobileAuthenticationClient: MobileAuthenticationClient?
-
         fun finish()
 
         fun setBacked(backed: Boolean)
@@ -83,6 +81,8 @@ interface CreateAlbumContract {
     }
 
     interface Presenter: BasePresenter {
+        val mobileAuthenticationClient: MobileAuthenticationClient
+
         fun viewShown(refresh: Boolean, addNetworkListener: Boolean)
         fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String, comments: String)
 
