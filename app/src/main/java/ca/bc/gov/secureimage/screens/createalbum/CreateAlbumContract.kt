@@ -104,6 +104,8 @@ interface CreateAlbumContract {
         fun uploadClicked(albumName: String, comments: String)
 
         fun uploadAnywayClicked()
+
+        fun authenticationSuccess()
     }
 
 }

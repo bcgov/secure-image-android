@@ -117,9 +117,7 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
             }
 
             override fun onSuccess(token: Token) {
-                val albumName = albumNameEt.text.toString()
-                val comments = commentsEt.text.toString()
-                presenter?.uploadClicked(albumName, comments)
+                presenter?.authenticationSuccess()
             }
         })
     }

@@ -358,9 +358,24 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error saving album fields")
                 },
                 onSuccess = {
-                    checkAuthClientForValidToken()
+                    checkNetworkTypeForUpload(networkManager.getNetworkType())
                 })
                 .addTo(disposables)
+    }
+
+    /**
+     * Determines if upload is viable, a warning needs to be showed, or not possible
+     */
+    fun checkNetworkTypeForUpload(networkType: NetworkManager.NetworkType) {
+        when (networkType) {
+            NetworkManager.NetworkType.WifiConnection -> checkAuthClientForValidToken()
+            NetworkManager.NetworkType.MobileConnection -> view.showMobileNetworkWarningDialog()
+            NetworkManager.NetworkType.NoConnection -> view.showNoConnectionDialog()
+        }
+    }
+
+    override fun uploadAnywayClicked() {
+        checkAuthClientForValidToken()
     }
 
     /**
@@ -396,23 +411,15 @@ class CreateAlbumPresenter(
                     checkThrowableForAuthenticateLaunch(it)
                 },
                 onSuccess = {
-                    checkNetworkTypeForUpload(networkManager.getNetworkType())
+                    getCameraImageCountForUploadingDialog()
                 }
         ).addTo(disposables)
     }
 
     /**
-     * Determines if upload is viable, a warning needs to be showed, or not possible
+     * Called when authentication response is successful
      */
-    fun checkNetworkTypeForUpload(networkType: NetworkManager.NetworkType) {
-        when (networkType) {
-            NetworkManager.NetworkType.WifiConnection -> getCameraImageCountForUploadingDialog()
-            NetworkManager.NetworkType.MobileConnection -> view.showMobileNetworkWarningDialog()
-            NetworkManager.NetworkType.NoConnection -> view.showNoConnectionDialog()
-        }
-    }
-
-    override fun uploadAnywayClicked() {
+    override fun authenticationSuccess() {
         getCameraImageCountForUploadingDialog()
     }
 
@@ -435,6 +442,9 @@ class CreateAlbumPresenter(
         ).addTo(disposables)
     }
 
+    /**
+     * Gets album name that will be used for
+     */
     fun getAlbumNameForUpload() {
         albumsRepo.getAlbum(albumKey)
                 .firstOrError()
