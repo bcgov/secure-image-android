@@ -1,5 +1,7 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import ca.bc.gov.mobileauthentication.common.exceptions.RefreshExpiredException
+import ca.bc.gov.mobileauthentication.common.exceptions.TokenNotFoundException
 import ca.bc.gov.secureimage.common.managers.NetworkManager
 import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.models.AddImages
@@ -86,6 +88,7 @@ class CreateAlbumPresenter(
      * Saves album fields if back was not clicked and album is not deleted
      */
     override fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String, comments: String) {
+        view.mobileAuthenticationClient?.clear()
         disposables.clear()
 
         if (!backed && !albumDeleted) {
@@ -357,9 +360,47 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error saving album fields")
                 },
                 onSuccess = {
-                    checkNetworkTypeForUpload(networkManager.getNetworkType())
+                    checkAuthClientForValidToken()
                 })
                 .addTo(disposables)
+    }
+
+    /**
+     * Called when an unexpected error happened during upload.
+     */
+    fun showUnexpectedUploadingError() {
+        view.hideUploadingDialog()
+        view.showError("Sorry an unexpected error has occurred. Please re-boot your app and retry.")
+    }
+
+    /**
+     * Checks a throwable to see if authentication flow needs to be reinitiated
+     */
+    fun checkThrowableForAuthenticateLaunch(throwable: Throwable) {
+        when (throwable) {
+            is TokenNotFoundException -> view.mobileAuthenticationClient?.authenticate()
+            is RefreshExpiredException -> view.mobileAuthenticationClient?.authenticate()
+            is NoSuchElementException -> view.mobileAuthenticationClient?.authenticate()
+            else -> view.showError(throwable.message ?: "Error uploading")
+        }
+    }
+
+    /**
+     * Checks to make sure a valid token is stored in the mobile authentication client
+     */
+    fun checkAuthClientForValidToken() {
+        val authClient = view.mobileAuthenticationClient ?: return showUnexpectedUploadingError()
+        authClient.getTokenAsObservable()
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                onError = {
+                    checkThrowableForAuthenticateLaunch(it)
+                },
+                onSuccess = {
+                    checkNetworkTypeForUpload(networkManager.getNetworkType())
+                }
+        ).addTo(disposables)
     }
 
     /**
@@ -414,13 +455,15 @@ class CreateAlbumPresenter(
      * Gets a remote album id that can be used to upload images to and build a download url
      */
     fun createRemoteAlbumId(albumName: String) {
-        appApi.createRemoteAlbumId()
+        val authClient = view.mobileAuthenticationClient ?: return showUnexpectedUploadingError()
+        authClient.getTokenAsObservable()
+                .flatMap { appApi.createRemoteAlbumId() }
                 .map { it.remoteAlbumId }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 onError = {
-                    view.showError(it.message ?: "Error getting remote album id")
+                    checkThrowableForAuthenticateLaunch(it)
                     view.hideUploadingDialog()
                 },
                 onSuccess = { remoteAlbumId ->
@@ -514,11 +557,15 @@ class CreateAlbumPresenter(
                 onSuccess = {
                     val subject = if (albumName.isBlank()) "Secure Image Album"
                     else "Secure Image Album: $albumName"
-                    view.showEmailChooser(
-                            it.email,
-                            subject,
-                            "Album name:\n$albumName\n\nComments:\n$comments\n\n$downloadUrl",
-                            "Send download link using....")
+
+                    var body = ""
+                    if (albumName.isNotBlank()) body += "Album Name:\n$albumName\n\n"
+                    if (comments.isNotBlank()) body += "Comments:\n$comments\n\n"
+                    if (downloadUrl.isNotBlank()) body += "Download Images Here:\n$downloadUrl"
+
+                    val chooserTitle = "Send download link using..."
+
+                    view.showEmailChooser(it.email, subject, body, chooserTitle)
                     view.hideUploadingDialog()
                 }
         ).addTo(disposables)

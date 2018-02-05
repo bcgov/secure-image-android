@@ -14,6 +14,8 @@ import ca.bc.gov.mobileauthentication.di.Injection
 import ca.bc.gov.mobileauthentication.di.InjectionUtils
 import ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity
 import com.google.gson.Gson
+import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -73,7 +75,7 @@ class MobileAuthenticationClient(
     }
 
     override fun getToken(tokenCallback: TokenCallback) {
-        tokenRepo.getToken()
+        getTokenAsObservable()
                 .firstElement()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -89,9 +91,10 @@ class MobileAuthenticationClient(
         ).addTo(disposables)
     }
 
+    override fun getTokenAsObservable(): Observable<Token> = tokenRepo.getToken()
+
     override fun refreshToken(tokenCallback: TokenCallback) {
-        tokenRepo.getToken()
-                .flatMap { token -> tokenRepo.refreshToken(token) }
+        refreshTokenAsObservable()
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -104,8 +107,11 @@ class MobileAuthenticationClient(
         ).addTo(disposables)
     }
 
+    override fun refreshTokenAsObservable(): Observable<Token> = tokenRepo.getToken()
+            .flatMap { token -> tokenRepo.refreshToken(token) }
+
     override fun deleteToken(deleteCallback: DeleteCallback) {
-        tokenRepo.deleteToken()
+        deleteTokenAsObservable()
                 .ignoreElements().subscribeBy(
                 onError = {
                     deleteCallback.onError(it)
@@ -115,6 +121,8 @@ class MobileAuthenticationClient(
                 }
         ).addTo(disposables)
     }
+
+    override fun deleteTokenAsObservable(): Observable<Boolean> = tokenRepo.deleteToken()
 
     override fun clear() {
         disposables.clear()

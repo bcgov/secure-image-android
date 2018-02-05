@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
 import ca.bc.gov.secureimage.data.models.local.CameraImage
@@ -11,6 +12,8 @@ import ca.bc.gov.secureimage.data.models.local.CameraImage
 interface CreateAlbumContract {
 
     interface View: BaseView<Presenter> {
+        var mobileAuthenticationClient: MobileAuthenticationClient?
+
         fun finish()
 
         fun setBacked(backed: Boolean)
