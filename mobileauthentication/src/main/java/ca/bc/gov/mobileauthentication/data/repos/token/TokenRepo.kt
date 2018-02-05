@@ -32,6 +32,13 @@ private constructor(
         }
     }
 
+    /**
+     * Gets token from remote if code IS NOT null
+     * Gets token from local if code IS null
+     * Returns token if valid
+     * If token from local db refresh is expired then @see ca.bc.gov.mobileauthentication.common.exceptions.RefreshExpiredException will be thrown.
+     * If refresh token is not expired and token is expired then token will be refreshed and returned
+     */
     override fun getToken(code: String?): Observable<Token> {
         return if (code != null) {
             remoteDataSource.getToken(code)
@@ -48,16 +55,26 @@ private constructor(
         }
     }
 
+    /**
+     * Saves token locally
+     */
     override fun saveToken(token: Token): Observable<Token> {
         return localDataSource.saveToken(token)
     }
 
+    /**
+     * Refreshes token and saves to local db
+     * If passed token refresh token is expired then @see ca.bc.gov.mobileauthentication.common.exceptions.RefreshExpiredException will be thrown.
+     */
     override fun refreshToken(token: Token): Observable<Token> {
         return if (token.isRefreshExpired()) Observable.error(RefreshExpiredException())
         else remoteDataSource.refreshToken(token)
                 .flatMap { localDataSource.saveToken(it) }
     }
 
+    /**
+     * Deletes token from local db
+     */
     override fun deleteToken(): Observable<Boolean> {
         return localDataSource.deleteToken()
     }

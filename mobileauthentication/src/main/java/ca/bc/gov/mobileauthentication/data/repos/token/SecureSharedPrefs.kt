@@ -24,20 +24,33 @@ class SecureSharedPrefs(
         keyStore.load(null)
     }
 
+    /**
+     * Gets String from shared prefs, decrypts it, and returns the result
+     */
     fun getString(key: String): String {
         val aesSecretKey = getAESSecretKey(key, 256)
         return getDecryptedString(key, aesSecretKey)
     }
 
+    /**
+     * Saves an encrypted version of the passed String to shared prefs
+     */
     fun saveString(key: String, data: String) {
         val aesSecretKey = getAESSecretKey(key, 256)
         encryptAndSaveString(key, data, aesSecretKey)
     }
 
+    /**
+     * Deletes String associated with key in shared prefs
+     */
     fun deleteString(key: String) {
         sharedPrefs.edit().remove(key).apply()
     }
 
+    /**
+     * Gets AES Secret key form keystore
+     * Generates a new one if it does not exist
+     */
     private fun getAESSecretKey(
             alias: String,
             keySize: Int
@@ -52,6 +65,9 @@ class SecureSharedPrefs(
         return keyStore.getKey(alias, null) as SecretKey
     }
 
+    /**
+     * Builds new AES Secret key
+     */
     private fun generateAESSecretKey(alias: String, keySize: Int) {
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, keyStore.provider)
 
@@ -65,6 +81,9 @@ class SecureSharedPrefs(
         keyGenerator.generateKey()
     }
 
+    /**
+     * Encrypts passed string and saves in shared prefs
+     */
     private fun encryptAndSaveString(
             key: String,
             data: String,
@@ -86,6 +105,9 @@ class SecureSharedPrefs(
         sharedPrefs.edit().putString(getIvKey(key), base64IvString).apply()
     }
 
+    /**
+     * Gets String associated with key in shared prefs and decrypts it
+     */
     private fun getDecryptedString(
             key: String,
             aesSecretKey: SecretKey
@@ -111,6 +133,9 @@ class SecureSharedPrefs(
         return decryptedBytes.toString(Charset.defaultCharset())
     }
 
+    /**
+     * Gets the iv key for the passed key
+     */
     private fun getIvKey(key: String): String {
         return "iv_key_$key"
     }

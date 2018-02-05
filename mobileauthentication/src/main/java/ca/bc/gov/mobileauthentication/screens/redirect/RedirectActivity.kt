@@ -43,6 +43,7 @@ class RedirectActivity : AppCompatActivity(), RedirectContract.View {
         val redirectUri: String? = intent.getStringExtra(REDIRECT_URI)
         val clientId: String? = intent.getStringExtra(CLIENT_ID)
 
+        // Checking for required params
         if (baseUrl == null) {
             showToastAndFinish(getString(R.string.error_missing_base_url))
             return
@@ -68,6 +69,7 @@ class RedirectActivity : AppCompatActivity(), RedirectContract.View {
             return
         }
 
+        // Building presenter params
         val grantType = Constants.GRANT_TYPE_AUTH_CODE
         val responseType = Constants.RESPONSE_TYPE_CODE
 
@@ -131,7 +133,9 @@ class RedirectActivity : AppCompatActivity(), RedirectContract.View {
         loginTv.setText(R.string.logging_in)
     }
 
-    // Chrome
+    /**
+     * Goes to Chrome custom tab
+     */
     override fun loadWithChrome(url: String) {
         CustomTabsIntent.Builder()
                 .addDefaultShareMenuItem()

@@ -29,6 +29,9 @@ private constructor(
                 }
     }
 
+    /**
+     * Gets token from local db and returns
+     */
     override fun getToken(code: String?): Observable<Token> {
         return Observable.create { emitter ->
             val tokenJson = secureSharedPrefs.getString(TOKEN_KEY)
@@ -40,6 +43,9 @@ private constructor(
         }
     }
 
+    /**
+     * Saves token to local db and returns saved version
+     */
     override fun saveToken(token: Token): Observable<Token> {
         return Observable.create { emitter ->
             val tokenJson = gson.toJson(token)
@@ -52,10 +58,16 @@ private constructor(
         }
     }
 
+    /**
+     * Invalid operation for local data source
+     */
     override fun refreshToken(token: Token): Observable<Token> {
         return Observable.error(InvalidOperationException())
     }
 
+    /**
+     * Deletes token form local db
+     */
     override fun deleteToken(): Observable<Boolean> {
         return Observable.create { emitter ->
             secureSharedPrefs.deleteString(TOKEN_KEY)

@@ -56,6 +56,9 @@ class RedirectPresenter(
         getToken(code)
     }
 
+    /**
+     * Gets token remotely using Authorization Code and saves locally
+     */
     private fun getToken(code: String) {
         tokenRepo.getToken(code)
                 .firstOrError()
