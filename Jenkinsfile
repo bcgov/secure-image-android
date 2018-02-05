@@ -19,19 +19,20 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
       checkout scm
     }
 
+    stage('Setup') {
+      echo "Build setup"
+      sh "openssl version"
+    }
+
     stage('Test') {
       echo "Testing: ${BUILD_ID}"
-      sh "ls -lah /opt"
-      sh "ls -lah /opt/android"
-      sh "uname -a"
-      sh "javac -version"
-      sh "ANDROID_HOME=/opt/android ./gradlew test"
+      // sh "javac -version"
+      // sh "ANDROID_HOME=/opt/android ./gradlew test"
     }
     
     stage('Build') {
       echo "Build: ${BUILD_ID}"
-      sh "ANDROID_HOME=/opt/android ./gradlew build"
+      // sh "ANDROID_HOME=/opt/android ./gradlew build"
     }
-
   }
 }
