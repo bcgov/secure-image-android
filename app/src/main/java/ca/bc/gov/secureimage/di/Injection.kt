@@ -12,8 +12,6 @@ import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRemoteDataSourc
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRemoteDataSource
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
-import ca.bc.gov.secureimage.data.repos.user.UserLocalDataSource
-import ca.bc.gov.secureimage.data.repos.user.UserRepo
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -41,9 +39,6 @@ object Injection {
                     CameraImagesLocalDataSource,
                     CameraImagesRemoteDataSource.getInstance(appApi)
             )
-
-    @JvmStatic
-    fun provideUserRepo(): UserRepo = UserRepo.getInstance(UserLocalDataSource)
 
     @JvmStatic
     fun provideLocationRepo(): LocationRepo = LocationRepo.getInstance(LocationRemoteDataSource)

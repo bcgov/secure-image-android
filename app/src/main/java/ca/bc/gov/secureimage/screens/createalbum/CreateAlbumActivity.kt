@@ -86,7 +86,6 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
                 albumKey,
                 Injection.provideAlbumsRepo(),
                 Injection.provideCameraImagesRepo(appApi),
-                Injection.provideUserRepo(),
                 networkManager,
                 appApi)
 
@@ -404,14 +403,12 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     // Email
     override fun showEmailChooser(
-            emailTo: String,
             subject: String,
             body: String,
             chooserTitle: String) {
 
         ShareCompat.IntentBuilder.from(this)
                 .setType("message/rfc822")
-                .addEmailTo(emailTo)
                 .setSubject(subject)
                 .setText(body)
                 .setChooserTitle(chooserTitle)

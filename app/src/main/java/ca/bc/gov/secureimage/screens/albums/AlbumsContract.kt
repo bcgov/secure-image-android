@@ -16,9 +16,6 @@ interface AlbumsContract {
         fun showLoading()
         fun hideLoading()
 
-        fun setUpSettingsListener()
-        fun goToSettings()
-
         fun setUpAlbumsList()
         fun showAlbumItems(items: ArrayList<Any>)
 
@@ -32,8 +29,6 @@ interface AlbumsContract {
     interface Presenter: BasePresenter {
         fun viewShown()
         fun viewHidden()
-
-        fun settingsClicked()
 
         fun createAlbumClicked()
 

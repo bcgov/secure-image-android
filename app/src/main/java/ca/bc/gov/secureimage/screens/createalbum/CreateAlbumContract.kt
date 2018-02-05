@@ -79,7 +79,7 @@ interface CreateAlbumContract {
         fun showNoConnectionDialog()
         fun hideNoConnectionDialog()
 
-        fun showEmailChooser(emailTo: String, subject: String, body: String, chooserTitle: String)
+        fun showEmailChooser(subject: String, body: String, chooserTitle: String)
     }
 
     interface Presenter: BasePresenter {

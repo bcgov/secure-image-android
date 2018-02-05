@@ -8,7 +8,6 @@ import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.local.CameraImage
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
-import ca.bc.gov.secureimage.data.repos.user.UserRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -26,7 +25,6 @@ class CreateAlbumPresenter(
         private val albumKey: String,
         private val albumsRepo: AlbumsRepo,
         private val cameraImagesRepo: CameraImagesRepo,
-        private val userRepo: UserRepo,
         private val networkManager: NetworkManager,
         private val appApi: AppApi
 ) : CreateAlbumContract.Presenter {
@@ -536,38 +534,26 @@ class CreateAlbumPresenter(
                     view.showError(it.message ?: "Error retrieving album")
                 },
                 onSuccess = { album ->
-                    getUserForEmailChooser(album.name, album.comments, downloadUrl)
+                    buildEmailChooser(album.name, album.comments, downloadUrl)
                 }
         ).addTo(disposables)
     }
 
     /**
-     * Gets the current user for it's email.
-     * Shows email chooser on success
+     * Builds an email chooser with name, comments, and download url
      */
-    fun getUserForEmailChooser(albumName: String, comments: String, downloadUrl: String) {
-        userRepo.getUser()
-                .firstOrError()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-                onError = {
-                    view.showError(it.message ?: "Error getting user")
-                    view.hideUploadingDialog()
-                },
-                onSuccess = {
-                    val subject = if (albumName.isBlank()) "Secure Image Album"
-                    else "Secure Image Album: $albumName"
+    fun buildEmailChooser(albumName: String, comments: String, downloadUrl: String) {
+        val subject = if (albumName.isBlank()) "Secure Image Album"
+        else "Secure Image Album: $albumName"
 
-                    var body = ""
-                    if (albumName.isNotBlank()) body += "Album Name:\n$albumName\n\n"
-                    if (comments.isNotBlank()) body += "Comments:\n$comments\n\n"
-                    if (downloadUrl.isNotBlank()) body += "Download Images Here:\n$downloadUrl"
+        var body = ""
+        if (albumName.isNotBlank()) body += "Album Name:\n$albumName\n\n"
+        if (comments.isNotBlank()) body += "Comments:\n$comments\n\n"
+        if (downloadUrl.isNotBlank()) body += "Download Images Here:\n$downloadUrl"
 
-                    val chooserTitle = "Send download link using..."
+        val chooserTitle = "Send download link using..."
 
-                    view.showEmailChooser(it.email, subject, body, chooserTitle)
-                    view.hideUploadingDialog()
-                }
-        ).addTo(disposables)
+        view.showEmailChooser(subject, body, chooserTitle)
+        view.hideUploadingDialog()
     }
 }
