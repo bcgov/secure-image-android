@@ -14,7 +14,6 @@ import ca.bc.gov.mobileauthentication.di.Injection
 import ca.bc.gov.mobileauthentication.di.InjectionUtils
 import ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity
 import com.google.gson.Gson
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

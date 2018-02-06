@@ -26,7 +26,9 @@ object UrlUtils {
      * code= and the first & or the end of the String
      */
     fun extractCode(codeUrl: String): String {
-        return codeUrl.substringAfter("code=").substringBefore("&")
+        return if (codeUrl.contains("code=".toRegex())) {
+            codeUrl.substringAfter("code=").substringBefore("&")
+        } else ""
     }
 
 }
