@@ -28,7 +28,8 @@ interface AppApi {
     // Download url
     @GET("/v1/album/{remoteAlbumId}/")
     fun buildDownloadUrl(
-            @Path("remoteAlbumId") remoteAlbumId: String
+            @Path("remoteAlbumId") remoteAlbumId: String,
+            @Query("name") name: String? = null
     ): Observable<BuildDownloadUrlResponse>
 
 }

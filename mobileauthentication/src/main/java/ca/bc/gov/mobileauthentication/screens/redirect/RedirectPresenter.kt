@@ -56,7 +56,10 @@ class RedirectPresenter(
         getToken(code)
     }
 
-    private fun getToken(code: String) {
+    /**
+     * Gets token remotely using Authorization Code and saves locally
+     */
+    fun getToken(code: String) {
         tokenRepo.getToken(code)
                 .firstOrError()
                 .subscribeOn(Schedulers.io())

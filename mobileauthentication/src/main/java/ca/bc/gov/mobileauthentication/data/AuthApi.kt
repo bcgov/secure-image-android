@@ -13,6 +13,9 @@ import retrofit2.http.Path
  */
 interface AuthApi {
 
+    /**
+     * OAuth2 get Token call
+     */
     @POST("/auth/realms/{realm_name}/protocol/openid-connect/token")
     @FormUrlEncoded
     fun getToken(
@@ -23,6 +26,9 @@ interface AuthApi {
             @Field("code") code: String
     ): Observable<Token>
 
+    /**
+     * OAuth2 refresh Token call
+     */
     @POST("/auth/realms/{realm_name}/protocol/openid-connect/token")
     @FormUrlEncoded
     fun refreshToken(

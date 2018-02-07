@@ -1,17 +1,17 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
+import ca.bc.gov.mobileauthentication.data.models.Token
 import ca.bc.gov.secureimage.RxImmediateSchedulerRule
 import ca.bc.gov.secureimage.common.managers.NetworkManager
 import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.models.AddImages
 import ca.bc.gov.secureimage.data.models.local.Album
 import ca.bc.gov.secureimage.data.models.local.CameraImage
-import ca.bc.gov.secureimage.data.models.local.User
 import ca.bc.gov.secureimage.data.models.remote.BuildDownloadUrlResponse
 import ca.bc.gov.secureimage.data.models.remote.CreateRemoteAlbumIdResponse
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.cameraimages.CameraImagesRepo
-import ca.bc.gov.secureimage.data.repos.user.UserRepo
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Observable
 import org.junit.After
@@ -42,7 +42,7 @@ class CreateAlbumPresenterTest {
     private lateinit var cameraImagesRepo: CameraImagesRepo
     private lateinit var networkManager: NetworkManager
     private lateinit var appApi: AppApi
-    private lateinit var userRepo: UserRepo
+    private lateinit var mobileAuthenticationClient: MobileAuthenticationClient
 
     private lateinit var presenter: CreateAlbumPresenter
 
@@ -50,21 +50,26 @@ class CreateAlbumPresenterTest {
     fun setUp() {
         view = mock()
 
+
         albumsRepo = mock()
         cameraImagesRepo = mock()
         networkManager = mock()
         appApi = mock()
-        userRepo = mock()
+        mobileAuthenticationClient = mock()
 
         presenter = CreateAlbumPresenter(
-                view, albumKey, albumsRepo, cameraImagesRepo, userRepo, networkManager, appApi)
+                view, albumKey, albumsRepo, cameraImagesRepo, networkManager, appApi, mobileAuthenticationClient)
     }
 
     @After
     fun tearDown() {
         AlbumsRepo.destroyInstance()
         CameraImagesRepo.destroyInstance()
-        UserRepo.destroyInstance()
+    }
+
+    @Test
+    fun presenterSet() {
+        verify(view).presenter = presenter
     }
 
     @Test
@@ -195,8 +200,9 @@ class CreateAlbumPresenterTest {
     @Test
     fun backClicked() {
         val albumName = "name"
+        val comments = "comments"
 
-        presenter.backClicked(false, albumName)
+        presenter.backClicked(false, albumName, comments)
 
         verify(view).setBacked(true)
     }
@@ -327,10 +333,6 @@ class CreateAlbumPresenterTest {
         val downloadUrl = "http://downloadimages.com"
         val buildDownloadUrlResponse = BuildDownloadUrlResponse(downloadUrl)
 
-        val email = "email@test.com"
-        val user = User()
-        user.email = email
-
         whenever(cameraImagesRepo.getCameraImageCountInAlbum(albumKey))
                 .thenReturn(Observable.just(imageCount))
 
@@ -346,7 +348,13 @@ class CreateAlbumPresenterTest {
         whenever(appApi.buildDownloadUrl(albumId))
                 .thenReturn(Observable.just(buildDownloadUrlResponse))
 
-        whenever(userRepo.getUser()).thenReturn(Observable.just(user))
+        whenever(mobileAuthenticationClient.getTokenAsObservable())
+                .thenReturn(Observable.just(
+                        Token("", 123L, 123L, "",
+                                "", "", 123L, "")))
+
+        whenever(albumsRepo.getAlbum(albumKey))
+                .thenReturn(Observable.just(Album()))
 
         presenter.checkNetworkTypeForUpload(networkType)
 
@@ -354,10 +362,9 @@ class CreateAlbumPresenterTest {
         verify(view).incrementUploadedCount()
 
         verify(view).showEmailChooser(
-                email,
-                "Secure image",
-                downloadUrl,
-                "Send download link using....")
+                "Secure Image Album",
+                "Download Images Here:\n$downloadUrl",
+                "Send download link using...")
 
         verify(view).hideUploadingDialog()
     }

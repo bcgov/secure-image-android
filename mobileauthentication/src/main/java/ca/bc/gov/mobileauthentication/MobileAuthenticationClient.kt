@@ -14,6 +14,7 @@ import ca.bc.gov.mobileauthentication.di.Injection
 import ca.bc.gov.mobileauthentication.di.InjectionUtils
 import ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity
 import com.google.gson.Gson
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -43,6 +44,9 @@ class MobileAuthenticationClient(
 
     private var passedRequestCode: Int = DEFAULT_REQUEST_CODE
 
+    /**
+     * Launches intent to activity which will handle OAuth2 Authorization Code Flow
+     */
     override fun authenticate(requestCode: Int) {
         this.passedRequestCode = requestCode
         Intent(context, RedirectActivity::class.java)
@@ -54,6 +58,10 @@ class MobileAuthenticationClient(
                 .run { (context as Activity).startActivityForResult(this, requestCode) }
     }
 
+    /**
+     * Handles on activity result and determines if the authentication was successful
+     * or an error occurred.
+     */
     override fun handleAuthResult(
             requestCode: Int, resultCode: Int, data: Intent?,
             tokenCallback: TokenCallback) {
@@ -72,6 +80,13 @@ class MobileAuthenticationClient(
         }
     }
 
+    /**
+     * Gets Token from local storage.
+     * Token will be automatically refreshed if refresh token is not expired.
+     * If refresh token is expired a @see ca.bc.gov.mobileauthentication.common.exceptions.RefreshExpiredException will be thrown
+     * If refresh token does not exist then @see ca.bc.gov.mobileauthentication.common.exceptions.NoRefreshTokenException will be thrown
+     * If a token does not exist a @see ca.bc.gov.mobileauthentication.common.exceptions.TokenNotFoundException will be thrown
+     */
     override fun getToken(tokenCallback: TokenCallback) {
         tokenRepo.getToken()
                 .firstElement()
@@ -89,6 +104,16 @@ class MobileAuthenticationClient(
         ).addTo(disposables)
     }
 
+    /**
+     * Gets Token from local storage as a RxJava2 Observable
+     */
+    override fun getTokenAsObservable(): Observable<Token> = tokenRepo.getToken()
+
+    /**
+     * Refreshes token
+     * If refresh token is expired a @see ca.bc.gov.mobileauthentication.common.exceptions.RefreshExpiredException will be thrown
+     * If refresh token does not exist then @see ca.bc.gov.mobileauthentication.common.exceptions.NoRefreshTokenException will be thrown
+     */
     override fun refreshToken(tokenCallback: TokenCallback) {
         tokenRepo.getToken()
                 .flatMap { token -> tokenRepo.refreshToken(token) }
@@ -104,6 +129,15 @@ class MobileAuthenticationClient(
         ).addTo(disposables)
     }
 
+    /**
+     * Refreshes Token that is stored in local storage as a RxJava2 Observable
+     */
+    override fun refreshTokenAsObservable(): Observable<Token> = tokenRepo.getToken()
+            .flatMap { token -> tokenRepo.refreshToken(token) }
+
+    /**
+     * Deletes token from local storage
+     */
     override fun deleteToken(deleteCallback: DeleteCallback) {
         tokenRepo.deleteToken()
                 .ignoreElements().subscribeBy(
@@ -116,6 +150,14 @@ class MobileAuthenticationClient(
         ).addTo(disposables)
     }
 
+    /**
+     * Deletes token from local storage as a RxJava2 Observable
+     */
+    override fun deleteTokenAsObservable(): Observable<Boolean> = tokenRepo.deleteToken()
+
+    /**
+     * Clears all current callbacks
+     */
     override fun clear() {
         disposables.clear()
     }

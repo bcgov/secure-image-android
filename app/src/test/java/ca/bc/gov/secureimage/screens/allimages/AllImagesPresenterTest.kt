@@ -47,6 +47,11 @@ class AllImagesPresenterTest {
     }
 
     @Test
+    fun presenterSet() {
+        verify(view).presenter = presenter
+    }
+
+    @Test
     fun subscribe() {
         presenter.subscribe()
 

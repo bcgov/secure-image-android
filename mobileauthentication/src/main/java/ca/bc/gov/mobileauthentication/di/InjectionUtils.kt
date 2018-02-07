@@ -21,6 +21,9 @@ import java.security.KeyStore
  */
 object InjectionUtils {
 
+    /**
+     * Gets Auth Api with standard params
+     */
     fun getAuthApi(
             apiDomain: String,
             gson: Gson = Injection.provideGson(),
@@ -37,6 +40,9 @@ object InjectionUtils {
                     apiDomain, okHttpClient, converterFactory, callAdapterFactory)
     ): AuthApi = Injection.provideAuthApi(retrofit)
 
+    /**
+     * Gets Token Repo with standard params
+     */
     fun getTokenRepo(
             authApi: AuthApi,
             realmName: String,

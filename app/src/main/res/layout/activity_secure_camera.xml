@@ -80,10 +80,7 @@
     <ImageView
         android:id="@+id/captureImageIv"
         android:contentDescription="@string/take_image"
-        android:tint="@color/white"
-        android:src="@drawable/ic_photo_camera_black_24dp"
-        android:background="@drawable/selector_oval_color_primary_light"
-        android:padding="20dp"
+        android:src="@drawable/selector_oval_white"
         android:layout_marginBottom="16dp"
         android:layout_width="72dp"
         android:layout_height="72dp"

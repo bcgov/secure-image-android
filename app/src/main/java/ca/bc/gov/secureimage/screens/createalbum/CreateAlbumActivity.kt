@@ -9,6 +9,9 @@ import android.support.v4.app.ShareCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
+import ca.bc.gov.mobileauthentication.data.models.Token
+import ca.bc.gov.secureimage.BuildConfig
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
 import ca.bc.gov.secureimage.R
@@ -66,15 +69,24 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         val networkManager = Injection.provideNetworkManager(
                 getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
 
+        val baseUrl = BuildConfig.SSO_BASE_URL
+        val realmName = BuildConfig.SSO_REALM_NAME
+        val authEndpoint = BuildConfig.SSO_AUTH_ENDPOINT
+        val redirectUri = BuildConfig.SSO_REDIRECT_URI
+        val clientId = BuildConfig.SSO_CLIENT_ID
+
+        val mobileAuthenticationClient =
+                MobileAuthenticationClient(
+                        this, baseUrl, realmName, authEndpoint, redirectUri, clientId)
+
         CreateAlbumPresenter(
                 this,
                 albumKey,
                 Injection.provideAlbumsRepo(),
                 Injection.provideCameraImagesRepo(appApi),
-                Injection.provideUserRepo(),
                 networkManager,
-                appApi
-        )
+                appApi,
+                mobileAuthenticationClient)
 
         presenter?.subscribe()
     }
@@ -87,13 +99,28 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
     override fun onPause() {
         super.onPause()
         val albumName = albumNameEt.text.toString()
-        presenter?.viewHidden(backed, albumDeleted, albumName)
+        val comments = commentsEt.text.toString()
+        presenter?.viewHidden(backed, albumDeleted, albumName, comments)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        presenter?.mobileAuthenticationClient?.handleAuthResult(requestCode, resultCode, data, object : MobileAuthenticationClient.TokenCallback {
+            override fun onError(throwable: Throwable) {
+                showToast(throwable.message ?: "Error logging in")
+            }
+
+            override fun onSuccess(token: Token) {
+                presenter?.authenticationSuccess()
+            }
+        })
+    }
+
     // Setters
     override fun setBacked(backed: Boolean) {
         this.backed = backed
@@ -137,7 +164,8 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     fun backEvent() {
         val albumName = albumNameEt.text.toString()
-        presenter?.backClicked(true, albumName)
+        val comments = commentsEt.text.toString()
+        presenter?.backClicked(true, albumName, comments)
     }
 
     // Network type
@@ -310,6 +338,11 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         albumNameEt.setText(albumName)
     }
 
+    // Comments
+    override fun setComments(comments: String) {
+        commentsEt.setText(comments)
+    }
+
     // Upload
     override fun showUpload() {
         uploadTv.visibility = View.VISIBLE
@@ -321,7 +354,9 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     override fun setUpUploadListener() {
         uploadTv.setOnClickListener {
-            presenter?.uploadClicked()
+            val albumName = albumNameEt.text.toString()
+            val comments = commentsEt.text.toString()
+            presenter?.uploadClicked(albumName, comments)
         }
     }
 
@@ -365,16 +400,14 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
 
     // Email
     override fun showEmailChooser(
-            emailTo: String,
             subject: String,
             body: String,
             chooserTitle: String) {
 
         ShareCompat.IntentBuilder.from(this)
                 .setType("message/rfc822")
-                .addEmailTo(emailTo)
                 .setSubject(subject)
-                .setHtmlText(body)
+                .setText(body)
                 .setChooserTitle(chooserTitle)
                 .startChooser()
     }

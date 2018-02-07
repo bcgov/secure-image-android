@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.screens.createalbum
 
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
 import ca.bc.gov.secureimage.common.base.BasePresenter
 import ca.bc.gov.secureimage.common.base.BaseView
 import ca.bc.gov.secureimage.data.models.local.CameraImage
@@ -60,6 +61,8 @@ interface CreateAlbumContract {
 
         fun setAlbumName(albumName: String)
 
+        fun setComments(comments: String)
+
         fun showUpload()
         fun hideUpload()
         fun setUpUploadListener()
@@ -74,14 +77,16 @@ interface CreateAlbumContract {
         fun showNoConnectionDialog()
         fun hideNoConnectionDialog()
 
-        fun showEmailChooser(emailTo: String, subject: String, body: String, chooserTitle: String)
+        fun showEmailChooser(subject: String, body: String, chooserTitle: String)
     }
 
     interface Presenter: BasePresenter {
-        fun viewShown(refresh: Boolean, addNetworkListener: Boolean)
-        fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String)
+        val mobileAuthenticationClient: MobileAuthenticationClient
 
-        fun backClicked(saveAlbum: Boolean = false, albumName: String = "")
+        fun viewShown(refresh: Boolean, addNetworkListener: Boolean)
+        fun viewHidden(backed: Boolean, albumDeleted: Boolean, albumName: String, comments: String)
+
+        fun backClicked(saveAlbum: Boolean = false, albumName: String, comments: String)
 
         fun deleteAlbumClicked()
         fun deleteAlbumConfirmed()
@@ -96,9 +101,11 @@ interface CreateAlbumContract {
 
         fun deleteImageConfirmed(cameraImage: CameraImage, position: Int)
 
-        fun uploadClicked()
+        fun uploadClicked(albumName: String, comments: String)
 
         fun uploadAnywayClicked()
+
+        fun authenticationSuccess()
     }
 
 }

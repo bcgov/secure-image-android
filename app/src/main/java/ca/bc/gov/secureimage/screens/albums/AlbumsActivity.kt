@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
-import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
 import ca.bc.gov.secureimage.R
 import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.albums.AlbumViewHolder
@@ -15,7 +14,6 @@ import ca.bc.gov.secureimage.common.adapters.albums.AlbumsAdapter
 import ca.bc.gov.secureimage.data.models.local.Album
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.createalbum.CreateAlbumActivity
-import ca.bc.gov.secureimage.screens.settings.SettingsActivity
 import com.github.florent37.rxgps.RxGps
 import kotlinx.android.synthetic.main.activity_albums.*
 
@@ -24,8 +22,6 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
     override var presenter: AlbumsContract.Presenter? = null
 
     private var albumsAdapter: AlbumsAdapter? = null
-
-    private var mobileAuthenticationClient: MobileAuthenticationClient? = null
 
     // Life cycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,19 +36,6 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
         )
 
         presenter?.subscribe()
-
-        /*
-        val baseUrl = BuildConfig.SSO_BASE_URL
-        val realmName = BuildConfig.SSO_REALM_NAME
-        val authEndpoint = BuildConfig.SSO_AUTH_ENDPOINT
-        val redirectUri = BuildConfig.SSO_REDIRECT_URI
-        val clientId = BuildConfig.SSO_CLIENT_ID
-
-        mobileAuthenticationClient =
-                MobileAuthenticationClient(this, baseUrl, realmName, authEndpoint, redirectUri, clientId)
-        mobileAuthenticationClient?.authenticate(1012)
-
-        })*/
     }
 
     override fun onResume() {
@@ -68,7 +51,6 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
     override fun onDestroy() {
         super.onDestroy()
         presenter?.dispose()
-        mobileAuthenticationClient?.clear()
     }
 
     // Error
@@ -83,18 +65,6 @@ class AlbumsActivity : AppCompatActivity(), AlbumsContract.View, AlbumViewHolder
 
     override fun hideLoading() {
         progressBar.visibility = View.GONE
-    }
-
-    // Settings
-    override fun setUpSettingsListener() {
-        settingsIv.setOnClickListener {
-            presenter?.settingsClicked()
-        }
-    }
-
-    override fun goToSettings() {
-        Intent(this, SettingsActivity::class.java)
-                .run { startActivity(this) }
     }
 
     // Album list

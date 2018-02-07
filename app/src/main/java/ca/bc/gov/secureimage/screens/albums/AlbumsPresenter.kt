@@ -31,8 +31,6 @@ class AlbumsPresenter(
         view.hideLoading()
         view.hideOnboarding()
 
-        view.setUpSettingsListener()
-
         view.setUpAlbumsList()
         view.setUpCreateAlbumListener()
     }
@@ -48,10 +46,6 @@ class AlbumsPresenter(
 
     override fun viewHidden() {
         disposables.clear()
-    }
-
-    override fun settingsClicked() {
-        view.goToSettings()
     }
 
     /**

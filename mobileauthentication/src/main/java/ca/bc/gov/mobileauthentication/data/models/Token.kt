@@ -19,7 +19,8 @@ data class Token(
         val refreshExpiresAt: Long = System.currentTimeMillis() + (refreshExpiresIn ?: 0 * 1000)
 ) {
 
-    fun isExpired(): Boolean = expiresAt > System.currentTimeMillis()
-    fun isRefreshExpired(): Boolean = refreshExpiresAt > System.currentTimeMillis()
+    fun isExpired(currentTime: Long = System.currentTimeMillis()): Boolean = expiresAt > currentTime
+
+    fun isRefreshExpired(currentTime: Long = System.currentTimeMillis()): Boolean = refreshExpiresAt > currentTime
 
 }
