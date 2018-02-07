@@ -28,7 +28,6 @@
         <activity android:name=".screens.allimages.AllImagesActivity" />
         <activity android:name=".screens.securecamera.SecureCameraActivity" />
         <activity android:name=".screens.imagedetail.ImageDetailActivity" />
-        <activity android:name=".screens.settings.SettingsActivity" />
 
         <activity
             android:name="ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity"
