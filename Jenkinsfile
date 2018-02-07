@@ -3,7 +3,7 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
   containerTemplate(
     name: 'jnlp',
     image: '172.50.0.2:5000/devex-mpf-secure-tools/jenkins-slave-android-rhel7:latest',
-    resourceRequestCpu: '1000m',
+    resourceRequestCpu: '1500m',
     resourceLimitCpu: '2000m',
     resourceRequestMemory: '6Gi',
     resourceLimitMemory: '8Gi',
