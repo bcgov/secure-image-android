@@ -28,6 +28,7 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
       echo "Build setup"
       // Decrypt the Android keystore properties file.
       sh "/usr/bin/openssl aes-256-cbc -d -a -in keystore.properties.enc -out keystore.properties -pass env:ANDROID_DECRYPT_KEY"
+      sh "/usr/bin/openssl aes-256-cbc -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass env:ANDROID_DECRYPT_KEY"
       // Use the following two lines to disable the gradle daemon. This can make builds faster if the intermediary
       // artifacts (download, etc) are *not* preserved. If they are, keep the daemon running. Overwrite other options
       // because the will likley prevent this param from beng applied and the daemon will start.
