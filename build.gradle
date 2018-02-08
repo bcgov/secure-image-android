@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.kotlin_version = '1.2.20'
+    ext.kotlin_version = '1.2.21'
 
     ext.gradleVersion = '3.0.1'
     ext.kotlinVersion = '1.2.21'
@@ -22,6 +22,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.21"
+}
+
 allprojects {
     repositories {
         google()
@@ -31,9 +35,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
 
 
 ext {

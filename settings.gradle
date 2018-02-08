@@ -1,1 +1,1 @@
-include ':app', ':mobileauthentication'
+include ':app'

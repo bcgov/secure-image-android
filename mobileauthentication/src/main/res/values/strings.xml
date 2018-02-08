@@ -1,9 +1,0 @@
-<resources>
-    <string name="error_missing_base_url">Missing base url intent parameter</string>
-    <string name="error_missing_realm_name">Missing realm name intent parameter</string>
-    <string name="error_missing_auth_endpoint">Missing auth endpoint intent parameter</string>
-    <string name="error_missing_redirect_uri">Missing redirect uri intent parameter</string>
-    <string name="error_missing_client_id">Missing client id intent parameter</string>
-    <string name="login">Login</string>
-    <string name="logging_in">Logging In</string>
-</resources>
