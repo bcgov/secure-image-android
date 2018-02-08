@@ -14,7 +14,6 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
       secretEnvVar(key: 'ANDROID_DECRYPT_KEY', secretName: 'android-decrypt-key', secretKey: 'password'),
       envVar(key: '_JAVA_OPTIONS', value: '-Xmx4g')
     ],
-    args: '${computer.jnlpmac} ${computer.name}',
     alwaysPullImage: true
   )
 ]) {
