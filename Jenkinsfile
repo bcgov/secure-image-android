@@ -9,7 +9,10 @@ podTemplate(label: 'android-build', name: 'android-build', serviceAccount: 'jenk
     resourceLimitMemory: '2Gi',
     workingDir: '/tmp',
     command: '',
-    args: '${computer.jnlpmac} ${computer.name}'
+    args: '${computer.jnlpmac} ${computer.name}',
+    envVars: [
+      secretEnvVar(key: 'ANDROID_DECRYPT_KEY', secretName: 'android-decrypt-key', secretKey: 'password'),
+    ]
   )
 ]) {
   node('android-build') {
