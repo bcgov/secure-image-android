@@ -15,10 +15,3 @@ RUN mkdir -p /root/.android/ && \
     touch /root/.android/repositories.cfg && \
     /opt/android/tools/bin/sdkmanager --update && \
     yes | /opt/android/tools/bin/sdkmanager --licenses
-
-# In the future it might be better to create a proper
-# workspace and set WORKDIR rather than use /tmp
-COPY ./ /tmp/src/
-
-#RUN cd /tmp/src/ && \
-#    ANDROID_HOME=/opt/android ./gradlew build

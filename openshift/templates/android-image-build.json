@@ -45,13 +45,7 @@
           "type": "Docker",
           "dockerStrategy":
           {
-            "dockerfilePath": "${DOCKER_FILE_PATH}",
-            "from":
-            {
-              "kind": "${SOURCE_IMAGE_KIND}",
-              "name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}",
-              "namespace": "openshift"
-            }
+            "dockerfilePath": "${DOCKER_FILE_PATH}"
           }
         },
         "output":
@@ -125,27 +119,6 @@
       "description": "The path to the docker file.",
       "required": true,
       "value": "Dockerfile"
-    },
-    {
-      "name": "SOURCE_IMAGE_KIND",
-      "displayName": "Source Image Kind",
-      "description": "The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.",
-      "required": true,
-      "value": "ImageStreamTag"
-    },
-    {
-      "name": "SOURCE_IMAGE_NAME",
-      "displayName": "Source Image Name",
-      "description": "The name of the source image.",
-      "required": true,
-      "value": "jenkins-slave-base-rhel7"
-    },
-    {
-      "name": "SOURCE_IMAGE_TAG",
-      "displayName": "Source Image Tag",
-      "description": "The tag of the source image.",
-      "required": true,
-      "value": "latest"
     },
     {
       "name": "CPU_LIMIT",
