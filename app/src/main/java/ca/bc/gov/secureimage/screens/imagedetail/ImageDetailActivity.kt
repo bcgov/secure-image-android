@@ -54,12 +54,15 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailContract.View, View.
             return
         }
 
+        val mobileAuthenticationClient = Injection.provideMobileAuthenticationClient(this)
+
         ImageDetailPresenter(
                 this,
                 albumKey,
                 imageIndex,
                 Injection.provideCameraImagesRepo(
-                        InjectionUtils.getAppApi()))
+                        InjectionUtils.getAppApi(),
+                        mobileAuthenticationClient))
 
         presenter?.subscribe()
     }

@@ -42,11 +42,13 @@ class AllImagesActivity : AppCompatActivity(), AllImagesContract.View, AddImages
             finish()
             return
         }
+        val mobileAuthenticationClient = Injection.provideMobileAuthenticationClient(this)
 
         AllImagesPresenter(this,
                 albumKey,
                 Injection.provideCameraImagesRepo(
-                        InjectionUtils.getAppApi()))
+                        InjectionUtils.getAppApi(),
+                        mobileAuthenticationClient))
 
         presenter?.subscribe()
     }

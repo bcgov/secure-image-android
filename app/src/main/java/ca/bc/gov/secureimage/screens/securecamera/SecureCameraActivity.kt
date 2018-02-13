@@ -39,10 +39,13 @@ class SecureCameraActivity : AppCompatActivity(), SecureCameraContract.View, Cam
             return
         }
 
+        val mobileAuthenticationClient = Injection.provideMobileAuthenticationClient(this)
+
         SecureCameraPresenter(this,
                 albumKey,
                 Injection.provideCameraImagesRepo(
-                        InjectionUtils.getAppApi()),
+                        InjectionUtils.getAppApi(),
+                        mobileAuthenticationClient),
                 Injection.provideAlbumsRepo(),
                 Injection.provideLocationRepo(),
                 RxGps(this),

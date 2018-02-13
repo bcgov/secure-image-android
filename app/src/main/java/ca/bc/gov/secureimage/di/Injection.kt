@@ -1,6 +1,9 @@
 package ca.bc.gov.secureimage.di
 
+import android.content.Context
 import android.net.ConnectivityManager
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
+import ca.bc.gov.secureimage.BuildConfig
 import ca.bc.gov.secureimage.common.managers.CompressionManager
 import ca.bc.gov.secureimage.common.managers.KeyStorageManager
 import ca.bc.gov.secureimage.common.managers.NetworkManager
@@ -34,11 +37,12 @@ object Injection {
     fun provideAlbumsRepo(): AlbumsRepo = AlbumsRepo.getInstance(AlbumsLocalDataSource)
 
     @JvmStatic
-    fun provideCameraImagesRepo(appApi: AppApi): CameraImagesRepo =
+    fun provideCameraImagesRepo(
+            appApi: AppApi,
+            mobileAuthenticationClient: MobileAuthenticationClient): CameraImagesRepo =
             CameraImagesRepo.getInstance(
                     CameraImagesLocalDataSource,
-                    CameraImagesRemoteDataSource.getInstance(appApi)
-            )
+                    CameraImagesRemoteDataSource.getInstance(appApi, mobileAuthenticationClient))
 
     @JvmStatic
     fun provideLocationRepo(): LocationRepo = LocationRepo.getInstance(LocationRemoteDataSource)
@@ -114,4 +118,20 @@ object Injection {
     // App Api
     @JvmStatic
     fun provideAppApi(retrofit: Retrofit): AppApi = retrofit.create(AppApi::class.java)
+
+    // Mobile auth client
+    @JvmStatic
+    fun provideMobileAuthenticationClient(context: Context): MobileAuthenticationClient {
+        val baseUrl = BuildConfig.SSO_BASE_URL
+        val realmName = BuildConfig.SSO_REALM_NAME
+        val authEndpoint = BuildConfig.SSO_AUTH_ENDPOINT
+        val redirectUri = BuildConfig.SSO_REDIRECT_URI
+        val clientId = BuildConfig.SSO_CLIENT_ID
+
+        val mobileAuthenticationClient =
+                MobileAuthenticationClient(
+                        context, baseUrl, realmName, authEndpoint, redirectUri, clientId)
+
+        return mobileAuthenticationClient
+    }
 }

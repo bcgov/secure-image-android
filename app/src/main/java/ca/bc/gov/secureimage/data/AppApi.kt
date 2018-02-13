@@ -15,12 +15,15 @@ interface AppApi {
 
     // Create remote album
     @POST("/v1/album/")
-    fun createRemoteAlbumId(): Observable<CreateRemoteAlbumIdResponse>
+    fun createRemoteAlbumId(
+            @Header("Authorization") authToken: String
+    ): Observable<CreateRemoteAlbumIdResponse>
 
     // Upload image
     @Multipart
     @POST("/v1/album/{remoteAlbumId}/")
     fun uploadImage(
+            @Header("Authorization") authToken: String,
             @Path("remoteAlbumId") remoteAlbumId: String,
             @Part imagePart: MultipartBody.Part
     ): Observable<UploadImageResponse>
@@ -28,6 +31,7 @@ interface AppApi {
     // Download url
     @GET("/v1/album/{remoteAlbumId}/")
     fun buildDownloadUrl(
+            @Header("Authorization") authToken: String,
             @Path("remoteAlbumId") remoteAlbumId: String,
             @Query("name") name: String? = null
     ): Observable<BuildDownloadUrlResponse>

@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
 import ca.bc.gov.mobileauthentication.data.models.Token
-import ca.bc.gov.secureimage.BuildConfig
 import ca.bc.gov.secureimage.di.Injection
 import ca.bc.gov.secureimage.screens.securecamera.SecureCameraActivity
 import ca.bc.gov.secureimage.R
@@ -69,21 +68,13 @@ class CreateAlbumActivity : AppCompatActivity(), CreateAlbumContract.View,
         val networkManager = Injection.provideNetworkManager(
                 getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
 
-        val baseUrl = BuildConfig.SSO_BASE_URL
-        val realmName = BuildConfig.SSO_REALM_NAME
-        val authEndpoint = BuildConfig.SSO_AUTH_ENDPOINT
-        val redirectUri = BuildConfig.SSO_REDIRECT_URI
-        val clientId = BuildConfig.SSO_CLIENT_ID
-
-        val mobileAuthenticationClient =
-                MobileAuthenticationClient(
-                        this, baseUrl, realmName, authEndpoint, redirectUri, clientId)
+        val mobileAuthenticationClient = Injection.provideMobileAuthenticationClient(this)
 
         CreateAlbumPresenter(
                 this,
                 albumKey,
                 Injection.provideAlbumsRepo(),
-                Injection.provideCameraImagesRepo(appApi),
+                Injection.provideCameraImagesRepo(appApi, mobileAuthenticationClient),
                 networkManager,
                 appApi,
                 mobileAuthenticationClient)

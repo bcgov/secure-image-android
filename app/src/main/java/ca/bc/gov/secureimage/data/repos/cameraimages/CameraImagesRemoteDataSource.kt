@@ -1,5 +1,6 @@
 package ca.bc.gov.secureimage.data.repos.cameraimages
 
+import ca.bc.gov.mobileauthentication.MobileAuthenticationClient
 import ca.bc.gov.mobileauthentication.common.exceptions.InvalidOperationException
 import ca.bc.gov.secureimage.data.AppApi
 import ca.bc.gov.secureimage.data.models.local.CameraImage
@@ -14,15 +15,22 @@ import java.util.*
  *
  */
 class CameraImagesRemoteDataSource
-private constructor(private val appApi: AppApi) : CameraImagesDataSource {
+private constructor(
+        private val appApi: AppApi,
+        private val mobileAuthenticationClient: MobileAuthenticationClient
+) : CameraImagesDataSource {
 
     companion object {
 
         @Volatile private var INSTANCE: CameraImagesRemoteDataSource? = null
 
-        fun getInstance(appApi: AppApi): CameraImagesRemoteDataSource =
+        fun getInstance(
+                appApi: AppApi,
+                mobileAuthenticationClient: MobileAuthenticationClient
+        ): CameraImagesRemoteDataSource =
                 INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: CameraImagesRemoteDataSource(appApi).also { INSTANCE = it }
+                    INSTANCE ?: CameraImagesRemoteDataSource(
+                            appApi, mobileAuthenticationClient).also { INSTANCE = it }
                 }
     }
 
@@ -53,7 +61,11 @@ private constructor(private val appApi: AppApi) : CameraImagesDataSource {
         val imagePart = MultipartBody.Part.createFormData(
                 "file", UUID.randomUUID().toString(), imageRequestBody)
 
-        return appApi.uploadImage(remoteAlbumId, imagePart)
+        return mobileAuthenticationClient.getTokenAsObservable()
+                .flatMap { token ->
+                    val authToken = "${token.bearer} ${token.accessToken}"
+                    appApi.uploadImage(authToken, remoteAlbumId, imagePart)
+                }
                 .flatMap { Observable.just(cameraImage) }
     }
 }

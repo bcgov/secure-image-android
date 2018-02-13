@@ -454,7 +454,10 @@ class CreateAlbumPresenter(
      */
     fun createRemoteAlbumId(albumName: String) {
         mobileAuthenticationClient.getTokenAsObservable()
-                .flatMap { appApi.createRemoteAlbumId() }
+                .flatMap { token ->
+                    val authToken = "${token.bearer} ${token.accessToken}"
+                    appApi.createRemoteAlbumId(authToken)
+                }
                 .map { it.remoteAlbumId }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())
@@ -499,7 +502,12 @@ class CreateAlbumPresenter(
      */
     fun buildDownloadUrl(remoteAlbumId: String, albumName: String) {
         val buildObservable = if (albumName.isBlank()) {
-            appApi.buildDownloadUrl(remoteAlbumId)
+            mobileAuthenticationClient.getTokenAsObservable()
+                    .flatMap { token ->
+                        val authToken = "${token.bearer} ${token.accessToken}"
+                        appApi.buildDownloadUrl(authToken, remoteAlbumId)
+                    }
+
         } else {
             var fileName = albumName.toLowerCase().replace(" ", "_")
             fileName = URLEncoder.encode(fileName, "utf-8")
