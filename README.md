@@ -8,11 +8,11 @@ SecureImage is an open source application developed for taking, storing and uplo
 - **Create Album** Create album with up to 100 images, album name, and any comments.
 - **View Saved Albums** View all saved albums ordered by most recently created.
 - **Delete Album** Delete album locally off device.
-- **Image Management** View all images, delete selected images, see detailed image view, and continuously add to an Album over time.
-- **Upload Album** Upload album to protected server and be returned a download url. To upload or download the user is required to authenticate.
+- **Image Management** View all images, delete selected images, see detailed image view, and continuously add to an album over time.
+- **Upload Album** Upload album to protected server and be returned a download url to email. To upload or download the user is first required to authenticate.
 
 ## Requirements
-1) Phone needs to have local device security enabled (pin, pattern, fingerprint, etc..) to enter the app.
+1) Phone needs to have local device protection setup (pin, pattern, fingerprint, etc..) to enter the app.
 2) User will need a government issued IDIR account to upload data to the network.
 3) Device running Android 6 Marshmallow or greater (API 23+).
 
