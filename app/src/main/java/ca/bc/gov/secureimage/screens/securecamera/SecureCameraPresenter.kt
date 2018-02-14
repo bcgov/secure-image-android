@@ -52,9 +52,9 @@ class SecureCameraPresenter(
     override fun subscribe() {
         view.hideShutter()
 
-        view.setCameraMethod(CameraKit.Constants.METHOD_STILL)
-        view.setCameraFlash(CameraKit.Constants.FLASH_OFF)
-        view.showFlashOff()
+        view.setCameraMethod(CameraKit.Constants.METHOD_STANDARD)
+        view.setCameraFlash(CameraKit.Constants.FLASH_AUTO)
+        view.showFlashAuto()
         view.setUpFlashControlListener()
 
         view.setCameraCropOutput(false)
