@@ -1,54 +1,38 @@
-
 # Secure Image Android
-
-SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network.
+SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network. Originally developed for use within the Government of British Columbia's ministry of Social Development and Poverty Reduction and the ministry of Children and Family Development.
 
 ## Features
-
-##### Restricted App Access
-User required to login with their local device credentials (pin, pattern, fingerprint, etc...) to view any app data.
-
-##### Encrypted Data
-All data saved locally is AES encrypted.
-
-##### Take Private Images
-Take images with a built in camera that will only be viewable within the secure image app. 
-
-##### Create Album
-Create album with up to 100 images, album name, and any comments.
-
-##### View Saved Albums
-View all saved albums ordered by most recently created.
-
-##### Delete Album
-Delete album locally off device.
-
-##### Image Management
-View all images, delete selected images, see detailed image view, and continuously add to an Album over time.
-
-##### Upload Album
-Upload album to protected server and be returned a download url. To upload or download the user is required to authenticate.
-
-## Usage
+- **Restricted App Access** User is required to login with their local device credentials (pin, pattern, fingerprint, etc...) to view any app data.
+- **Encrypted Data** All data saved locally is AES encrypted.
+- **Take Private Images** Take images with a built in camera that will only be viewable within the secure image app. 
+- **Create Album** Create album with up to 100 images, album name, and any comments.
+- **View Saved Albums** View all saved albums ordered by most recently created.
+- **Delete Album** Delete album locally off device.
+- **Image Management** View all images, delete selected images, see detailed image view, and continuously add to an Album over time.
+- **Upload Album** Upload album to protected server and be returned a download url. To upload or download the user is required to authenticate.
 
 ## Requirements
+1) Phone needs to have local device security enabled (pin, pattern, fingerprint, etc..) to enter the app.
+2) User will need a government issued IDIR account to upload data to the network.
+3) Device running Android 6 Marshmallow or greater (API 23+).
 
 ## Installation
+App can be installed using AirWatch
 
 ## Project Status
+Pre beta launch
 
 ## Goals/Roadmap
+Everything being worked on can be found on the public[Secure Image App Trello board](https://trello.com/b/UYJpEzrT/secure-image-app)
 
 ## Getting Help or Reporting an Issue
+If you find any issues please submit an issue on GitHub.
 
 ## How to Contribute
-
-*If you are including a Code of Conduct, make sure that you have a [CODE_OF_CONDUCT.md](SAMPLE-CODE_OF_CONDUCT.md) file, and include the following text in here in the README:*
-"Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms."
+Please create a pull request on GitHub.
 
 ## License
-
-    Copyright 2015 Province of British Columbia
+    Copyright 2017 Province of British Columbia
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
