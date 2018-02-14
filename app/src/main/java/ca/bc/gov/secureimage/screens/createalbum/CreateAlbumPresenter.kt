@@ -18,6 +18,19 @@ import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 /**
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  * Created by Aidan Laing on 2017-12-12.
  *
  */
@@ -501,20 +514,21 @@ class CreateAlbumPresenter(
      * that remote album id.
      */
     fun buildDownloadUrl(remoteAlbumId: String, albumName: String) {
-        val buildObservable = if (albumName.isBlank()) {
-            mobileAuthenticationClient.getTokenAsObservable()
-                    .flatMap { token ->
-                        val authToken = "${token.bearer} ${token.accessToken}"
-                        appApi.buildDownloadUrl(authToken, remoteAlbumId)
+        mobileAuthenticationClient.getTokenAsObservable()
+                .flatMap {
+                    if (albumName.isBlank()) {
+                        mobileAuthenticationClient.getTokenAsObservable()
+                                .flatMap { token ->
+                                    val authToken = "${token.bearer} ${token.accessToken}"
+                                    appApi.buildDownloadUrl(authToken, remoteAlbumId)
+                                }
+
+                    } else {
+                        var fileName = albumName.toLowerCase().replace(" ", "_")
+                        fileName = URLEncoder.encode(fileName, "utf-8")
+                        appApi.buildDownloadUrl(remoteAlbumId, fileName)
                     }
-
-        } else {
-            var fileName = albumName.toLowerCase().replace(" ", "_")
-            fileName = URLEncoder.encode(fileName, "utf-8")
-            appApi.buildDownloadUrl(remoteAlbumId, fileName)
-        }
-
-        buildObservable
+                }
                 .map { it.downloadUrl }
                 .firstOrError()
                 .subscribeOn(Schedulers.io())

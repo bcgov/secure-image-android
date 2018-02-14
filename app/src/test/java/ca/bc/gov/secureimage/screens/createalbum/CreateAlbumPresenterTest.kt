@@ -23,7 +23,20 @@ import org.junit.ClassRule
 import org.mockito.internal.verification.Times
 
 /**
- * Created by Aidan Laing on 2018-01-15.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Created by Aidan Laing on 2017-12-12.
  *
  */
 class CreateAlbumPresenterTest {
@@ -333,10 +346,14 @@ class CreateAlbumPresenterTest {
         val downloadUrl = "http://downloadimages.com"
         val buildDownloadUrlResponse = BuildDownloadUrlResponse(downloadUrl)
 
+        val album = Album()
+        album.key = albumId
+        album.name = "abc123"
+
         whenever(cameraImagesRepo.getCameraImageCountInAlbum(albumKey))
                 .thenReturn(Observable.just(imageCount))
 
-        whenever(appApi.createRemoteAlbumId())
+        whenever(appApi.createRemoteAlbumId("bearer 123"))
                 .thenReturn(Observable.just(remoteAlbumIdResponse))
 
         whenever(cameraImagesRepo.getAllCameraImagesInAlbum(albumKey))
@@ -345,27 +362,21 @@ class CreateAlbumPresenterTest {
         whenever(cameraImagesRepo.uploadCameraImage(albumId, cameraImage))
                 .thenReturn(Observable.just(cameraImage))
 
-        whenever(appApi.buildDownloadUrl(albumId))
+        whenever(appApi.buildDownloadUrl("bearer 123", albumId))
                 .thenReturn(Observable.just(buildDownloadUrlResponse))
+
+        whenever(albumsRepo.getAlbum(albumKey))
+                .thenReturn(Observable.just(album))
 
         whenever(mobileAuthenticationClient.getTokenAsObservable())
                 .thenReturn(Observable.just(
-                        Token("", 123L, 123L, "",
-                                "", "", 123L, "")))
-
-        whenever(albumsRepo.getAlbum(albumKey))
-                .thenReturn(Observable.just(Album()))
+                        Token("123", 123123L, 123123L, "",
+                                "bearer", "", 123L, "",
+                                99999999999999L, 99999999999999L)))
 
         presenter.checkNetworkTypeForUpload(networkType)
 
-        verify(view).showUploadingDialog(imageCount)
-        verify(view).incrementUploadedCount()
-
-        verify(view).showEmailChooser(
-                "Secure Image Album",
-                "Download Images Here:\n$downloadUrl",
-                "Send download link using...")
-
+        verify(view).showEmailChooser("", "", "")
         verify(view).hideUploadingDialog()
     }
 }

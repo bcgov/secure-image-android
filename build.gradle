@@ -4,7 +4,7 @@ buildscript {
 
     ext.gradleVersion = '3.0.1'
     ext.kotlinVersion = '1.2.21'
-    ext.realmVersion = '4.3.3'
+    ext.realmVersion = '4.3.4'
     ext.fabricToolsVersion = '1.21.6'
 
     repositories {
@@ -61,4 +61,5 @@ ext {
     testRunnerVersion = '1.0.1'
     espressoVersion = '3.0.1'
     crashlyticsVersion = '2.8.0@aar'
+    mobileAuthenticationVersion = '0.1.4'
 }
