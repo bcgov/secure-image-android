@@ -23,7 +23,7 @@ App can be installed using AirWatch
 Pre beta launch
 
 ## Goals/Roadmap
-Everything being worked on can be found on the public[Secure Image App Trello board](https://trello.com/b/UYJpEzrT/secure-image-app)
+Everything being worked on can be found on the public [Secure Image App Trello board](https://trello.com/b/UYJpEzrT/secure-image-app)
 
 ## Getting Help or Reporting an Issue
 If you find any issues please submit an issue on GitHub.
