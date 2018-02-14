@@ -515,18 +515,14 @@ class CreateAlbumPresenter(
      */
     fun buildDownloadUrl(remoteAlbumId: String, albumName: String) {
         mobileAuthenticationClient.getTokenAsObservable()
-                .flatMap {
+                .flatMap {token ->
+                    val authToken = "${token.bearer} ${token.accessToken}"
                     if (albumName.isBlank()) {
-                        mobileAuthenticationClient.getTokenAsObservable()
-                                .flatMap { token ->
-                                    val authToken = "${token.bearer} ${token.accessToken}"
-                                    appApi.buildDownloadUrl(authToken, remoteAlbumId)
-                                }
-
+                        appApi.buildDownloadUrl(authToken, remoteAlbumId)
                     } else {
                         var fileName = albumName.toLowerCase().replace(" ", "_")
                         fileName = URLEncoder.encode(fileName, "utf-8")
-                        appApi.buildDownloadUrl(remoteAlbumId, fileName)
+                        appApi.buildDownloadUrl(authToken, remoteAlbumId, fileName)
                     }
                 }
                 .map { it.downloadUrl }
@@ -574,7 +570,7 @@ class CreateAlbumPresenter(
 
         val chooserTitle = "Send download link using..."
 
-        view.showEmailChooser(subject, body, chooserTitle)
         view.hideUploadingDialog()
+        view.showEmailChooser(subject, body, chooserTitle)
     }
 }
