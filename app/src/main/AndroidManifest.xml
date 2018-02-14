@@ -16,22 +16,45 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".screens.authenticate.AuthenticateActivity">
+        <activity
+            android:name=".screens.authenticate.AuthenticateActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".screens.albums.AlbumsActivity" />
-        <activity android:name=".screens.createalbum.CreateAlbumActivity" />
-        <activity android:name=".screens.allimages.AllImagesActivity" />
-        <activity android:name=".screens.securecamera.SecureCameraActivity" />
-        <activity android:name=".screens.imagedetail.ImageDetailActivity" />
+        <activity
+            android:name=".screens.albums.AlbumsActivity"
+            android:finishOnTaskLaunch="true"
+            android:excludeFromRecents="true"/>
+
+        <activity
+            android:name=".screens.createalbum.CreateAlbumActivity"
+            android:finishOnTaskLaunch="true"
+            android:excludeFromRecents="true" />
+
+        <activity
+            android:name=".screens.allimages.AllImagesActivity"
+            android:finishOnTaskLaunch="true"
+            android:excludeFromRecents="true"/>
+
+        <activity
+            android:name=".screens.securecamera.SecureCameraActivity"
+            android:finishOnTaskLaunch="true"
+            android:excludeFromRecents="true" />
+
+        <activity
+            android:name=".screens.imagedetail.ImageDetailActivity"
+            android:finishOnTaskLaunch="true"
+            android:excludeFromRecents="true" />
 
         <activity
             android:name="ca.bc.gov.mobileauthentication.screens.redirect.RedirectActivity"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:finishOnTaskLaunch="true"
+            android:excludeFromRecents="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

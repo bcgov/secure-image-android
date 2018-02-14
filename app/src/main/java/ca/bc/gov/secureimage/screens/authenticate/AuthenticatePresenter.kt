@@ -33,10 +33,10 @@ class AuthenticatePresenter(
             view.finish()
 
         } else {
-            view.hideLogo()
-            view.hideInfo()
-            view.hideAuthenticate()
-            view.goToConfirmDeviceCredentials()
+            view.showLogo()
+            view.showInfo()
+            view.showAuthenticate()
+            view.setUpAuthenticateListener()
         }
     }
 
@@ -53,13 +53,6 @@ class AuthenticatePresenter(
     override fun onResult(isResultOk: Boolean, isCredentialsRequestCode: Boolean) {
         if (isResultOk && isCredentialsRequestCode) {
             view.goToAlbums()
-            view.finish()
-
-        } else {
-            view.showLogo()
-            view.showInfo()
-            view.showAuthenticate()
-            view.setUpAuthenticateListener()
         }
     }
 }

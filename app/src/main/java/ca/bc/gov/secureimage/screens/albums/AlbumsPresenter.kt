@@ -46,6 +46,8 @@ class AlbumsPresenter(
 
         view.setUpAlbumsList()
         view.setUpCreateAlbumListener()
+
+        getLocationAndCache()
     }
 
     override fun dispose() {
@@ -53,7 +55,6 @@ class AlbumsPresenter(
     }
 
     override fun viewShown() {
-        getLocationAndCache()
         getAlbums()
     }
 

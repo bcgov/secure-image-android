@@ -1,6 +1,7 @@
 package ca.bc.gov.secureimage.screens.albums
 
 import ca.bc.gov.secureimage.RxImmediateSchedulerRule
+import ca.bc.gov.secureimage.data.models.Location
 import ca.bc.gov.secureimage.data.models.local.Album
 import ca.bc.gov.secureimage.data.repos.albums.AlbumsRepo
 import ca.bc.gov.secureimage.data.repos.locationrepo.LocationRepo
@@ -72,6 +73,9 @@ class AlbumsPresenterTest {
 
     @Test
     fun subscribe() {
+        whenever(locationRepo.getLocation(rxGps, true))
+                .thenReturn(Observable.just(Location()))
+
         presenter.subscribe()
 
         verify(view).hideLoading()

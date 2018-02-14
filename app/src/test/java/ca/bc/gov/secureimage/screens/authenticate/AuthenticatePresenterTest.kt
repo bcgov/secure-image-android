@@ -54,10 +54,10 @@ class AuthenticatePresenterTest {
         presenter = AuthenticatePresenter(view, true, true)
         presenter.subscribe()
 
-        verify(view).hideLogo()
-        verify(view).hideInfo()
-        verify(view).hideAuthenticate()
-        verify(view).goToConfirmDeviceCredentials()
+        verify(view).showLogo()
+        verify(view).showInfo()
+        verify(view).showAuthenticate()
+        verify(view).setUpAuthenticateListener()
     }
 
     @Test
@@ -99,37 +99,6 @@ class AuthenticatePresenterTest {
         presenter.onResult(true, true)
 
         verify(view).goToAlbums()
-        verify(view).finish()
-    }
-
-    @Test
-    fun onResultNotOkAndIsNotCredentials() {
-        presenter.onResult(false, false)
-
-        verify(view).showLogo()
-        verify(view).showInfo()
-        verify(view).showAuthenticate()
-        verify(view).setUpAuthenticateListener()
-    }
-
-    @Test
-    fun onResultOkAndIsNotCredentials() {
-        presenter.onResult(true, false)
-
-        verify(view).showLogo()
-        verify(view).showInfo()
-        verify(view).showAuthenticate()
-        verify(view).setUpAuthenticateListener()
-    }
-
-    @Test
-    fun onResultNotOkAndIsCredentials() {
-        presenter.onResult(false, true)
-
-        verify(view).showLogo()
-        verify(view).showInfo()
-        verify(view).showAuthenticate()
-        verify(view).setUpAuthenticateListener()
     }
 
 }

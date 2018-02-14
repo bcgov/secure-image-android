@@ -90,6 +90,9 @@ class SecureCameraPresenterTest {
 
     @Test
     fun subscribe() {
+        val location = Location(48.123, -123.123)
+        whenever(locationRepo.getLocation(rxGps, true)).thenReturn(Observable.just(location))
+
         presenter.subscribe()
 
         verify(view).hideShutter()

@@ -68,6 +68,8 @@ class SecureCameraPresenter(
         view.setCapturing(false)
 
         view.setUpBackListener()
+
+        getLocationAndCache()
     }
 
     override fun dispose() {
@@ -75,7 +77,6 @@ class SecureCameraPresenter(
     }
 
     override fun viewShown() {
-        getLocationAndCache()
         getAlbumImageCountForCounter()
 
         view.setCapturing(false)

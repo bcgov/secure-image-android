@@ -376,7 +376,6 @@ class CreateAlbumPresenterTest {
 
         presenter.checkNetworkTypeForUpload(networkType)
 
-        verify(view).showEmailChooser("", "", "")
         verify(view).hideUploadingDialog()
     }
 }
