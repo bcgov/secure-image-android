@@ -2,7 +2,7 @@
 SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network. Originally developed for use within the Government of British Columbia's Ministry of Social Development and Poverty Reduction and Ministry of Children and Family Development.
 
 ## Features
-- **Restricted App Access** User is required to login with their local device credentials (pin, pattern, fingerprint, etc...) to view any app data.
+- **Restricted App Access** - User is required to login with their local device credentials (pin, pattern, fingerprint, etc...) to view any app data.
 - **Encrypted Data** All data saved locally is AES encrypted.
 - **Take Private Images** Take images with a built in camera that will only be viewable within the secure image app. 
 - **Create Album** Create album with up to 100 images, album name, and any comments.
