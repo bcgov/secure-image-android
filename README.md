@@ -31,9 +31,9 @@ Everything being worked on can be found on the public [Secure Image App Trello b
 To report bugs/issues/feature requests, please file an [issue.](https://github.com/bcgov/secure-image-android/issues)
 
 ## How to Contribute
-If you would like to contribute, please see our CONTRIBUTING guidelines.
+If you would like to contribute, please see our [CONTRIBUTING guidelines.](https://github.com/bcgov/secure-image-android/blob/master/CONTRIBUTING.md)
 
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/bcgov/secure-image-android/blob/master/CODE-OF-CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## License
     Copyright 2017 Province of British Columbia
