@@ -1,5 +1,5 @@
 # Secure Image Android
-SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network. Originally developed for use within the Government of British Columbia's ministry of Social Development and Poverty Reduction and the ministry of Children and Family Development.
+SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network. Originally developed for use within the Government of British Columbia's Ministry of Social Development and Poverty Reduction and Ministry of Children and Family Development.
 
 ## Features
 - **Restricted App Access** User is required to login with their local device credentials (pin, pattern, fingerprint, etc...) to view any app data.
