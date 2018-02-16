@@ -1,6 +1,8 @@
 # Secure Image Android
 SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network. Originally developed for use within the Government of British Columbia's Ministry of Social Development and Poverty Reduction and Ministry of Children and Family Development.
 
+Authentication is handled by this reusable library: [Mobie-authentication-android](https://github.com/bcgov/mobile-authentication-android)
+
 ## Features
 - **Restricted App Access** - User is required to login with their local device credentials (pin, pattern, fingerprint, etc...) to view any app data.
 - **Encrypted Data** - All data saved locally is AES encrypted.
@@ -29,7 +31,9 @@ Everything being worked on can be found on the public [Secure Image App Trello b
 If you find any issues please submit an issue on GitHub.
 
 ## How to Contribute
-Please create a pull request on GitHub.
+If you would like to contribute, please see our CONTRIBUTING guidelines.
+
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 
 ## License
     Copyright 2017 Province of British Columbia
