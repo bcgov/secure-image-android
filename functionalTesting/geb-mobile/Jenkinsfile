@@ -1,0 +1,101 @@
+
+// See https://github.com/jenkinsci/kubernetes-plugin
+podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+  containerTemplate(
+    name: 'jnlp',
+    image: '172.50.0.2:5000/devex-mpf-secure-tools/jenkins-slave-android-rhel7:latest',
+    resourceRequestCpu: '1500m',
+    resourceLimitCpu: '2000m',
+    resourceRequestMemory: '6Gi',
+    resourceLimitMemory: '8Gi',
+    workingDir: '/tmp',
+    command: '',
+    args: '${computer.jnlpmac} ${computer.name}',
+    alwaysPullImage: true
+  )
+]) {
+  node('android-build') {
+
+    // environment {
+    //   // TO BE SET IN THE JSON FILE:
+    //   APP_PATH = "app/build/outputs/apk/debug/*.apk"
+    //   APP_NAME = "SecureImageAndoird.apk"
+    //   USERNAME = "testingautomatio2"
+    //   PASSWORD = "jBqsm9QpKx36tNSVzyx6"
+    //   // this Jenkinsfile is in the funtionalTesting folder, go back to access the project build:
+    //   UPLOAD_URL_SL = "curl -u $USERNAME:$PASSWORD -X POST https://api.browserstack.com/app-automate/upload -F file=@../../$APP_PATH"
+    //   // For Saucelabs:
+    //   // USERNAME = "AutomationTesting2"
+    //   // PASSWORD = "7b856390-dce2-45b2-b55f-a3e184a4c942"
+    //   // UPLOAD_URL_SL = "curl -u $USERNAME:$PASSWORD -X POST -H 'Content-Type: application/octet-stream' https://saucelabs.com/rest/v1/storage/$USERNAME/$APP_NAME?overwrite=true --data-binary @../../$APP_PATH"
+    // }
+
+    stage('Checkout') {
+      echo "Checking out source"
+      checkout scm
+    }
+
+    stage('Setup') {
+      echo "Build setup"
+      // Decrypt the Android keystore properties file.
+      sh "/usr/bin/openssl aes-256-cbc -d -a -in keystore.properties.enc -out keystore.properties -pass env:ANDROID_DECRYPT_KEY"
+      sh "/usr/bin/openssl aes-256-cbc -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass env:ANDROID_DECRYPT_KEY"
+      // Use the following two lines to disable the gradle daemon. This can make builds faster if the intermediary
+      // artifacts (download, etc) are *not* preserved. If they are, keep the daemon running. Overwrite other options
+      // because the will likley prevent this param from beng applied and the daemon will start.
+      // sh "mkdir -p $HOME/.gradle"
+      // sh "echo 'org.gradle.daemon=false' >$HOME/.gradle/gradle.properties"
+      // Help cut down on warning messages from the Android SDK
+      sh "mkdir -p $HOME/.android"
+      sh "touch $HOME/.android/repositories.cfg"
+      // The JVM / Kotlin Daemon will quite often fail in memory constraind environments. Givng the JVM
+      // 4g allows for the maxumum reqested / recommended by gradle. This is passed in the pod spec as a
+      // global: _JAVA_OPTIONS="-Xmx4g"
+    }
+    
+    stage('Build') {
+      echo "Build: ${BUILD_ID}"
+      sh """
+        JAVA_HOME=\$(dirname \$( readlink -f \$(which java) )) && \
+        JAVA_HOME=\$(realpath "$JAVA_HOME"/../) && \
+        export JAVA_HOME && \
+        export ANDROID_HOME=/opt/android && \
+        ./gradlew build -x test
+        ./gradlew assembleDebug
+        """
+      // Keep the generated apk
+      archiveArtifacts allowEmptyArchive: true, artifacts: $APP_PATH
+      echo "keep the generated apk"
+      
+    }
+    stage('Upload App Package') {
+      echo "Upload the app to cloud server"
+      // App hash (bs/md5), could be used to reference in test task. Using the app package name for now.
+      // APP_HASH = sh (
+      //   script: "$UPLOAD_URL",
+      //   returnStdout: true).trim
+
+      sh "$UPLOAD_URL"
+      // Abort the build if not uploaded successfully:
+      if ($APP_BS.contains("Warning")) {
+          currentBuild.result = 'ABORTED'
+          error('Error uploading app to account storage')
+      }
+      echo "Successfully uploaded the app"
+    }
+
+    stage('Functional Test Android') {
+      echo "Start testing"
+      dir('functionalTesting') {
+        try {
+          sh './gradlew --debug --stacktrace androidOnBrowserStack'
+        } finally { 
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'screenshots/*'
+          junit 'build/test-results/**/*.xml'
+        }
+      }
+    }
+  }
+}

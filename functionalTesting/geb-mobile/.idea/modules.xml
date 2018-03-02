@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile-extension.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile-extension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile-extension_main.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile-extension_main.iml" group="geb-mobile-extension" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile-extension_test.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile-extension_test.iml" group="geb-mobile-extension" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile-test-spock/geb-mobile-test-spock.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile-test-spock/geb-mobile-test-spock.iml" group="geb-mobile-test-spock" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile-test-spock/geb-mobile-test-spock_main.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile-test-spock/geb-mobile-test-spock_main.iml" group="geb-mobile-test-spock" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile-test-spock/geb-mobile-test-spock_test.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile-test-spock/geb-mobile-test-spock_test.iml" group="geb-mobile-test-spock" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile/geb-mobile_main.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile/geb-mobile_main.iml" group="geb-mobile" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile/geb-mobile_test.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile/geb-mobile_test.iml" group="geb-mobile" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geb-mobile/geb-mobile~1.iml" filepath="$PROJECT_DIR$/.idea/modules/geb-mobile/geb-mobile~1.iml" group="geb-mobile" />
+    </modules>
+  </component>
+</project>

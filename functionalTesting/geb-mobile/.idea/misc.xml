@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/3__Create_an_album_pageSource.xml" />
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/Create_an_album_pageSource.xml" />
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/find_Button__click_and_return_pageSource.xml" />
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/first_time_login_to_the_app_pageSource.xml" />
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/open_test_app_and_enter_search_string__pageSource.xml" />
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/open_test_app_and_enter_text__pageSource.xml" />
+    <file url="file://$PROJECT_DIR$/geb-mobile-test-spock/screenshots/test_camera_and_take_photo_pageSource.xml" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/classes" />
+  </component>
+</project>

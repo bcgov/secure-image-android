@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="geb-mobile-extension_main" target="1.8" />
+      <module name="geb-mobile-extension_test" target="1.8" />
+      <module name="geb-mobile-test-cucumber_main" target="1.8" />
+      <module name="geb-mobile-test-cucumber_test" target="1.8" />
+      <module name="geb-mobile-test-spock_main" target="1.8" />
+      <module name="geb-mobile-test-spock_test" target="1.8" />
+      <module name="geb-mobile_main" target="1.8" />
+      <module name="geb-mobile_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
