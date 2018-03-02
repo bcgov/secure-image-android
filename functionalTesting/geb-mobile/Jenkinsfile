@@ -85,7 +85,7 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
     }
 
     stage('Functional Test Android') {
-      echo "Start testing"
+      echo "Start testing, running sample test case"
       dir('functionalTesting') {
         try {
           sh './gradlew --debug --stacktrace androidOnBrowserStack'
