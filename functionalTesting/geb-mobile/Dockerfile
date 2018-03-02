@@ -30,7 +30,4 @@ RUN yum repolist > /dev/null && \
 ENV JAVA_HOME "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.161-0.b14.el7_4.x86_64/jre"
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-# Test run:
-# RUN /opt/app/./gradlew -i clean androidOnBrowserStack
-
 USER 1001
