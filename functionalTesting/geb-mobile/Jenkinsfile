@@ -16,19 +16,20 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
 ]) {
   node('android-build') {
 
-    // environment {
-    //   // TO BE SET IN THE JSON FILE:
-    //   APP_PATH = "app/build/outputs/apk/debug/*.apk"
-    //   APP_NAME = "SecureImageAndoird.apk"
-    //   USERNAME = "testingautomatio2"
-    //   PASSWORD = "jBqsm9QpKx36tNSVzyx6"
-    //   // this Jenkinsfile is in the funtionalTesting folder, go back to access the project build:
-    //   UPLOAD_URL_SL = "curl -u $USERNAME:$PASSWORD -X POST https://api.browserstack.com/app-automate/upload -F file=@../../$APP_PATH"
-    //   // For Saucelabs:
-    //   // USERNAME = "AutomationTesting2"
-    //   // PASSWORD = "7b856390-dce2-45b2-b55f-a3e184a4c942"
-    //   // UPLOAD_URL_SL = "curl -u $USERNAME:$PASSWORD -X POST -H 'Content-Type: application/octet-stream' https://saucelabs.com/rest/v1/storage/$USERNAME/$APP_NAME?overwrite=true --data-binary @../../$APP_PATH"
-    // }
+    environment {
+      APP_PATH = "../demo_apps/WikipediaSample.apk"
+      APP_NAME = "SampleAPP.apk"
+      // APP_PATH = "app/build/outputs/apk/debug/*.apk"
+      // APP_NAME = "SecureImageAndoird.apk"
+      USERNAME = "testingautomatio2"
+      PASSWORD = "jBqsm9QpKx36tNSVzyx6"
+      // this Jenkinsfile is in the funtionalTesting folder, go back to access the project build:
+      UPLOAD_URL_BS = "curl -u $USERNAME:$PASSWORD -X POST https://api.browserstack.com/app-automate/upload -F file=@../../$APP_PATH"
+      // For Saucelabs:
+      // USERNAME = "AutomationTesting2"
+      // PASSWORD = "7b856390-dce2-45b2-b55f-a3e184a4c942"
+      // UPLOAD_URL_SL = "curl -u $USERNAME:$PASSWORD -X POST -H 'Content-Type: application/octet-stream' https://saucelabs.com/rest/v1/storage/$USERNAME/$APP_NAME?overwrite=true --data-binary @../../$APP_PATH"
+    }
 
     stage('Checkout') {
       echo "Checking out source"
@@ -37,6 +38,7 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
 
     stage('Setup') {
       echo "Build setup"
+      sh "cd ../../"
       // Decrypt the Android keystore properties file.
       sh "/usr/bin/openssl aes-256-cbc -d -a -in keystore.properties.enc -out keystore.properties -pass env:ANDROID_DECRYPT_KEY"
       sh "/usr/bin/openssl aes-256-cbc -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass env:ANDROID_DECRYPT_KEY"
@@ -70,6 +72,7 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
     }
     stage('Upload App Package') {
       echo "Upload the app to cloud server"
+      sh "cd functionalTesting/geb-mobile"
       // App hash (bs/md5), could be used to reference in test task. Using the app package name for now.
       // APP_HASH = sh (
       //   script: "$UPLOAD_URL",
@@ -90,10 +93,10 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
         try {
           sh './gradlew --debug --stacktrace androidOnBrowserStack'
         } finally { 
-          archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-          archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
-          archiveArtifacts allowEmptyArchive: true, artifacts: 'screenshots/*'
-          junit 'build/test-results/**/*.xml'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'geb-mobile-test-spock/build/reports/**/*'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'geb-mobile-test-spock/build/test-results/**/*'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'geb-mobile-test-spock/screenshots/*'
+          junit 'geb-mobile-test-spock/build/test-results/**/*.xml'
         }
       }
     }
