@@ -1,4 +1,3 @@
-
 // See https://github.com/jenkinsci/kubernetes-plugin
 podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
@@ -24,7 +23,7 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
       USERNAME = "testingautomatio2"
       PASSWORD = "jBqsm9QpKx36tNSVzyx6"
       // this Jenkinsfile is in the funtionalTesting folder, go back to access the project build:
-      UPLOAD_URL_BS = "curl -u $USERNAME:$PASSWORD -X POST https://api.browserstack.com/app-automate/upload -F file=@../../$APP_PATH"
+      UPLOAD_URL = "curl -u $USERNAME:$PASSWORD -X POST https://api.browserstack.com/app-automate/upload -F file=@../../$APP_PATH"
       // For Saucelabs:
       // USERNAME = "AutomationTesting2"
       // PASSWORD = "7b856390-dce2-45b2-b55f-a3e184a4c942"
@@ -70,7 +69,7 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
       echo "keep the generated apk"
       
     }
-    stage('Upload App Package') {
+    stage('Upload') {
       echo "Upload the app to cloud server"
       sh "cd functionalTesting/geb-mobile"
       // App hash (bs/md5), could be used to reference in test task. Using the app package name for now.
@@ -87,8 +86,8 @@ podTemplate(label: 'Mobile-BDDStack-android', name: 'Mobile-BDDStack-android', s
       echo "Successfully uploaded the app"
     }
 
-    stage('Functional Test Android') {
-      echo "Start testing, running sample test case"
+    stage('Test') {
+      echo "Start functional testing with mobile-BDDStack, running sample test case"
       dir('functionalTesting') {
         try {
           sh './gradlew --debug --stacktrace androidOnBrowserStack'
