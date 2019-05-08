@@ -13,7 +13,8 @@ jobs:
       - run:
           name: Properties
           command: >
-            /usr/bin/openssl aes-256-cbc -md sha256 -d -a -in keystore.properties.enc -out keystore.properties -pass env:ANDROID_DECRYPT_KEY
+            /usr/bin/openssl aes-256-cbc -md sha256 -d -a -in keystore.properties.enc -out keystore.properties -pass env:ANDROID_DECRYPT_KEY &&
+            /usr/bin/openssl aes-256-cbc -md sha256 -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass env:ANDROID_DECRYPT_KEY
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
