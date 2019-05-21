@@ -38,7 +38,6 @@ steps:
 #   inputs:
 #     script: |
 #         ./scripts/az-set-build-no.sh
-steps:
 - task: Gradle@2
   inputs:
     # workingDirectory: ''
