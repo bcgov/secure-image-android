@@ -64,12 +64,22 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleDebug'
-- task: CopyFiles@2
-  displayName: Copy APK file
+- task: AndroidSigning@2
   inputs:
-    contents: '**/*.apk'
-    # sourceFolder: '$(Build.SourcesDirectory)/output/$(SDK)/$(Configuration)'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    apkFiles: '**/*.apk'
+    jarsign: true
+    jarsignerKeystoreFile: '$(Agent.TempDirectory)/secureImageAndroid.jks'
+    jarsignerKeystorePassword: '$(DecryptKey)'
+    jarsignerKeystoreAlias: 'secureImageAndroid'
+    jarsignerKeyPassword: '$(DecryptKey)'
+    zipalign: true
+# /Users/vsts/agent/2.150.3/work/1/s/app/build/outputs/apk/debug/app-debug.apk
+# - task: CopyFiles@2
+#   displayName: Copy APK file
+#   inputs:
+#     contents: '**/*.apk'
+#     # sourceFolder: '$(Build.SourcesDirectory)/output/$(SDK)/$(Configuration)'
+#     targetFolder: '$(Build.ArtifactStagingDirectory)'
 # - task: AzureCLI@1
 #   displayName: Upload IPA to Azure storage
 #   timeoutInMinutes: 1
