@@ -41,15 +41,21 @@ steps:
 - task: DownloadSecureFile@1
   inputs:
     secureFile: 'keystore.properties'
-- task: DownloadSecureFile@1
-  inputs:
-    secureFile: 'fabric.properties'
 - task: CopyFiles@2
-  displayName: Copy IPA file
+  displayName: Copy keystore.properties file
   inputs:
     contents: 'keystore.properties'
     sourceFolder: '$(Agent.TempDirectory)'
     targetFolder: '$(System.DefaultWorkingDirectory)'
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'fabric.properties'
+- task: CopyFiles@2
+  displayName: Copy fabric.properties file
+  inputs:
+    contents: 'fabric.properties'
+    sourceFolder: '$(Agent.TempDirectory)'
+    targetFolder: '$(System.DefaultWorkingDirectory)/app'
 - task: Gradle@2
   inputs:
     workingDirectory: ''
