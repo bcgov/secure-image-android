@@ -48,6 +48,12 @@ steps:
   inputs:
     secureFile: 'secureImageAndroid.jks'
 - task: CopyFiles@2
+  displayName: Copy secureImageAndroid.jks file
+  inputs:
+    contents: 'secureImageAndroid.jks'
+    sourceFolder: '$(Agent.TempDirectory)'
+    targetFolder: '$(System.DefaultWorkingDirectory)'
+- task: CopyFiles@2
   displayName: Copy keystore.properties file
   inputs:
     contents: 'keystore.properties'
@@ -71,7 +77,7 @@ steps:
   inputs:
     apkFiles: '**/*.apk'
     jarsign: true
-    jarsignerKeystoreFile: '$(Agent.TempDirectory)/secureImageAndroid.jks'
+    jarsignerKeystoreFile: '$(System.DefaultWorkingDirectory)/secureImageAndroid.jks'
     jarsignerKeystorePassword: '$(DecryptKey)'
     jarsignerKeystoreAlias: 'secureImageAndroid'
     jarsignerKeyPassword: '$(DecryptKey)'
