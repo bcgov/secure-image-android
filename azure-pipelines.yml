@@ -1,0 +1,87 @@
+# NOTES
+#
+# In the Azure DevOps Web IDE:
+# 1) Set the following pipeline variables:
+#   - AzureStorageAccountName
+#   - AzureSubscriptionID
+# 2) In the project settings you must create a `service connection` of type `Azure Resource Manager`
+#    call it `SomethingServiceConnection` and reference by name in in the AzureCLI tasks
+#    `connectedServiceNameARM` input.
+#
+# These will be used by the AzureCLI@2 to copy the build artifact(s) to an Azure blob storage for easy
+# downloading or further processing.
+#
+# For build numbering you can use the following options:
+# BUILD_BUILDID     = NN            # Linier build number eg. 87, 88, 89
+# Build.BuildNumber = NN            # Linier daily build number eg. 1, 2, 3
+# Build.BuildId     = YYYYMMDD.NN   # Build identifier eg. 20190515.3, 20190516.1
+#
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+#
+
+trigger:
+- master
+
+pool:
+  vmImage: 'macos-latest'
+
+variables:
+  BuildID: ${BUILD_BUILDID}
+  AZServiceConnectionName: 'FullboarServiceConnection'
+  AZBlobStorageContainerName: 'artifacts'
+
+steps:
+# - task: CmdLine@2
+#   displayName: Bump build number
+#   timeoutInMinutes: 1
+#   inputs:
+#     script: |
+#         ./scripts/az-set-build-no.sh
+steps:
+- task: Gradle@2
+  inputs:
+    # workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx3072m'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    tasks: 'assembleDebug'
+# - task: CopyFiles@2
+#   displayName: Copy IPA file
+#   inputs:
+#     contents: '$(SchemaName).ipa'
+#     sourceFolder: '$(Build.SourcesDirectory)/output/$(SDK)/$(Configuration)'
+#     targetFolder: '$(Build.ArtifactStagingDirectory)'
+# - task: AzureCLI@1
+#   displayName: Upload IPA to Azure storage
+#   timeoutInMinutes: 1
+#   inputs:
+#     connectedServiceNameARM: $(AZServiceConnectionName)
+#     azureSubscription: '$(AzureSubscriptionID)'
+#     scriptLocation: 'inlineScript'
+#     inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "$(SchemaName)-$(BuildID).ipa" --file "$(Build.ArtifactStagingDirectory)/$(SchemaName).ipa"'
+# - task: CopyFiles@2
+#   displayName: Copy options (plist) file
+#   timeoutInMinutes: 1
+#   inputs:
+#     SourceFolder: '$(Build.SourcesDirectory)'
+#     Contents: $(ExportOptionsFileName)
+#     TargetFolder: '$(Build.ArtifactStagingDirectory)/pack'
+# - task: ArchiveFiles@2
+#   displayName: Create archive
+#   timeoutInMinutes: 1
+#   inputs:
+#     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/pack'
+#     includeRootFolder: false # don't include the /pack portion of the path
+#     archiveType: 'zip'
+#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(SchemaName).zip'
+#     replaceExistingArchive: true
+# - task: AzureCLI@1
+#   displayName: Upload archive to Azure storage
+#   timeoutInMinutes: 1
+#   inputs:
+#     connectedServiceNameARM: $(AZServiceConnectionName)
+#     azureSubscription: '$(AzureSubscriptionID)'
+#     scriptLocation: 'inlineScript'
+#     inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "$(SchemaName)-$(BuildID).zip" --file "$(Build.ArtifactStagingDirectory)/$(SchemaName).zip"'
