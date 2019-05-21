@@ -38,9 +38,15 @@ steps:
 #   inputs:
 #     script: |
 #         ./scripts/az-set-build-no.sh
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'keystore.properties'
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'fabric.properties'
 - task: Gradle@2
   inputs:
-    # workingDirectory: ''
+    workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     gradleOptions: '-Xmx3072m'
     publishJUnitResults: false
