@@ -64,12 +64,12 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleDebug'
-# - task: CopyFiles@2
-#   displayName: Copy IPA file
-#   inputs:
-#     contents: '$(SchemaName).ipa'
-#     sourceFolder: '$(Build.SourcesDirectory)/output/$(SDK)/$(Configuration)'
-#     targetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: CopyFiles@2
+  displayName: Copy APK file
+  inputs:
+    contents: '**/*.apk'
+    # sourceFolder: '$(Build.SourcesDirectory)/output/$(SDK)/$(Configuration)'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
 # - task: AzureCLI@1
 #   displayName: Upload IPA to Azure storage
 #   timeoutInMinutes: 1
