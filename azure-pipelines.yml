@@ -24,7 +24,7 @@ trigger:
 - master
 
 pr:
-  autoCancel: false
+  autoCancel: true
 
 pool:
   vmImage: 'macos-latest'
