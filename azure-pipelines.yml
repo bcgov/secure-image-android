@@ -23,6 +23,9 @@
 trigger:
 - master
 
+pr:
+  autoCancel: false
+
 pool:
   vmImage: 'macos-latest'
 
@@ -56,6 +59,18 @@ steps:
     sourceFolder: '$(Agent.TempDirectory)'
     targetFolder: '$(System.DefaultWorkingDirectory)/app'
 - task: Gradle@2
+  condition: and(always(), eq(variables['Build.Reason'], 'PullRequest'))
+  timeoutInMinutes: 3
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx4608M'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
+    tasks: 'check assembleDebug'
+- task: Gradle@2
+  condition: and(always(), ne(variables['Build.Reason'], 'PullRequest'))
   timeoutInMinutes: 3
   inputs:
     workingDirectory: ''
@@ -66,6 +81,7 @@ steps:
     # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
     tasks: 'assembleRelease'
 - task: AndroidSigning@3
+  condition: and(always(), ne(variables['Build.Reason'], 'PullRequest'))
   timeoutInMinutes: 3
   inputs:
     apkFiles: '**/*.apk'
@@ -77,12 +93,14 @@ steps:
     zipalign: true # Only works with  `assembleRelease` task.
 # /Users/vsts/agent/2.150.3/work/1/s/app/build/outputs/apk/debug/app-debug.apk
 - task: CopyFiles@2
+  condition: and(always(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Copy APK file
   inputs:
     contents: 'app-release-unsigned.apk'
     sourceFolder: '$(Build.SourcesDirectory)/app/build/outputs/apk/release/'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: AzureCLI@1
+  condition: and(always(), ne(variables['Build.Reason'], 'PullRequest'))
   displayName: Upload APK to Azure storage
   timeoutInMinutes: 1
   inputs:
