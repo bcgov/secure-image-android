@@ -65,7 +65,7 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
-    tasks: 'assembleDebug'
+    tasks: 'assembleRelease'
 - task: AndroidSigning@3
   timeoutInMinutes: 3
   inputs:
@@ -75,22 +75,22 @@ steps:
     apksignerKeystorePassword: '$(DecryptKey)'
     apksignerKeystoreAlias: 'secureImageAndroid'
     apksignerKeyPassword: '$(DecryptKey)'
-    zipalign: false # Only works with  `assembleRelease` task.
+    zipalign: true # Only works with  `assembleRelease` task.
 # /Users/vsts/agent/2.150.3/work/1/s/app/build/outputs/apk/debug/app-debug.apk
-# - task: CopyFiles@2
-#   displayName: Copy APK file
-#   inputs:
-#     contents: '**/*.apk'
-#     # sourceFolder: '$(Build.SourcesDirectory)/output/$(SDK)/$(Configuration)'
-#     targetFolder: '$(Build.ArtifactStagingDirectory)'
-# - task: AzureCLI@1
-#   displayName: Upload IPA to Azure storage
-#   timeoutInMinutes: 1
-#   inputs:
-#     connectedServiceNameARM: $(AZServiceConnectionName)
-#     azureSubscription: '$(AzureSubscriptionID)'
-#     scriptLocation: 'inlineScript'
-#     inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "$(SchemaName)-$(BuildID).ipa" --file "$(Build.ArtifactStagingDirectory)/$(SchemaName).ipa"'
+- task: CopyFiles@2
+  displayName: Copy APK file
+  inputs:
+    contents: 'app-release-unsigned.apk'
+    sourceFolder: '$(Build.SourcesDirectory)/app/build/outputs/apk/release/'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: AzureCLI@1
+  displayName: Upload IPA to Azure storage
+  timeoutInMinutes: 1
+  inputs:
+    connectedServiceNameARM: $(AZServiceConnectionName)
+    azureSubscription: '$(AzureSubscriptionID)'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "SecureImage-$(BuildID).apk" --file "$(Build.ArtifactStagingDirectory)/app-release-unsigned.apk"'
 # - task: CopyFiles@2
 #   displayName: Copy options (plist) file
 #   timeoutInMinutes: 1
