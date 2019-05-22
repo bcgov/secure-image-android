@@ -68,11 +68,11 @@ steps:
   inputs:
     apkFiles: '**/*.apk'
     apksign: true
-    apksignerKeystoreFile: 'secureImageAndroid.keystore'
+    apksignerKeystoreFile: 'secureImageAndroid.jks'
     apksignerKeystorePassword: '$(DecryptKey)'
     apksignerKeystoreAlias: 'secureImageAndroid'
     apksignerKeyPassword: '$(DecryptKey)'
-    zipalign: false 
+    zipalign: true 
 # /Users/vsts/agent/2.150.3/work/1/s/app/build/outputs/apk/debug/app-debug.apk
 # - task: CopyFiles@2
 #   displayName: Copy APK file
