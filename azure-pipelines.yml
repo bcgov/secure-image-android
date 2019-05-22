@@ -57,6 +57,7 @@ steps:
     sourceFolder: '$(Agent.TempDirectory)'
     targetFolder: '$(System.DefaultWorkingDirectory)/app'
 - task: Gradle@2
+  timeoutInMinutes: 3
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
@@ -66,6 +67,7 @@ steps:
     # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
     tasks: 'assembleDebug'
 - task: AndroidSigning@3
+  timeoutInMinutes: 3
   inputs:
     apkFiles: '**/*.apk'
     apksign: true
