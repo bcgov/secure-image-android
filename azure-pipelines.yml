@@ -90,27 +90,3 @@ steps:
     azureSubscription: '$(AzureSubscriptionID)'
     scriptLocation: 'inlineScript'
     inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "SecureImage-$(BuildID).apk" --file "$(Build.ArtifactStagingDirectory)/app-release-unsigned.apk"'
-# - task: CopyFiles@2
-#   displayName: Copy options (plist) file
-#   timeoutInMinutes: 1
-#   inputs:
-#     SourceFolder: '$(Build.SourcesDirectory)'
-#     Contents: $(ExportOptionsFileName)
-#     TargetFolder: '$(Build.ArtifactStagingDirectory)/pack'
-# - task: ArchiveFiles@2
-#   displayName: Create archive
-#   timeoutInMinutes: 1
-#   inputs:
-#     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/pack'
-#     includeRootFolder: false # don't include the /pack portion of the path
-#     archiveType: 'zip'
-#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(SchemaName).zip'
-#     replaceExistingArchive: true
-# - task: AzureCLI@1
-#   displayName: Upload archive to Azure storage
-#   timeoutInMinutes: 1
-#   inputs:
-#     connectedServiceNameARM: $(AZServiceConnectionName)
-#     azureSubscription: '$(AzureSubscriptionID)'
-#     scriptLocation: 'inlineScript'
-#     inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "$(SchemaName)-$(BuildID).zip" --file "$(Build.ArtifactStagingDirectory)/$(SchemaName).zip"'
