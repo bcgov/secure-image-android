@@ -28,7 +28,6 @@ pool:
 
 variables:
   BuildID: ${BUILD_BUILDID}
-  AZServiceConnectionName: 'FullboarServiceConnection'
   AZBlobStorageContainerName: 'artifacts'
 
 steps:
