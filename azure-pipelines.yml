@@ -81,7 +81,7 @@ steps:
   displayName: Copy APK file
   inputs:
     contents: 'app-release.apk'
-    sourceFolder: '$(Build.SourcesDirectory)/app/build/outputs/apk/debug/app-release.apk'
+    sourceFolder: '$(Build.SourcesDirectory)/app/build/outputs/apk/release/app-release.apk'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 # - task: AzureCLI@1
 #   displayName: Upload IPA to Azure storage
