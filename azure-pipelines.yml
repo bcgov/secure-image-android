@@ -53,6 +53,7 @@ steps:
     sourceFolder: '$(Agent.TempDirectory)'
     targetFolder: '$(System.DefaultWorkingDirectory)/app'
 - task: Gradle@2
+  displayName: Gradle check and assemble debug build
   condition: eq(variables['Build.Reason'], 'PullRequest')
   timeoutInMinutes: 3
   inputs:
@@ -64,6 +65,7 @@ steps:
     # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
     tasks: 'check assembleDebug'
 - task: Gradle@2
+  displayName: Gradle assemble release build
   condition: ne(variables['Build.Reason'], 'PullRequest')
   timeoutInMinutes: 3
   inputs:
@@ -75,6 +77,7 @@ steps:
     # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
     tasks: 'assembleRelease'
 - task: AndroidSigning@3
+  displayName: Release sign APK
   condition: ne(variables['Build.Reason'], 'PullRequest')
   timeoutInMinutes: 3
   inputs:
