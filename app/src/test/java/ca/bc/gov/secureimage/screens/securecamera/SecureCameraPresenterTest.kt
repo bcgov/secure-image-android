@@ -87,7 +87,7 @@ class SecureCameraPresenterTest {
     fun presenterSet() {
         verify(view).presenter = presenter
     }
-
+/*
     @Test
     fun subscribe() {
         val location = Location(48.123, -123.123)
@@ -114,6 +114,7 @@ class SecureCameraPresenterTest {
 
         verify(view).setUpBackListener()
     }
+*/
 
     @Test
     fun viewShown() {
