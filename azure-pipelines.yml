@@ -81,7 +81,7 @@ steps:
   condition: ne(variables['Build.Reason'], 'PullRequest')
   timeoutInMinutes: 3
   inputs:
-    apkFiles: '**/*.apk'
+    apkFiles: '**/*release*.apk'
     apksign: true
     apksignerKeystoreFile: 'secureImageAndroid.jks'
     apksignerKeystorePassword: '$(DecryptKey)'
