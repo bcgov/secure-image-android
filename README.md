@@ -1,3 +1,8 @@
+This repo is deprecated. Find the new consolidated project repo [here](https://github.com/bcgov/secure-image-app).
+
+---
+
+
 # Secure Image Android
 SecureImage is an open source application developed for taking, storing and uploading images securely to a protected network. Originally developed for use within the Government of British Columbia's Ministry of Social Development and Poverty Reduction and Ministry of Children and Family Development.
 
